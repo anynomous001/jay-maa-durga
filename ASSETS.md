@@ -18,6 +18,12 @@ The site hosts no copyrighted audio or images from third parties. Everything vis
 | UPI QR code | generated in the browser at runtime | `qrcode-generator` library, from config values | n/a |
 | All copy (Bengali and English) | `src/lib/strings.ts`, HTML | Written for this project | Original |
 
+## Provided by the site owner
+
+| Asset | Where | Notes | Licence |
+|---|---|---|---|
+| Hero illustration: pandal at dusk with dhakis and the Durga idol | Source `assets-src/hero-pandal.png` (1672×941); derived `public/hero/*` (landscape 640–1672 px and a portrait crop for phones, in AVIF, WebP and JPEG, made by `scripts/make-hero.mjs`) | Supplied by Pritam on 2026-10-04. Origin not recorded; it looks AI-generated | **To confirm:** Pritam must confirm the image's source and that it may be used commercially. If it came from an AI tool, check that tool's terms |
+
 ## Third-party (used, not modified)
 
 | Asset | Source | Licence |

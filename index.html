@@ -48,31 +48,45 @@
     </script>
     <script type="module" src="/src/pages/home.ts"></script>
   </head>
-  <body>
+  <body class="page-home">
     <!--@partial header-->
     <main id="main">
       <section class="hero" aria-labelledby="hero-title">
-        <div class="sky" aria-hidden="true"></div>
-        <p class="kicker" data-i18n="hero.kicker">শনিবার, ১০ অক্টোবর ২০২৬ · ভোর</p>
-        <h1 id="hero-title" data-i18n="hero.title">শুভ মহালয়া</h1>
-        <p class="hero-sub" data-i18n="hero.sub">ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।</p>
-
-        <div class="countdown" id="countdown" role="timer" aria-live="off">
-          <p class="cd-label" id="cd-label" data-i18n="cd.toMahalaya">মহিষাসুরমর্দিনী শুরু হতে বাকি</p>
-          <div class="cd-grid" id="cd-grid">
-            <div><span class="cd-num" data-unit="days">–</span><span class="cd-unit" data-i18n="cd.days">দিন</span></div>
-            <div><span class="cd-num" data-unit="hours">–</span><span class="cd-unit" data-i18n="cd.hours">ঘণ্টা</span></div>
-            <div><span class="cd-num" data-unit="minutes">–</span><span class="cd-unit" data-i18n="cd.minutes">মিনিট</span></div>
-            <div><span class="cd-num" data-unit="seconds">–</span><span class="cd-unit" data-i18n="cd.seconds">সেকেন্ড</span></div>
+        <picture class="hero-media">
+          <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" sizes="100vw" />
+          <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="/hero/port-480.webp 480w, /hero/port-720.webp 720w" sizes="100vw" />
+          <source media="(max-aspect-ratio: 4/5)" srcset="/hero/port-480.jpg 480w, /hero/port-720.jpg 720w" sizes="100vw" />
+          <source type="image/avif" srcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" sizes="100vw" />
+          <source type="image/webp" srcset="/hero/land-640.webp 640w, /hero/land-960.webp 960w, /hero/land-1280.webp 1280w, /hero/land-1672.webp 1672w" sizes="100vw" />
+          <img src="/hero/land-1280.jpg" srcset="/hero/land-640.jpg 640w, /hero/land-960.jpg 960w, /hero/land-1280.jpg 1280w, /hero/land-1672.jpg 1672w" sizes="100vw"
+            width="1672" height="941" alt="" fetchpriority="high" decoding="async" />
+        </picture>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-inner">
+          <div class="hero-copy">
+            <p class="kicker" data-i18n="hero.kicker">শনিবার, ১০ অক্টোবর ২০২৬ · ভোর</p>
+            <h1 id="hero-title" data-i18n="hero.title">শুভ মহালয়া</h1>
+            <p class="hero-sub" data-i18n="hero.sub">ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।</p>
           </div>
-          <p class="cd-message" id="cd-message" hidden></p>
-          <dl class="cd-times" id="cd-times">
-            <div><dt data-i18n="cd.ist">ভারতীয় সময়</dt><dd id="cd-ist">শনি, ১০ অক্টো · ভোর ৩:৫০</dd></div>
-            <div id="cd-local-row"><dt data-i18n="cd.local">আপনার সময়</dt><dd id="cd-local"></dd></div>
-          </dl>
-          <p class="sr-only" id="cd-sr" aria-live="polite"></p>
+          <div class="hero-bottom">
+            <div class="countdown" id="countdown" role="timer" aria-live="off">
+              <p class="cd-label" id="cd-label" data-i18n="cd.toMahalaya">মহিষাসুরমর্দিনী শুরু হতে বাকি</p>
+              <div class="cd-grid" id="cd-grid">
+                <div><span class="cd-num" data-unit="days">–</span><span class="cd-unit" data-i18n="cd.days">দিন</span></div>
+                <div><span class="cd-num" data-unit="hours">–</span><span class="cd-unit" data-i18n="cd.hours">ঘণ্টা</span></div>
+                <div><span class="cd-num" data-unit="minutes">–</span><span class="cd-unit" data-i18n="cd.minutes">মিনিট</span></div>
+                <div><span class="cd-num" data-unit="seconds">–</span><span class="cd-unit" data-i18n="cd.seconds">সেকেন্ড</span></div>
+              </div>
+              <p class="cd-message" id="cd-message" hidden></p>
+              <dl class="cd-times" id="cd-times">
+                <div><dt data-i18n="cd.ist">ভারতীয় সময়</dt><dd id="cd-ist">শনি, ১০ অক্টো · ভোর ৩:৫০</dd></div>
+                <div id="cd-local-row"><dt data-i18n="cd.local">আপনার সময়</dt><dd id="cd-local"></dd></div>
+              </dl>
+              <p class="sr-only" id="cd-sr" aria-live="polite"></p>
+            </div>
+            <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
+          </div>
         </div>
-        <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
       </section>
 
       <section class="panel radio" id="radio" aria-labelledby="radio-title">

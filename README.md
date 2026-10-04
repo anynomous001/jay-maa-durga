@@ -120,6 +120,10 @@ https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=V
 
 A 401 response means embedding is disabled, so don't add it.
 
+### Hero image
+
+The home hero is `assets-src/hero-pandal.png`. To replace it, drop in a new PNG with the same name and run `npm run hero`. That writes resized AVIF/WebP/JPEG files to `public/hero/`: a landscape set, plus a portrait crop centred around 70% across for phones (change the crop in `scripts/make-hero.mjs`). The dark gradient that keeps text readable is `.hero-shade` in `src/styles.css`.
+
 ### OG image and icons
 
 `npm run og` renders the PWA icons and `scripts/og-art.svg` (background art). The OG image's text is drawn by the browser, because resvg can't shape Bengali conjuncts. With `npm run dev` running, open <http://localhost:5173/scripts/og.html>; it saves `public/og.jpg` through a dev-only endpoint.

@@ -110,6 +110,16 @@ export function initMotion(): void {
       });
     }
     reveals();
+    // Hero photo: slow settle-in, then parallax (moves slower than the page).
+    const heroImg = document.querySelector<HTMLElement>('.hero-media img');
+    if (heroImg) {
+      gsap.fromTo(heroImg, { scale: 1.08 }, { scale: 1, duration: 2.4, ease: 'power2.out' });
+      gsap.to(heroImg, {
+        yPercent: 12,
+        ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+      });
+    }
     const durga = document.querySelector('.bd-durga');
     if (durga) {
       gsap.to(durga, {

@@ -59,6 +59,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Reduced motion | `.still` class: eyes fully painted, no rotation or float | **Pass** |
 | Performance | The Google Fonts stylesheet became the bottleneck (pandals FCP 3.4 s), so it now loads without blocking paint (`media="print"` → `all`). After: FCP ≈ 1.5 s on every page | **Pass** |
 
+## Photo hero
+
+| Check | How | Result |
+|---|---|---|
+| Layout | Desktop: text on the left over a dark gradient, pandal and idol on the right (`d-hero-photo.png`). 390 px: portrait crop, title over the sky, idol framed, countdown over the crowd (`m-hero-photo.png`). The header overlays the image | **Pass** |
+| Responsive delivery | `<picture>` with AVIF/WebP/JPEG; phones get the 480/720 px portrait crop (39–67 KB AVIF) instead of the 3.1 MB source | **Pass** |
+| Motion | Settle-in zoom on load and scroll parallax (12%); off under reduced motion | **Pass** |
+| Lighthouse | Mobile home 99 / 100 / 100 / 100 (LCP 1.8 s, CLS 0.045); desktop home Performance 100 (LCP 0.5 s) | **Pass** |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |
@@ -80,7 +89,7 @@ Removed at Pritam's request ("no need for greeting card"), along with its sponso
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|
-| `/` | 100 | 100 | 100 | 100 | 1.5 s | 0.033 |
+| `/` | 99 | 100 | 100 | 100 | 1.8 s | 0.045 |
 | `/pandals/` | 99 | 100 | 100 | 100 | 1.5 s | 0.032 |
 | `/advertise/` | 100 | 100 | 100 | 100 | 1.5 s | 0.05 |
 

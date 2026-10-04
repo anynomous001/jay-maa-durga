@@ -1251,3 +1251,120 @@ a.pm-eat:hover {
 .route-stops a {
   color: var(--text);
 }
+
+/* ── Photo hero (home) ── */
+html,
+body {
+  overflow-x: clip;
+}
+.page-home .site-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+}
+.page-home .site-header,
+.page-home .site-nav a {
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.7);
+}
+.page-home .lang-toggle {
+  background: rgba(8, 10, 28, 0.45);
+}
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Full-bleed out of the centred <main>. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  min-height: 100svh;
+  padding: 8.5rem 1rem 1.5rem;
+  display: flex;
+  text-align: center;
+}
+.hero-media,
+.hero-shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+  transform-origin: 70% 50%;
+}
+.hero-shade {
+  background:
+    linear-gradient(180deg, rgba(8, 10, 28, 0.82) 0%, rgba(8, 10, 28, 0.35) 30%, rgba(8, 10, 28, 0.12) 46%, rgba(8, 10, 28, 0.78) 72%, #0c0f1f 100%);
+}
+.hero-inner {
+  position: relative;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.hero-bottom {
+  margin-top: auto;
+  padding-top: 24vh; /* keep the idol visible between title and countdown */
+}
+.hero .kicker {
+  color: #ffd27a;
+}
+.hero h1,
+.hero .hero-sub,
+.hero .kicker,
+.hero .cd-label,
+.hero .cd-times,
+.hero .cd-message {
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.75);
+}
+.hero .hero-sub {
+  color: #ece6f4;
+}
+.hero .cd-grid > div {
+  text-align: center;
+  background: rgba(8, 10, 28, 0.6);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.hero .cd-times dt {
+  color: #d6d0e4;
+}
+@media (min-width: 900px) {
+  .hero {
+    min-height: min(100vh, 920px);
+    padding: 9rem 2rem 3rem;
+    text-align: left;
+  }
+  .hero-media img {
+    object-position: 60% 50%;
+  }
+  .hero-shade {
+    background:
+      linear-gradient(90deg, rgba(8, 10, 28, 0.9) 0%, rgba(8, 10, 28, 0.66) 34%, rgba(8, 10, 28, 0.12) 60%, rgba(8, 10, 28, 0) 75%),
+      linear-gradient(180deg, rgba(8, 10, 28, 0.6) 0%, rgba(8, 10, 28, 0) 22%, rgba(8, 10, 28, 0) 70%, #0c0f1f 100%);
+  }
+  .hero-copy {
+    max-width: 34rem;
+  }
+  .hero-sub {
+    margin-left: 0;
+  }
+  .hero-bottom {
+    padding-top: 2rem;
+    max-width: 32rem;
+  }
+  .hero .countdown {
+    margin: 0;
+  }
+  .hero .cd-times {
+    justify-content: flex-start;
+  }
+  .hero .sponsor {
+    margin-left: 0;
+  }
+}
