@@ -74,9 +74,6 @@ const render = (svg, width, out) => {
 };
 
 mkdirSync(resolve(root, 'public/icons'), { recursive: true });
-render(icon(), 192, 'public/icons/icon-192.png');
-render(icon(), 512, 'public/icons/icon-512.png');
-render(icon(0.2), 512, 'public/icons/maskable-512.png');
-render(icon(0.08).replace('rx="112"', ''), 180, 'public/icons/apple-touch-icon.png');
+// App icons and favicons now come from scripts/make-logo.mjs.
 writeFileSync(resolve(root, 'scripts/og-art.svg'), og);
 console.log('wrote scripts/og-art.svg — now open http://localhost:5173/scripts/og.html with `npm run dev` to render public/og.jpg');
