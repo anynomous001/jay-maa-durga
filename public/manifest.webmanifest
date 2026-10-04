@@ -1,0 +1,16 @@
+{
+  "name": "Mahalaya Live — মহালয়া লাইভ",
+  "short_name": "Mahalaya Live",
+  "description": "Mahalaya 2026 live radio, Durga Puja dates, songs and Kolkata pandal map.",
+  "lang": "bn",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c0f1f",
+  "theme_color": "#0c0f1f",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

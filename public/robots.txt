@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mahalaya-live.pages.dev/sitemap.xml

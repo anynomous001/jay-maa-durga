@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8" />
+<title>OG renderer (dev only)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@600&family=Noto+Serif+Bengali:wght@700&display=block" />
+<style>body{background:#222;color:#eee;font-family:system-ui;margin:1rem}canvas{max-width:100%;border:1px solid #555}</style>
+</head>
+<body>
+<p id="msg">Rendering…</p>
+<canvas id="c" width="1200" height="630"></canvas>
+<script type="module">
+// Draws the text layer with real browser shaping, then saves via the dev-only endpoint.
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+await document.fonts.load('700 128px "Noto Serif Bengali"', 'শুভ মহালয়া');
+await document.fonts.load('600 40px "Hind Siliguri"', 'মহিষাসুরমর্দিনী অক্টোবর');
+const art = new Image();
+art.src = '/scripts/og-art.svg';
+await art.decode();
+ctx.drawImage(art, 0, 0, 1200, 630);
+ctx.textAlign = 'center';
+const line = (text, y, font, color, alpha = 1) => {
+  ctx.globalAlpha = alpha; ctx.font = font; ctx.fillStyle = color; ctx.fillText(text, 600, y); ctx.globalAlpha = 1;
+};
+ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 18;
+line('১০ অক্টোবর ২০২৬ · ভোর ৩:৫০', 120, '600 32px "Hind Siliguri"', '#f4b942');
+line('শুভ মহালয়া', 268, '700 124px "Noto Serif Bengali"', '#f6f1e7');
+line('মহিষাসুরমর্দিনী — সরাসরি শুনুন', 340, '600 42px "Hind Siliguri"', '#f6f1e7', 0.94);
+line('Mahalaya 2026 · Live radio from 3:50 AM IST', 396, '600 29px "Hind Siliguri"', '#d6d2e6');
+line('mahalaya-live.pages.dev', 452, '600 24px "Hind Siliguri"', '#d6d2e6', 0.85);
+const blob = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.86));
+const res = await fetch('/__save-asset?path=public/og.jpg', { method: 'POST', body: blob });
+document.getElementById('msg').textContent = res.ok ? `Saved public/og.jpg (${blob.size} bytes)` : 'Save failed: ' + res.status;
+window.__ogDone = res.ok;
+</script>
+</body>
+</html>
