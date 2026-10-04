@@ -1,0 +1,38 @@
+{
+  "_readme": "Only official embeds. platform: youtube | spotify. url: the normal watch/open URL. Each YouTube item was checked via YouTube oEmbed (owner + embedding allowed) on 2026-10-04. 'source' records who uploaded it.",
+  "lists": [
+    {
+      "id": "mahalaya-recordings",
+      "items": [
+        { "title": "Mahalaya (Mahishasura Mardini) — Full Album", "artist": "Birendra Krishna Bhadra, Pankaj Kumar Mullick & others", "platform": "youtube", "url": "https://www.youtube.com/watch?v=YQyo8QeoYhc", "source": "Saregama Bengali (verified channel)" },
+        { "title": "1966 — Mahishasur Mardini", "artist": "Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=ZtMbKIfzioM", "source": "Akashvani AIR (official channel)" },
+        { "title": "Mahishasura Mardini (Bangla)", "artist": "Akashvani", "platform": "youtube", "url": "https://www.youtube.com/watch?v=4J_U8MwsL9c", "source": "Akashvani AIR (official channel)" },
+        { "title": "Chandipath — Mahisasurmardini", "artist": "Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=AnrGifI3WHk", "source": "Saregama Bengali (verified channel)" }
+      ]
+    },
+    {
+      "id": "mahalaya-songs",
+      "items": [
+        { "title": "Bajlo Tomar Aalor Benu (with narration)", "artist": "Supriti Ghosh, Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=2Zqlb00ttCU", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Jago Durga Dashapraharanadharinee", "artist": "Dwijen Mukherjee", "platform": "youtube", "url": "https://www.youtube.com/watch?v=IfSJy3_Lkuo", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Akhila Bimane Taba Jaya Gane", "artist": "Krishna Dasgupta", "platform": "youtube", "url": "https://www.youtube.com/watch?v=FrHp3pXxeNU", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Bimane Bimane", "artist": "Sandhya Mukherjee", "platform": "youtube", "url": "https://www.youtube.com/watch?v=-ZJtci1_Ih0", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Narayani Namastute", "artist": "Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=lb2Fwp5y_U0", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Agomoni (album)", "artist": "Birendra Krishna Bhadra & others", "platform": "spotify", "url": "https://open.spotify.com/album/4aybz4dL8EJK2OjdlGcF79", "source": "Spotify catalogue release (label not shown in embed)" }
+      ]
+    },
+    {
+      "id": "puja-songs",
+      "items": [
+        { "title": "Dhak Baja Kashor Baja", "artist": "Shreya Ghoshal · Jeet Gannguli", "platform": "youtube", "url": "https://www.youtube.com/watch?v=id5_3dKvEBg", "source": "T-Series (verified channel)" },
+        { "title": "Elo Je Maa", "artist": "Abhijeet, Shreya Ghoshal · Jeet Gannguli", "platform": "youtube", "url": "https://www.youtube.com/watch?v=GSJDim_JP4M", "source": "SVF Music (verified channel)" },
+        { "title": "Bolo Dugga Maiki", "artist": "Jeet Gannguli, Nakash Aziz, Nikhita Gandhi", "platform": "youtube", "url": "https://www.youtube.com/watch?v=DGNCKijVhJc", "source": "SVF Music (verified channel)" },
+        { "title": "Dugga Ma", "artist": "Arijit Singh", "platform": "youtube", "url": "https://www.youtube.com/watch?v=sPuZ0Q3KDWo", "source": "SVF (verified channel)" },
+        { "title": "Agomonir Gaan", "artist": "Anupam Roy", "platform": "youtube", "url": "https://www.youtube.com/watch?v=MsqpjM09MrY", "source": "SVF Music (verified channel)" },
+        { "title": "Aamaar Dugga", "artist": "Monali Thakur", "platform": "youtube", "url": "https://www.youtube.com/watch?v=4h5DXcN6cd4", "source": "Monali Thakur (official artist channel)" },
+        { "title": "Sera Pujor Gaan (jukebox)", "artist": "Various artists", "platform": "youtube", "url": "https://www.youtube.com/watch?v=K9-3WREFVhM", "source": "Saregama Bengali (verified channel)" },
+        { "title": "Bengali Durga Pujo Songs (playlist)", "artist": "SVF Music", "platform": "spotify", "url": "https://open.spotify.com/playlist/7AiRlFRDMS7tz5KXxXYrWf", "source": "Playlist owned by SVF Music" }
+      ]
+    }
+  ]
+}

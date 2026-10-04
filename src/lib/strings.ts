@@ -1,0 +1,219 @@
+/** All UI copy, Bengali + English. Keep keys grouped by page/feature. */
+type Entry = { bn: string; en: string };
+export const dict: Record<string, Entry> = {
+  // ── Common chrome ──
+  'nav.home': { bn: 'হোম', en: 'Home' },
+  'nav.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
+  'nav.card': { bn: 'শুভেচ্ছা কার্ড', en: 'Greeting card' },
+  'nav.advertise': { bn: 'বিজ্ঞাপন দিন', en: 'Advertise' },
+  'skip': { bn: 'মূল অংশে যান', en: 'Skip to content' },
+  'sponsored': { bn: 'স্পনসর', en: 'Sponsored' },
+  'adhere.cta': { bn: 'এখানে আপনার বিজ্ঞাপন — বিজ্ঞাপন দিন', en: 'Your brand here — Advertise' },
+  'footer.disclaimer': {
+    bn: 'রেডিও সম্প্রচার ও রেকর্ডিং প্রসার ভারতী / আকাশবাণীর সম্পত্তি। এই সাইট শুধু তাদের সরকারি লাইভ স্ট্রিম চালায়; কোনো অডিও আমরা রাখি না।',
+    en: 'The radio broadcast and recording belong to Prasar Bharati / Akashvani. This site only plays their official live stream; we host no audio.',
+  },
+  'footer.made': { bn: 'পশ্চিমবঙ্গ থেকে ভালোবাসা নিয়ে তৈরি', en: 'Made with love in West Bengal' },
+
+  // ── Hero / countdown ──
+  'hero.kicker': { bn: 'শনিবার, ১০ অক্টোবর ২০২৬ · ভোর', en: 'Saturday, 10 October 2026 · before dawn' },
+  'hero.title': { bn: 'শুভ মহালয়া', en: 'Shubho Mahalaya' },
+  'hero.sub': {
+    bn: 'ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।',
+    en: 'Mahishasuramardini in the pre-dawn dark — on Akashvani’s official live stream, right from this page.',
+  },
+  'cd.toMahalaya': { bn: 'মহিষাসুরমর্দিনী শুরু হতে বাকি', en: 'Mahishasuramardini begins in' },
+  'cd.live': { bn: 'এখন সম্প্রচার চলছে — নিচে প্লে করুন', en: 'On air now — press play below' },
+  'cd.toShashthi': { bn: 'মহাষষ্ঠী আসতে বাকি', en: 'Maha Shashthi arrives in' },
+  'cd.pujo': { bn: 'পুজো এসে গেছে! আজ {day}', en: 'Pujo is here! Today is {day}' },
+  'cd.over': { bn: 'শুভ বিজয়া! আসছে বছর আবার হবে।', en: 'Shubho Bijoya! See you again next year.' },
+  'cd.days': { bn: 'দিন', en: 'days' },
+  'cd.hours': { bn: 'ঘণ্টা', en: 'hours' },
+  'cd.minutes': { bn: 'মিনিট', en: 'min' },
+  'cd.seconds': { bn: 'সেকেন্ড', en: 'sec' },
+  'cd.ist': { bn: 'ভারতীয় সময়', en: 'India time (IST)' },
+  'cd.local': { bn: 'আপনার সময়', en: 'Your time' },
+  'cd.by': { bn: 'কাউন্টডাউন সৌজন্যে', en: 'Countdown by' },
+
+  // ── Radio ──
+  'radio.title': { bn: 'লাইভ রেডিও', en: 'Live radio' },
+  'radio.note': {
+    bn: 'সরকারি তালিকা অনুযায়ী ১০ অক্টোবর ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়) কলকাতা কেন্দ্র থেকে মহালয়ার বিশেষ অনুষ্ঠান। অন্য সময়ে চ্যানেলের নিয়মিত অনুষ্ঠান শোনা যাবে।',
+    en: 'Per the official schedule, Kolkata’s special Mahalaya transmission runs 3:50–5:45 AM IST on 10 Oct. At other times you’ll hear the channel’s regular programmes.',
+  },
+  'radio.channel': { bn: 'চ্যানেল', en: 'Channel' },
+  'radio.play': { bn: 'শুনুন', en: 'Play' },
+  'radio.pause': { bn: 'থামান', en: 'Pause' },
+  'radio.live': { bn: 'লাইভ', en: 'LIVE' },
+  'radio.idle': { bn: 'প্লে চাপলে আকাশবাণীর লাইভ স্ট্রিম চালু হবে', en: 'Press play to start Akashvani’s live stream' },
+  'radio.loading': { bn: 'সংযোগ হচ্ছে…', en: 'Connecting…' },
+  'radio.buffering': { bn: 'বাফারিং…', en: 'Buffering…' },
+  'radio.playing': { bn: 'সরাসরি শুনছেন: {ch}', en: 'Listening live: {ch}' },
+  'radio.paused': { bn: 'থামানো আছে', en: 'Paused' },
+  'radio.retry': { bn: 'স্ট্রিম পাওয়া যাচ্ছে না — {s} সেকেন্ডে আবার চেষ্টা (#{n})', en: 'Stream unreachable — retrying in {s}s (#{n})' },
+  'radio.error': {
+    bn: 'স্ট্রিম চালু হচ্ছে না। ভোরে সার্ভারে প্রচণ্ড ভিড় হয় — নিচের সরকারি বিকল্প চেষ্টা করুন।',
+    en: 'The stream won’t start. Their servers get very busy at dawn — try the official options below.',
+  },
+  'radio.fallback': { bn: 'না চললে:', en: 'If it doesn’t play:' },
+  'radio.fallbackSite': { bn: 'আকাশবাণীর সরকারি প্লেয়ার', en: 'Akashvani official player' },
+  'radio.fallbackAndroid': { bn: 'NewsOnAir অ্যাপ (Android)', en: 'NewsOnAir app (Android)' },
+  'radio.fallbackIos': { bn: 'NewsOnAir অ্যাপ (iPhone)', en: 'NewsOnAir app (iPhone)' },
+  'radio.fallbackFm': {
+    bn: 'অথবা সাধারণ রেডিও: আকাশবাণী কলকাতা ক ৬৫৭ kHz MW।',
+    en: 'Or a regular radio set: Akashvani Kolkata A on 657 kHz MW.',
+  },
+  'radio.bg': {
+    bn: 'স্ক্রিন বন্ধ করলেও অধিকাংশ ফোনে শোনা চলবে; লক-স্ক্রিন থেকেও থামানো/চালানো যাবে।',
+    en: 'On most phones audio keeps playing with the screen off, and lock-screen controls work.',
+  },
+  'radio.listeners': { bn: '{n} জন এখন শুনছেন', en: '{n} listening now' },
+
+  // ── Wake ──
+  'wake.title': { bn: 'মহালয়ার ভোরে জাগিয়ে দাও', en: 'Wake me for Mahalaya' },
+  'wake.desc': {
+    bn: 'আগের রাতে চালু করে রাখুন — ভোর ৩:৫০-এ (ভারতীয় সময়) রেডিও নিজে থেকেই বেজে উঠবে।',
+    en: 'Switch this on the night before — the radio starts by itself at 3:50 AM IST.',
+  },
+  'wake.arm': { bn: 'চালু করুন', en: 'Turn on' },
+  'wake.disarm': { bn: 'বন্ধ করুন', en: 'Turn off' },
+  'wake.armed': { bn: 'চালু আছে — {t} তে বাজবে (আপনার সময়)', en: 'On — will play at {t} (your time)' },
+  'wake.armedLock': { bn: 'স্ক্রিন জেগে থাকবে।', en: 'Screen will stay awake.' },
+  'wake.noLock': {
+    bn: 'এই ব্রাউজারে স্ক্রিন জাগিয়ে রাখা যায় না — ফোনের অটো-লক বন্ধ রাখুন।',
+    en: 'This browser can’t keep the screen awake — turn off auto-lock on your phone.',
+  },
+  'wake.limits': {
+    bn: 'সীমাবদ্ধতা: পাতাটি খোলা রাখতে হবে, ফোন চার্জে রাখুন আর সাইলেন্ট মোড/ভলিউম দেখে নিন। ফোন ঘুমিয়ে পড়লে বা ব্রাউজার বন্ধ হলে বাজবে না — ভরসার জন্য নিচের ক্যালেন্ডার রিমাইন্ডারও দিয়ে রাখুন।',
+    en: 'Limits: this page must stay open, keep the phone on charge, and check silent mode/volume. If the phone sleeps or the browser is closed it can’t play — add the calendar reminder below as a backup.',
+  },
+  'wake.started': { bn: 'সময় হয়েছে — রেডিও চালু করা হল।', en: 'It’s time — radio started.' },
+  'wake.past': { bn: 'এ বছরের সম্প্রচার শেষ হয়ে গেছে।', en: 'This year’s broadcast is over.' },
+
+  // ── Reminders ──
+  'rem.title': { bn: 'রিমাইন্ডার রাখুন', en: 'Set a reminder' },
+  'rem.gcal': { bn: 'গুগল ক্যালেন্ডারে যোগ করুন', en: 'Add to Google Calendar' },
+  'rem.ics': { bn: '.ics ফাইল (iPhone/Outlook)', en: '.ics file (iPhone/Outlook)' },
+  'rem.shashthi': { bn: 'মহাষষ্ঠীর রিমাইন্ডারও', en: 'Also remind me for Shashthi' },
+  'rem.wa': { bn: 'হোয়াটসঅ্যাপে শেয়ার করুন', en: 'Share on WhatsApp' },
+  'rem.waText': {
+    bn: 'শুভ মহালয়া 🙏 ১০ অক্টোবর ভোর ৩:৫০ থেকে আকাশবাণীতে মহিষাসুরমর্দিনী। এখান থেকে সরাসরি শুনুন, রিমাইন্ডারও দিয়ে রাখুন: {url}',
+    en: 'Shubho Mahalaya 🙏 Mahishasuramardini on Akashvani from 3:50 AM IST, 10 Oct. Listen live and set a reminder here: {url}',
+  },
+  'rem.copy': { bn: 'লিংক কপি', en: 'Copy link' },
+  'rem.copied': { bn: 'কপি হয়েছে', en: 'Copied' },
+  'ev.mahalaya.title': { bn: 'মহালয়া — মহিষাসুরমর্দিনী লাইভ', en: 'Mahalaya — Mahishasuramardini live' },
+  'ev.mahalaya.desc': {
+    bn: 'ভোর ৩:৫০ (ভারতীয় সময়) থেকে আকাশবাণী কলকাতার সম্প্রচার। শুনুন: {url}',
+    en: 'Akashvani Kolkata transmission from 3:50 AM IST. Listen: {url}',
+  },
+  'ev.shashthi.title': { bn: 'মহাষষ্ঠী — দুর্গাপুজো শুরু', en: 'Maha Shashthi — Durga Puja begins' },
+  'ev.shashthi.desc': { bn: 'প্যান্ডেল ম্যাপ ও পুজোর গান: {url}', en: 'Pandal map & Puja songs: {url}' },
+
+  // ── Schedule ──
+  'sch.title': { bn: 'পুজোর নির্ঘণ্ট ২০২৬', en: 'Puja calendar 2026' },
+  'sch.today': { bn: 'আজ', en: 'Today' },
+  'sch.tomorrow': { bn: 'আগামীকাল', en: 'Tomorrow' },
+  'sch.inDays': { bn: '{n} দিন পরে', en: 'In {n} days' },
+  'sch.done': { bn: 'হয়ে গেছে', en: 'Done' },
+  'sch.note': {
+    bn: 'তারিখ বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা অনুযায়ী (এ বছর সপ্তমী দুদিন)। গুপ্তপ্রেস পঞ্জিকায় অষ্টমী থেকে এক দিন আগে।',
+    en: 'Dates follow the Bisuddha Siddhanta panjika (Saptami spans two days this year). Gupta Press panjika runs one day earlier from Ashtami.',
+  },
+
+  // ── Dhak ──
+  'dhak.title': { bn: 'ঢাক বাজান', en: 'Play the dhak' },
+  'dhak.hint': { bn: 'ঢাকে টোকা দিন (বা স্পেস/এন্টার চাপুন)', en: 'Tap the drum (or press Space/Enter)' },
+  'dhak.label': { bn: 'ঢাক — বাজাতে চাপুন', en: 'Dhak — press to play' },
+  'dhak.rhythm': { bn: 'পুরো বোল বাজাও', en: 'Play a full rhythm' },
+  'dhak.by': { bn: 'ঢাক সৌজন্যে', en: 'Dhak presented by' },
+
+  // ── Playlists ──
+  'pl.title': { bn: 'গান ও রেকর্ডিং', en: 'Songs & recordings' },
+  'pl.mahalaya-recordings': { bn: 'মহালয়ার রেকর্ডিং', en: 'Mahalaya recordings' },
+  'pl.mahalaya-songs': { bn: 'মহালয়ার গান', en: 'Mahalaya songs' },
+  'pl.puja-songs': { bn: 'পুজোর গান', en: 'Durga Puja songs' },
+  'pl.load': { bn: 'চালান', en: 'Load player' },
+  'pl.open': { bn: 'অ্যাপে খুলুন', en: 'Open in app' },
+  'pl.spotifyNote': {
+    bn: 'স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ শোনা যায়। সব প্লেয়ার সরকারি চ্যানেলের — চাপলে তবেই লোড হয়।',
+    en: 'Spotify plays 30-second previews unless you’re logged in. All players are official channel embeds and load only when you tap.',
+  },
+  'pl.empty': { bn: 'তালিকা তৈরি হচ্ছে…', en: 'List coming soon…' },
+
+  // ── FAQ ──
+  'faq.title': { bn: 'প্রশ্নোত্তর', en: 'FAQ' },
+  'faq.q1': { bn: '২০২৬ সালে মহালয়া কবে?', en: 'When is Mahalaya in 2026?' },
+  'faq.a1': {
+    bn: 'শনিবার, ১০ অক্টোবর ২০২৬। আকাশবাণীতে মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)।',
+    en: 'Saturday, 10 October 2026. Akashvani’s Mahishasuramardini transmission runs from 3:50 to 5:45 AM IST.',
+  },
+  'faq.q2': { bn: 'মহালয়া লাইভ রেডিও অনলাইনে কীভাবে শুনব?', en: 'How do I listen to Mahalaya live radio online?' },
+  'faq.a2': {
+    bn: 'এই পাতার প্লেয়ারে "শুনুন" চাপুন — এটি আকাশবাণী কলকাতার সরকারি স্ট্রিম চালায়। না চললে আকাশবাণীর ওয়েবসাইট বা NewsOnAir অ্যাপ ব্যবহার করুন, অথবা MW ৬৫৭ kHz-এ রেডিও ধরুন।',
+    en: 'Press Play in the player on this page — it plays Akashvani Kolkata’s official stream. If it fails, use the Akashvani website or the NewsOnAir app, or tune a radio to 657 kHz MW.',
+  },
+  'faq.q3': { bn: 'দুর্গাপুজো ২০২৬-এর তারিখ কী?', en: 'What are the Durga Puja 2026 dates?' },
+  'faq.a3': {
+    bn: 'ষষ্ঠী ১৬ অক্টোবর, সপ্তমী ১৭–১৮ অক্টোবর, অষ্টমী ১৯ অক্টোবর, নবমী ২০ অক্টোবর, বিজয়া দশমী ২১ অক্টোবর (বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা)।',
+    en: 'Shashthi 16 Oct, Saptami 17–18 Oct, Ashtami 19 Oct, Nabami 20 Oct, Bijoya Dashami 21 Oct (Bisuddha Siddhanta panjika).',
+  },
+  'faq.q4': { bn: 'বিদেশ থেকে কখন শুনব?', en: 'What time is it outside India?' },
+  'faq.a4': {
+    bn: 'উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।',
+    en: 'The countdown above also shows your local time. For example: London 11:20 PM on 9 Oct, New York 6:20 PM on 9 Oct, Dubai 2:20 AM on 10 Oct.',
+  },
+
+  // ── Advertise page ──
+  'ad.title': { bn: 'বিজ্ঞাপন দিন', en: 'Advertise with us' },
+  'ad.intro': {
+    bn: 'মহালয়া থেকে বিজয়া দশমী — পুজোর মরসুমে আপনার দোকান বা ব্র্যান্ডকে তুলে ধরুন। প্রতিটি স্লটে স্পষ্ট "স্পনসর" লেখা থাকে। রেডিও সম্প্রচারের পাশে কোনো বিজ্ঞাপন থাকে না।',
+    en: 'From Mahalaya to Bijoya Dashami — put your shop or brand in front of Puja-season visitors. Every slot is clearly marked “Sponsored”. No ads appear on or around the radio broadcast.',
+  },
+  'ad.slots': { bn: 'স্লট ও দাম', en: 'Slots & prices' },
+  'ad.col.slot': { bn: 'স্লট', en: 'Slot' },
+  'ad.col.where': { bn: 'কোথায় দেখা যাবে', en: 'Where it appears' },
+  'ad.col.price': { bn: 'দাম', en: 'Price' },
+  'ad.col.status': { bn: 'অবস্থা', en: 'Status' },
+  'ad.free': { bn: 'খালি', en: 'Available' },
+  'ad.taken': { bn: 'বুকড', en: 'Booked' },
+  'ad.tbd': { bn: 'শীঘ্রই জানানো হবে', en: 'To be announced' },
+  'ad.runs': {
+    bn: 'সব স্লট বুকিং-এর দিন থেকে বিজয়া দশমী (২১ অক্টোবর ২০২৬) পর্যন্ত চলবে।',
+    en: 'All slots run from booking until Bijoya Dashami (21 October 2026).',
+  },
+  'ad.audience': { bn: 'কারা দেখবেন', en: 'Audience' },
+  'ad.audienceText': {
+    bn: 'বাংলাভাষী শ্রোতা — কলকাতা, উত্তর ২৪ পরগনা ও প্রবাসী বাঙালি। আসল ভিজিটর সংখ্যা এখানে শীঘ্রই দেওয়া হবে।',
+    en: 'Bengali-speaking visitors — Kolkata, North 24 Parganas and the diaspora. Real visitor numbers will be published here soon.',
+  },
+  'ad.pay': { bn: 'UPI-তে পেমেন্ট', en: 'Pay via UPI' },
+  'ad.payStep': {
+    bn: 'আগে হোয়াটসঅ্যাপে স্লট নিশ্চিত করুন, তারপর পেমেন্ট করুন।',
+    en: 'Confirm your slot on WhatsApp first, then pay.',
+  },
+  'ad.pickSlot': { bn: 'স্লট বাছুন', en: 'Choose a slot' },
+  'ad.payBtn': { bn: 'UPI অ্যাপে পেমেন্ট করুন', en: 'Pay in a UPI app' },
+  'ad.qr': { bn: 'অন্য ফোন থেকে স্ক্যান করুন', en: 'Or scan from another phone' },
+  'ad.upiId': { bn: 'UPI আইডি', en: 'UPI ID' },
+  'ad.contact': { bn: 'হোয়াটসঅ্যাপে কথা বলুন', en: 'Chat on WhatsApp' },
+  'ad.waText': {
+    bn: 'নমস্কার, আমি {site}-এ বিজ্ঞাপন দিতে চাই। স্লট: ',
+    en: 'Hello, I would like to advertise on {site}. Slot: ',
+  },
+  'slot.dhak': { bn: '"ঢাক সৌজন্যে …"', en: '“Dhak presented by …”' },
+  'slot.dhak.where': { bn: 'হোম পেজে ঢাক বাজানোর অংশে', en: 'Under the dhak on the home page' },
+  'slot.countdown': { bn: '"কাউন্টডাউন সৌজন্যে …"', en: '“Countdown by …”' },
+  'slot.countdown.where': { bn: 'হোম পেজের কাউন্টডাউনের নিচে', en: 'Below the home-page countdown' },
+  'slot.card': { bn: 'শুভেচ্ছা কার্ডে নাম', en: 'Greeting-card credit' },
+  'slot.card.where': { bn: 'প্রতিটি শেয়ার করা শুভেচ্ছা কার্ডের কোণে', en: 'A small credit on every shared greeting card' },
+  'slot.map-partner': { bn: 'প্যান্ডেল ম্যাপ পার্টনার', en: 'Pandal map partner' },
+  'slot.map-partner.where': { bn: 'প্যান্ডেল ম্যাপের মাথায়', en: 'Top of the pandal map page' },
+  'slot.pandal-nearby': { bn: '"কাছেই খাবার" — প্যান্ডেল কার্ডে', en: '“Eat nearby” on pandal cards' },
+  'slot.pandal-nearby.where': {
+    bn: 'আপনার দোকানের কাছের প্যান্ডেলগুলোর কার্ডে (প্রতি এলাকা)',
+    en: 'On the cards of pandals near your shop (per area)',
+  },
+  'slot.footer': { bn: 'ফুটার স্পনসর', en: 'Footer sponsor strip' },
+  'slot.footer.where': { bn: 'সব পাতার নিচে', en: 'Bottom of every page' },
+};

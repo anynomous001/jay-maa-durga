@@ -1,0 +1,25 @@
+{
+  "name": "mahalaya-2026",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && node scripts/validate-data.mjs && vite build",
+    "preview": "vite preview",
+    "og": "node scripts/make-og.mjs",
+    "check": "tsc --noEmit && node scripts/validate-data.mjs"
+  },
+  "dependencies": {
+    "hls.js": "^1.7.3",
+    "leaflet": "^1.9.4",
+    "qrcode-generator": "^2.0.4"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/leaflet": "^1.9.22",
+    "@types/node": "^26.6.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2"
+  }
+}
