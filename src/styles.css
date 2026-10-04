@@ -2,7 +2,7 @@
 :root {
   --bg: #0c0f1f;
   --bg-2: #12162b;
-  --panel: #161a33;
+  --panel: rgba(20, 24, 50, 0.9);
   --line: #2a2f52;
   --text: #f1ece2;
   --muted: #b3b0c4;
@@ -169,14 +169,7 @@ main {
   isolation: isolate;
 }
 .sky {
-  position: absolute;
-  inset: -1rem -1rem 0;
-  z-index: -1;
-  background:
-    radial-gradient(60% 45% at 50% 105%, rgba(244, 185, 66, 0.22), transparent 70%),
-    radial-gradient(40% 30% at 50% 100%, rgba(239, 106, 79, 0.18), transparent 70%),
-    linear-gradient(180deg, #090b18 0%, #12162b 100%);
-  border-radius: 0 0 28px 28px;
+  display: none; /* replaced by the page-wide .backdrop */
 }
 .kicker {
   color: var(--accent);
@@ -877,4 +870,81 @@ a.sponsor:hover {
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* ── Animated backdrop (original) ── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #080a1c 0%, #111531 42%, #1c1430 78%, #2a1726 100%);
+}
+.bd-glow {
+  position: absolute;
+  left: 50%;
+  bottom: -30vh;
+  width: 140vw;
+  height: 70vh;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, rgba(244, 185, 66, 0.22), rgba(239, 106, 79, 0.1) 55%, transparent);
+  animation: bd-breathe 9s ease-in-out infinite;
+}
+.bd-star {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: #fff;
+  opacity: var(--o);
+  animation: bd-twinkle var(--d) ease-in-out infinite alternate;
+}
+.bd-mist {
+  position: absolute;
+  left: -40vw;
+  width: 120vw;
+  height: 22vh;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(196, 200, 236, var(--o)), transparent);
+  filter: blur(12px);
+  animation: bd-drift var(--d) linear var(--delay) infinite;
+}
+.bd-flower {
+  position: absolute;
+  top: -40px;
+  width: var(--z);
+  height: var(--z);
+  opacity: 0.75;
+  will-change: transform;
+  animation: bd-fall var(--d) linear var(--delay) infinite;
+}
+.bd-flower svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.bd-flower.rest {
+  top: auto;
+  animation: none;
+  opacity: 0.55;
+}
+.backdrop.paused * {
+  animation-play-state: paused;
+}
+@keyframes bd-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(0); opacity: 0; }
+  8% { opacity: 0.75; }
+  50% { transform: translate3d(var(--sway), 55vh, 0) rotate(calc(var(--spin) / 2)); }
+  90% { opacity: 0.7; }
+  100% { transform: translate3d(calc(var(--sway) * -0.3), 108vh, 0) rotate(var(--spin)); opacity: 0; }
+}
+@keyframes bd-twinkle {
+  to { opacity: calc(var(--o) * 0.3); }
+}
+@keyframes bd-drift {
+  to { transform: translate3d(80vw, 0, 0); }
+}
+@keyframes bd-breathe {
+  50% { opacity: 0.7; }
 }

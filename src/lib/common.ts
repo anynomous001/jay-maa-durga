@@ -3,8 +3,10 @@ import '../styles.css';
 import { ANALYTICS, SITE_NAME, SITE_NAME_BN } from '../config';
 import { getLang, initI18n, onLangChange } from './i18n';
 import { renderSlots } from './sponsors';
+import { initBackdrop } from '../features/backdrop';
 
 export function initCommon(): void {
+  initBackdrop();
   initI18n();
   const nameEl = document.getElementById('site-name');
   const syncName = () => {

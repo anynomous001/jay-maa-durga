@@ -207,6 +207,7 @@ export class Radio {
   private bindAudio(): void {
     const a = this.audio;
     a.addEventListener('playing', () => {
+      if (!this.wantPlay) return; // e.g. the silent unlock clip
       clearTimeout(this.stallTimer);
       this.failures = 0;
       this.setState('playing');
