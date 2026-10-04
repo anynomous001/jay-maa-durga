@@ -665,8 +665,9 @@ details.more .btn-row {
 }
 
 /* ── Sponsors ── */
-.sponsor-slot:empty {
-  display: none;
+/* Every slot always renders (sponsor or CTA); reserve its height to avoid layout shift. */
+.sponsor-slot[data-slot] {
+  min-height: 3.75rem;
 }
 .sponsor {
   display: flex;
@@ -966,6 +967,7 @@ a.sponsor:hover {
   flex: 1 1 16rem;
 }
 .pm-zones {
+  min-height: 44px;
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
@@ -1055,6 +1057,12 @@ a.sponsor:hover {
     overflow-y: auto;
     padding-right: 0.25rem;
   }
+}
+#pm-status {
+  min-height: 1.6em;
+}
+.pm-list-wrap {
+  min-height: 100vh;
 }
 .pm-list {
   list-style: none;

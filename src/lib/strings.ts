@@ -169,6 +169,7 @@ export const dict: Record<string, Entry> = {
     bn: 'উত্তর ও দক্ষিণ কলকাতার পরিচিত পুজো — ম্যাপে দেখুন, খুঁজুন, আর এক চাপে গুগল ম্যাপসে রাস্তা পান।',
     en: 'Well-known pujas of North and South Kolkata — browse the map, search, and get Google Maps directions in one tap.',
   },
+  'pm.listTitle': { bn: 'প্যান্ডেলের তালিকা', en: 'Pandal list' },
   'pm.all': { bn: 'সব', en: 'All' },
   'pm.zone.North Kolkata': { bn: 'উত্তর কলকাতা', en: 'North Kolkata' },
   'pm.zone.South Kolkata': { bn: 'দক্ষিণ কলকাতা', en: 'South Kolkata' },

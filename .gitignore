@@ -5,3 +5,4 @@ dist
 .vite
 scripts/.cache
 .vite-dev.log
+.vite-preview.log
