@@ -1,3 +1,146 @@
-# Mahalaya & Durga Puja 2026
+# Mahalaya Live — মহালয়া লাইভ
 
-Work in progress.
+Static site for Mahalaya and Durga Puja 2026:
+
+- live Akashvani radio (Mahishasuramardini) with a "wake me" auto-start;
+- calendar reminders;
+- countdowns and the Puja calendar;
+- official song embeds and a synthesised dhak;
+- a Kolkata pandal map with directions;
+- config-driven sponsor slots.
+
+Built with **Vite + vanilla TypeScript**. There's no UI framework. The pages are mostly static content with a few interactive widgets, so plain DOM code keeps the JS small (≈8 KB gzipped per page, plus 11 KB shared). That matters on mid-range Android phones over 4G. Two heavy pieces load only when needed:
+- **Leaflet** loads only when the map is shown.
+- **hls.js** loads only in browsers without native HLS.
+
+## Run it
+
+```bash
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # typecheck + data validation + production build → dist/
+npm run preview    # serve dist/ on http://localhost:4173
+```
+
+Pages: `/` (radio, countdown, reminders, schedule, dhak, songs, FAQ), `/pandals/` (map), `/advertise/`.
+
+### Test hooks (safe to leave in production)
+
+| URL param | Effect |
+|---|---|
+| `?now=2026-10-10T03:49:50%2B05:30` | Pretend it is that instant (countdown, schedule, wake, hero copy). |
+| `?lang=en` / `?lang=bn` | Force the language. |
+| `?hlsjs` | Force the hls.js player path (simulates Firefox / older Chrome). |
+
+## Where to change things
+
+| What | File |
+|---|---|
+| Site name, tagline, URL, UPI ID, WhatsApp number, slot prices, the `PRICES_TBD` flag | `src/config.ts` |
+| Key times (transmission 03:50–05:45 IST, auto-start time, reminder time), Puja dates | `src/config.ts` (`MAHALAYA_*`, `AUTO_START_AT`, `PUJA_DAYS`) |
+| Radio stream URLs | `src/config.ts` (`RADIO_CHANNELS`) |
+| Map tile provider | `src/config.ts` (`MAP_TILE_URL`, `MAP_TILE_ATTRIBUTION`) |
+| Cloudflare Web Analytics | `src/config.ts` → `ANALYTICS = { enabled: true, cloudflareToken: '…' }` |
+| All UI text (Bengali + English) | `src/lib/strings.ts` |
+| Sponsors | `data/sponsors.json` |
+| Pandals and routes | `data/pandals.json` |
+| Playlists | `data/playlists.json` |
+
+`npm run build` runs `scripts/validate-data.mjs` first, so a typo in a JSON file fails the build instead of breaking the site.
+
+### Sponsors (`data/sponsors.json`)
+
+```json
+{
+  "id": "tota-cake-house",
+  "slot": "dhak",
+  "name": "Tota Cake House",
+  "name_bn": "টোটা কেক হাউস",
+  "tagline": "Home-baked cakes for every celebration",
+  "tagline_bn": "বাড়িতে বানানো কেক — সব উৎসবের জন্য",
+  "logo": "/sponsors/tota.png",
+  "link": "https://…",
+  "whatsapp": "91XXXXXXXXXX",
+  "startDate": "2026-10-04",
+  "endDate": "2026-10-21",
+  "active": true,
+  "pandalIds": []
+}
+```
+
+- `slot` is one of `dhak`, `countdown`, `map-partner`, `pandal-nearby` or `footer`.
+- `logo` is optional. Put the file in `public/sponsors/`.
+- `link` takes precedence over `whatsapp`; if both are empty, the card isn't clickable.
+- Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Advertise here / বিজ্ঞাপন দিন" CTA.
+- For `pandal-nearby`, list the pandal ids the shop is near, e.g. `["maddox-square","singhi-park"]`.
+- Every sponsor is labelled "স্পনসর / Sponsored". No slot sits on or around the radio player; the broadcast belongs to Prasar Bharati.
+
+### Pandals (`data/pandals.json`)
+
+Each pandal has these fields: `id`, `name_bn`, `name_en`, `area`, `zone`, `lat`, `lng`, optional `nearestMetro`, `theme2026` (leave empty unless confirmed), `verified`, `source` and `notes`.
+
+- `verified: false` shows an "approximate location" warning on the card and greys the pin.
+- Every coordinate was looked up individually on Google Maps. `docs/pandal-lookup-log.tsv` records the search, the matched place and the confidence.
+- To add a pandal, look it up the same way and add a row to that log.
+
+`routes` is an ordered list of stop ids plus a `travelmode`. Google Maps on phones accepts only 3 waypoints, so the page splits a route into even legs of at most 5 stops (shown as "Part 1 / Part 2").
+
+### Playlists (`data/playlists.json`)
+
+Use official uploads only. Each item has `title`, `artist`, `platform` (`youtube` or `spotify`), `url` (a normal watch/open URL) and `source`.
+
+Before adding a YouTube video, check it's embeddable and see who uploaded it:
+
+```
+https://www.youtube.com/oembed?format=json&url=https://www.youtube.com/watch?v=VIDEO_ID
+```
+
+A 401 response means embedding is disabled, so don't add it.
+
+### OG image and icons
+
+`npm run og` renders the PWA icons and `scripts/og-art.svg` (background art). The OG image's text is drawn by the browser, because resvg can't shape Bengali conjuncts. With `npm run dev` running, open <http://localhost:5173/scripts/og.html>; it saves `public/og.jpg` through a dev-only endpoint.
+
+## Deploy to Cloudflare Pages (steps only — not done)
+
+Vercel's free plan forbids commercial use, so target Cloudflare Pages.
+
+1. Push this repo to GitHub (ask before creating the remote).
+2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git** and pick the repo.
+3. Build settings:
+   - framework preset: **None**;
+   - build command: `npm run build`;
+   - build output directory: `dist`;
+   - environment variable `NODE_VERSION=22`.
+4. Deploy. `public/_headers` (caching and security headers) is picked up automatically.
+5. Set the final domain in `SITE_URL` (`src/config.ts`), and in the canonical/OG tags in the three `index.html` files, `public/robots.txt` and `public/sitemap.xml`. Redeploy.
+6. Optional:
+   - **Web Analytics:** Cloudflare → Web Analytics → add site → copy the token into `ANALYTICS` → redeploy.
+   - **Custom domain:** Pages → Custom domains.
+
+## Known limitations
+
+- **The stream depends on Prasar Bharati.** The CDN (`airhlspush.pc.cdn.bitgravity.com`) serves HTTPS with `Access-Control-Allow-Origin: *`, the HLS MIME type and AAC segments, so it plays from our page. On Mahalaya dawn it may be overloaded or the URLs may change. The player retries with backoff (2→4→8→15→30 s) and highlights the official fallbacks: the Akashvani player, the NewsOnAir app, and 657 kHz MW.
+  - The streams are listed on <https://akashvani.gov.in/radio/live.php>. If they change, update `RADIO_CHANNELS`.
+- **Which channel carries the broadcast:** the official 2026 schedule says Kolkata "originates" the Bengali programme on selected MW and FM stations, 03:50–05:45 IST. Kolkata A (Geetanjali) and FM Rainbow Kolkata are both offered; confirm on the day.
+- **Autoplay and wake mode:**
+  - Browsers only let audio start after a tap. "Wake me" works because the user taps to arm it, and the page must stay open.
+  - Screen Wake Lock isn't available everywhere.
+  - Background tabs may run timers late, so the stream can start a few seconds after 03:50.
+  - iOS may still pause audio when the screen locks during a long silence.
+- **Background playback** works for native-HLS audio on Android Chrome and iOS Safari in most cases. It is not guaranteed.
+- **OSM tiles:** `tile.openstreetmap.org` is a volunteer-run service with a [usage policy](https://operations.osmfoundation.org/policies/tiles/) that forbids heavy use. If traffic grows, switch `MAP_TILE_URL` to a commercial or free-tier provider (MapTiler, Stadia, Thunderforest…) and update the attribution.
+- **Spotify embeds** play 30-second previews unless the listener is logged in.
+- **Dates:** Puja dates follow the Bisuddha Siddhanta panjika (Saptami spans 17–18 Oct). Gupta Press / Benimadhab Sheel panjika runs one day earlier from Ashtami. The WB holiday list puts Shashthi on 17 Oct.
+- **Live listener count** needs a backend, so it is not built. The UI hook (`#listener-count`) stays hidden until `LISTENER_COUNT_ENDPOINT` is set to a URL returning `{"count": 123}`. A cheap option is a Cloudflare Worker with a Durable Object (or KV with short TTLs):
+  - clients `POST /ping` every 60 s while playing;
+  - the Worker counts unique pings in the last 2 minutes;
+  - `GET /count` returns the number.
+  
+  Never route the audio itself through it.
+
+## Docs
+
+- `ASSETS.md` — every asset, its source and licence.
+- `VERIFICATION.md` — what was tested, how, and the results (screenshots and Lighthouse reports in `docs/verification/`).
+- `docs/pandal-lookup-log.tsv` — the per-pandal Google Maps lookup record.
