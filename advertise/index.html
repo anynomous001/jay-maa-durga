@@ -2,12 +2,51 @@
 <html lang="bn">
   <head>
     <!--@partial head-->
-    <title>advertise — Mahalaya Live</title>
-    <script type="module" src="/src/pages/stub.ts"></script>
+    <title>বিজ্ঞাপন দিন — Advertise on Mahalaya Live | Durga Puja 2026</title>
+    <meta name="description" content="মহালয়া থেকে বিজয়া দশমী পর্যন্ত পুজোর মরসুমে আপনার দোকান বা ব্র্যান্ডের বিজ্ঞাপন দিন। Sponsor slots, prices and UPI payment for Mahalaya Live." />
+    <link rel="canonical" href="https://mahalaya-live.pages.dev/advertise/" />
+    <meta property="og:title" content="Advertise on Mahalaya Live — Durga Puja 2026" />
+    <meta property="og:image" content="https://mahalaya-live.pages.dev/og.jpg" />
+    <script type="module" src="/src/pages/advertise.ts"></script>
   </head>
   <body>
     <!--@partial header-->
-    <main id="main"><section class="panel"><h1>advertise</h1><p>Coming soon.</p></section></main>
+    <main id="main">
+      <section class="page-head">
+        <h1 data-i18n="ad.title">বিজ্ঞাপন দিন</h1>
+        <p class="lead" data-i18n="ad.intro">মহালয়া থেকে বিজয়া দশমী — পুজোর মরসুমে আপনার দোকান বা ব্র্যান্ডকে তুলে ধরুন। প্রতিটি স্লটে স্পষ্ট "স্পনসর" লেখা থাকে। রেডিও সম্প্রচারের পাশে কোনো বিজ্ঞাপন থাকে না।</p>
+      </section>
+
+      <section class="panel" aria-labelledby="slots-title">
+        <h2 id="slots-title" data-i18n="ad.slots">স্লট ও দাম</h2>
+        <div class="slot-list" id="slot-list"></div>
+        <p class="muted small" data-i18n="ad.runs">সব স্লট বুকিং-এর দিন থেকে বিজয়া দশমী (২১ অক্টোবর ২০২৬) পর্যন্ত চলবে।</p>
+      </section>
+
+      <section class="panel" aria-labelledby="aud-title">
+        <h2 id="aud-title" data-i18n="ad.audience">কারা দেখবেন</h2>
+        <p data-i18n="ad.audienceText">বাংলাভাষী শ্রোতা — কলকাতা ও প্রবাসী বাঙালি। আসল ভিজিটর সংখ্যা এখানে শীঘ্রই দেওয়া হবে।</p>
+        <dl class="stats" id="stats"></dl>
+      </section>
+
+      <section class="panel pay" aria-labelledby="pay-title">
+        <h2 id="pay-title" data-i18n="ad.pay">UPI-তে পেমেন্ট</h2>
+        <p data-i18n="ad.payStep">আগে হোয়াটসঅ্যাপে স্লট নিশ্চিত করুন, তারপর পেমেন্ট করুন।</p>
+        <a class="btn btn-wa" id="wa-contact" target="_blank" rel="noopener" data-i18n="ad.contact">হোয়াটসঅ্যাপে কথা বলুন</a>
+        <div class="pay-grid">
+          <div>
+            <label for="slot-select" class="field-label" data-i18n="ad.pickSlot">স্লট বাছুন</label>
+            <select id="slot-select" class="select"></select>
+            <p class="upi-line"><span data-i18n="ad.upiId">UPI আইডি</span>: <code id="upi-id"></code></p>
+            <a class="btn" id="upi-link" data-i18n="ad.payBtn">UPI অ্যাপে পেমেন্ট করুন</a>
+          </div>
+          <figure class="qr">
+            <div id="qr" class="qr-box"></div>
+            <figcaption class="muted small" data-i18n="ad.qr">অন্য ফোন থেকে স্ক্যান করুন</figcaption>
+          </figure>
+        </div>
+      </section>
+    </main>
     <!--@partial footer-->
   </body>
 </html>
