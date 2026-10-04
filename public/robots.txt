@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://mahalaya-live.pages.dev/sitemap.xml
+Sitemap: https://agomonir-sure.pages.dev/sitemap.xml

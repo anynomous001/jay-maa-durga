@@ -27,7 +27,7 @@ bucket_name = "mahalaya-sponsor-logos"
 
 [vars]
 # Comma-separated origins allowed to call the API (your site + local dev).
-ALLOWED_ORIGINS = "https://mahalaya-live.pages.dev,https://agomonir-sure.vercel.app,http://localhost:5173,http://localhost:4173"
+ALLOWED_ORIGINS = "https://agomonir-sure.pages.dev,https://mahalaya-live.pages.dev,https://agomonir-sure.vercel.app,http://localhost:5173,http://localhost:4173"
 
 # Secrets — never put these in this file:
 #   npx wrangler secret put RAZORPAY_KEY_ID
