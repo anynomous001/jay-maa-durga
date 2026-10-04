@@ -9,7 +9,7 @@ const err = (m) => errors.push(m);
 const isDate = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s));
 
 // Sponsors
-const SLOTS = ['dhak', 'countdown', 'map-partner', 'pandal-nearby', 'footer'];
+const SLOTS = ['dhak', 'countdown', 'spotlight', 'map-partner', 'pandal-nearby', 'footer'];
 const sponsors = load('sponsors.json').sponsors;
 const ids = new Set();
 for (const s of sponsors) {

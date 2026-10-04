@@ -43,6 +43,21 @@ export const dict: Record<string, Entry> = {
   'cd.local': { bn: 'আপনার সময়', en: 'Your time' },
   'cd.by': { bn: 'কাউন্টডাউন সৌজন্যে', en: 'Countdown by' },
 
+  'ui.close': { bn: 'বন্ধ করুন', en: 'Close' },
+  'dock.label': { bn: 'আরও', en: 'More' },
+  'dock.schedule': { bn: 'নির্ঘণ্ট', en: 'Schedule' },
+  'dock.songs': { bn: 'গান', en: 'Songs' },
+  'dock.dhak': { bn: 'ঢাক', en: 'Dhak' },
+  'dock.faq': { bn: 'প্রশ্নোত্তর', en: 'FAQ' },
+  'dock.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
+  'rem.gcalShort': { bn: 'গুগল ক্যালেন্ডার', en: 'Google Calendar' },
+  'rem.icsShort': { bn: '.ics রিমাইন্ডার', en: '.ics reminder' },
+  'rem.waShort': { bn: 'শেয়ার', en: 'Share' },
+  'radio.noteShort': { bn: '১০ অক্টোবর ভোর ৩:৫০–৫:৪৫ (ভারতীয় সময়) · আকাশবাণী কলকাতা', en: '10 Oct, 3:50–5:45 AM IST · Akashvani Kolkata' },
+  'radio.fallbackMw': { bn: 'MW ৬৫৭ kHz', en: 'MW 657 kHz' },
+  'wake.how': { bn: 'কীভাবে কাজ করে', en: 'How it works' },
+  'slot.spotlight': { bn: 'স্পটলাইট কার্ড', en: 'Spotlight card' },
+  'slot.spotlight.where': { bn: 'হোম পেজের ছবির উপর, ডান দিকে (রেডিও প্লেয়ার থেকে দূরে)', en: 'On the home hero image, right side (away from the radio player)' },
   // ── Radio ──
   'radio.title': { bn: 'লাইভ রেডিও', en: 'Live radio' },
   'radio.note': {

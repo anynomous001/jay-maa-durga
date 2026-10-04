@@ -22,6 +22,7 @@ export const WHATSAPP_NUMBER = '919874353532';
 export const SLOT_PRICES_INR: Record<string, number> = {
   dhak: 99,
   countdown: 99,
+  spotlight: 99,
   'map-partner': 99,
   'pandal-nearby': 99,
   footer: 99,
@@ -70,6 +71,10 @@ export interface RadioChannel {
   id: string;
   name_bn: string;
   name_en: string;
+  /** Short caption under the channel icon. */
+  short_bn: string;
+  short_en: string;
+  icon: 'tower' | 'rainbow';
   /** Official Prasar Bharati HLS URL (from akashvani.gov.in/radio/live.php). */
   url: string;
 }
@@ -78,12 +83,18 @@ export const RADIO_CHANNELS: RadioChannel[] = [
     id: 'kolkata-a',
     name_bn: 'আকাশবাণী কলকাতা ক (গীতাঞ্জলি)',
     name_en: 'Akashvani Kolkata A (Geetanjali)',
+    short_bn: 'কলকাতা ক',
+    short_en: 'Kolkata A',
+    icon: 'tower',
     url: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio055/hlspbaudio055_Auto.m3u8',
   },
   {
     id: 'fm-rainbow',
     name_bn: 'এফএম রেনবো কলকাতা',
     name_en: 'FM Rainbow Kolkata',
+    short_bn: 'রেনবো',
+    short_en: 'Rainbow',
+    icon: 'rainbow',
     url: 'https://airhlspush.pc.cdn.bitgravity.com/httppush/hlspbaudio058/hlspbaudio058_Auto.m3u8',
   },
 ];

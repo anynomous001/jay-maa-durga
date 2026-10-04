@@ -72,8 +72,10 @@ export function initPlaylists(): void {
           const f = embedFor(tr);
           if (!f) return;
           li.appendChild(f);
-          btn.remove();
+          btn.hidden = true;
         });
+        // Closing the sheet removes iframes (stops playback); bring the button back.
+        li.addEventListener('track:reset', () => (btn.hidden = false));
         ul.appendChild(li);
       }
       panel.appendChild(ul);

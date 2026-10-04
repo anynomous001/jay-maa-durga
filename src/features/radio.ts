@@ -24,6 +24,14 @@ const BACKOFF_S = [2, 4, 8, 15, 30];
 const STALL_TIMEOUT_MS = 20_000;
 const CHANNEL_KEY = 'radio-channel';
 
+/** Original channel icons: a broadcast mast (Kolkata A) and a rainbow (FM Rainbow). */
+const CHANNEL_ICONS: Record<RadioChannel['icon'], string> = {
+  tower:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 10.5 8 21M12 10.5l4 10.5M9.3 17.5h5.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="9" r="1.8" fill="currentColor"/><path d="M8.2 5.8a5 5 0 0 0 0 6.4M15.8 5.8a5 5 0 0 1 0 6.4M5.6 3.6a8.6 8.6 0 0 0 0 10.8M18.4 3.6a8.6 8.6 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  rainbow:
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 18a9.5 9.5 0 0 1 19 0" fill="none" stroke="#ef6a4f" stroke-width="2.2" stroke-linecap="round"/><path d="M5.5 18a6.5 6.5 0 0 1 13 0" fill="none" stroke="#f4b942" stroke-width="2.2" stroke-linecap="round"/><path d="M8.5 18a3.5 3.5 0 0 1 7 0" fill="none" stroke="#7fd1a8" stroke-width="2.2" stroke-linecap="round"/></svg>',
+};
+
 /** 0.1 s of silence, used to "unlock" the audio element inside a user gesture. */
 function silentWavUrl(): string {
   const rate = 8000, samples = 800;
@@ -270,14 +278,16 @@ export class Radio {
 
   private renderChannels(): void {
     const box = this.els.channels;
-    box.querySelectorAll('.chip').forEach((n) => n.remove());
+    box.querySelectorAll('.ch').forEach((n) => n.remove());
     for (const ch of RADIO_CHANNELS) {
       const label = document.createElement('label');
-      label.className = 'chip';
-      label.innerHTML = `<input type="radio" name="channel" value="${ch.id}"><span></span>`;
+      label.className = 'ch';
+      label.title = this.channelName(ch);
+      label.innerHTML = `<input type="radio" name="channel" value="${ch.id}"><span class="ch-icon">${CHANNEL_ICONS[ch.icon]}</span><span class="ch-cap"></span>`;
       const input = label.querySelector('input')!;
       input.checked = ch.id === this.channel.id;
-      label.querySelector('span')!.textContent = this.channelName(ch);
+      input.setAttribute('aria-label', this.channelName(ch));
+      label.querySelector('.ch-cap')!.textContent = getLang() === 'bn' ? ch.short_bn : ch.short_en;
       input.addEventListener('change', () => this.setChannel(ch.id));
       box.appendChild(label);
     }

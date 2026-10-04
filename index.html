@@ -63,12 +63,63 @@
         </picture>
         <div class="hero-shade" aria-hidden="true"></div>
         <div class="hero-inner">
-          <div class="hero-copy">
-            <p class="kicker" data-i18n="hero.kicker">শনিবার, ১০ অক্টোবর ২০২৬ · ভোর</p>
-            <h1 id="hero-title" data-i18n="hero.title">শুভ মহালয়া</h1>
-            <p class="hero-sub" data-i18n="hero.sub">ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।</p>
+          <div class="hero-left">
+            <div class="hero-copy">
+              <p class="kicker" data-i18n="hero.kicker">শনিবার, ১০ অক্টোবর ২০২৬ · ভোর</p>
+              <h1 id="hero-title" data-i18n="hero.title">শুভ মহালয়া</h1>
+              <p class="hero-sub" data-i18n="hero.sub">ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।</p>
+            </div>
+
+            <!-- Live radio. Prasar Bharati's broadcast: no sponsor slots in or next to this card. -->
+            <section class="radio-card" id="radio" aria-labelledby="radio-title">
+              <h2 class="sr-only" id="radio-title" data-i18n="radio.title">লাইভ রেডিও</h2>
+              <div class="player" id="player" data-state="idle">
+                <button type="button" class="play-btn" id="play-btn" aria-describedby="player-status">
+                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+                  <svg class="i-spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="42 100" stroke-linecap="round"/></svg>
+                  <span class="play-label" data-i18n="radio.play">শুনুন</span>
+                </button>
+                <div class="player-meta">
+                  <span class="live-badge" id="live-badge" hidden><span class="dot" aria-hidden="true"></span><span data-i18n="radio.live">লাইভ</span></span>
+                  <p class="player-status" id="player-status" role="status" data-i18n="radio.idle">প্লে চাপলে আকাশবাণীর লাইভ স্ট্রিম চালু হবে</p>
+                  <p class="listeners" id="listener-count" hidden></p>
+                </div>
+                <fieldset class="channels" id="channels">
+                  <legend class="sr-only" data-i18n="radio.channel">চ্যানেল</legend>
+                </fieldset>
+              </div>
+              <audio id="audio" preload="none"></audio>
+              <p class="radio-note" data-i18n="radio.noteShort">১০ অক্টোবর ভোর ৩:৫০–৫:৪৫ (ভারতীয় সময়) · আকাশবাণী কলকাতা</p>
+              <div class="wake" id="wake">
+                <button type="button" class="switch" id="wake-toggle" role="switch" aria-checked="false" aria-labelledby="wake-title"><span class="switch-knob" aria-hidden="true"></span></button>
+                <div class="wake-text">
+                  <p class="wake-title" id="wake-title" data-i18n="wake.title">মহালয়ার ভোরে জাগিয়ে দাও</p>
+                  <p class="wake-status" id="wake-status" role="status"></p>
+                  <details class="wake-more">
+                    <summary data-i18n="wake.how">কীভাবে কাজ করে</summary>
+                    <p data-i18n="wake.desc">আগের রাতে চালু করে রাখুন — ভোর ৩:৫০-এ (ভারতীয় সময়) রেডিও নিজে থেকেই বেজে উঠবে।</p>
+                    <p data-i18n="wake.limits">সীমাবদ্ধতা: পাতাটি খোলা রাখতে হবে, ফোন চার্জে রাখুন আর সাইলেন্ট মোড/ভলিউম দেখে নিন। ফোন ঘুমিয়ে পড়লে বা ব্রাউজার বন্ধ হলে বাজবে না — ভরসার জন্য নিচের ক্যালেন্ডার রিমাইন্ডারও দিয়ে রাখুন।</p>
+                  </details>
+                </div>
+              </div>
+              <p class="fallback" id="fallback">
+                <span data-i18n="radio.fallback">না চললে:</span>
+                <a id="fb-site" href="https://akashvani.gov.in/radio/live.php" target="_blank" rel="noopener" data-i18n="radio.fallbackSite">আকাশবাণীর সরকারি প্লেয়ার</a> ·
+                <a id="fb-android" href="https://play.google.com/store/apps/details?id=com.parsarbharti.airnews" target="_blank" rel="noopener" data-i18n="radio.fallbackAndroid">NewsOnAir অ্যাপ (Android)</a> ·
+                <a id="fb-ios" href="https://apps.apple.com/in/app/newsonair/id1450030867" target="_blank" rel="noopener" data-i18n="radio.fallbackIos">NewsOnAir অ্যাপ (iPhone)</a> ·
+                <span data-i18n="radio.fallbackMw">MW ৬৫৭ kHz</span>
+              </p>
+            </section>
+
+            <div class="reminders" id="reminders" role="group" data-i18n-attr="aria-label:rem.title" aria-label="রিমাইন্ডার রাখুন">
+              <a class="icon-btn" id="gcal-mahalaya" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.8" fill="currentColor"/></svg><span data-i18n="rem.gcalShort">গুগল ক্যালেন্ডার</span></a>
+              <button type="button" class="icon-btn" id="ics-mahalaya"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0-4-4m4 4 4-4M5 18h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="rem.icsShort">.ics রিমাইন্ডার</span></button>
+              <a class="icon-btn icon-wa" id="wa-share" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.6c.3-.6.7-.6 1-.6l.6.1.9 2.1-.6.9c.5 1 1.3 1.8 2.3 2.3l.9-.6 2.1.9v.6c0 .4-.4 1-.9 1.2-.6.2-1.8.2-3.6-.9a8 8 0 0 1-2.9-3.2c-.6-1.3-.3-2.3.2-2.8Z" fill="currentColor"/></svg><span data-i18n="rem.waShort">শেয়ার</span></a>
+            </div>
           </div>
-          <div class="hero-bottom">
+
+          <div class="hero-right">
             <div class="countdown" id="countdown" role="timer" aria-live="off">
               <p class="cd-label" id="cd-label" data-i18n="cd.toMahalaya">মহিষাসুরমর্দিনী শুরু হতে বাকি</p>
               <div class="cd-grid" id="cd-grid">
@@ -83,84 +134,56 @@
                 <div id="cd-local-row"><dt data-i18n="cd.local">আপনার সময়</dt><dd id="cd-local"></dd></div>
               </dl>
               <p class="sr-only" id="cd-sr" aria-live="polite"></p>
+              <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
             </div>
-            <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
+            <div class="sponsor-slot spotlight" data-slot="spotlight"></div>
           </div>
+
+          <nav class="dock" data-i18n-attr="aria-label:dock.label" aria-label="আরও">
+            <button type="button" class="dock-btn" data-open="sheet-schedule" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.schedule">নির্ঘণ্ট</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-songs" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor"/></svg><span data-i18n="dock.songs">গান</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-dhak" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="7" ry="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 8v7c0 1.5 3.1 2.7 7 2.7s7-1.2 7-2.7V8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 3.5 7 6.5M15 3.5l2 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.dhak">ঢাক</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-faq" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg><span data-i18n="dock.faq">প্রশ্নোত্তর</span></button>
+            <a class="dock-btn" href="/pandals/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.8" r="2.4" fill="currentColor"/></svg><span data-i18n="dock.map">প্যান্ডেল ম্যাপ</span></a>
+          </nav>
         </div>
       </section>
 
-      <section class="panel radio" id="radio" aria-labelledby="radio-title">
-        <h2 id="radio-title" data-i18n="radio.title">লাইভ রেডিও</h2>
-        <p class="muted small" data-motion="highlight" data-i18n="radio.note">সরকারি তালিকা অনুযায়ী ১০ অক্টোবর ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়) কলকাতা কেন্দ্র থেকে মহালয়ার বিশেষ অনুষ্ঠান। অন্য সময়ে চ্যানেলের নিয়মিত অনুষ্ঠান শোনা যাবে।</p>
-
-        <fieldset class="channels" id="channels">
-          <legend data-i18n="radio.channel">চ্যানেল</legend>
-        </fieldset>
-
-        <div class="player" id="player" data-state="idle">
-          <button type="button" class="play-btn" id="play-btn" aria-describedby="player-status">
-            <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-            <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
-            <svg class="i-spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="42 100" stroke-linecap="round"/></svg>
-            <span class="play-label" data-i18n="radio.play">শুনুন</span>
-          </button>
-          <div class="player-meta">
-            <span class="live-badge" id="live-badge" hidden><span class="dot" aria-hidden="true"></span><span data-i18n="radio.live">লাইভ</span></span>
-            <p class="player-status" id="player-status" role="status" data-i18n="radio.idle">প্লে চাপলে আকাশবাণীর লাইভ স্ট্রিম চালু হবে</p>
-            <p class="listeners" id="listener-count" hidden></p>
-          </div>
+      <dialog class="sheet" id="sheet-schedule" aria-labelledby="sheet-schedule-title">
+        <div class="sheet-head">
+          <h2 id="sheet-schedule-title" data-i18n="sch.title">পুজোর নির্ঘণ্ট ২০২৬</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
         </div>
-        <audio id="audio" preload="none"></audio>
-
-        <div class="fallback" id="fallback">
-          <p><strong data-i18n="radio.fallback">না চললে:</strong></p>
-          <ul>
-            <li><a id="fb-site" href="https://akashvani.gov.in/radio/live.php" target="_blank" rel="noopener" data-i18n="radio.fallbackSite">আকাশবাণীর সরকারি প্লেয়ার</a></li>
-            <li><a id="fb-android" href="https://play.google.com/store/apps/details?id=com.parsarbharti.airnews" target="_blank" rel="noopener" data-i18n="radio.fallbackAndroid">NewsOnAir অ্যাপ (Android)</a></li>
-            <li><a id="fb-ios" href="https://apps.apple.com/in/app/newsonair/id1450030867" target="_blank" rel="noopener" data-i18n="radio.fallbackIos">NewsOnAir অ্যাপ (iPhone)</a></li>
-          </ul>
-          <p class="muted small" data-i18n="radio.fallbackFm">অথবা সাধারণ রেডিও: আকাশবাণী কলকাতা ক ৬৫৭ kHz MW।</p>
-        </div>
-        <p class="muted small" data-i18n="radio.bg">স্ক্রিন বন্ধ করলেও অধিকাংশ ফোনে শোনা চলবে; লক-স্ক্রিন থেকেও থামানো/চালানো যাবে।</p>
-
-        <div class="wake" id="wake">
-          <div class="wake-head">
-            <h3 id="wake-title" data-i18n="wake.title">মহালয়ার ভোরে জাগিয়ে দাও</h3>
-            <button type="button" class="switch" id="wake-toggle" role="switch" aria-checked="false" aria-labelledby="wake-title">
-              <span class="switch-knob" aria-hidden="true"></span>
-            </button>
-          </div>
-          <p data-i18n="wake.desc">আগের রাতে চালু করে রাখুন — ভোর ৩:৫০-এ (ভারতীয় সময়) রেডিও নিজে থেকেই বেজে উঠবে।</p>
-          <p class="wake-status" id="wake-status" role="status"></p>
-          <p class="muted small" data-i18n="wake.limits">সীমাবদ্ধতা: পাতাটি খোলা রাখতে হবে, ফোন চার্জে রাখুন আর সাইলেন্ট মোড/ভলিউম দেখে নিন। ফোন ঘুমিয়ে পড়লে বা ব্রাউজার বন্ধ হলে বাজবে না — ভরসার জন্য নিচের ক্যালেন্ডার রিমাইন্ডারও দিয়ে রাখুন।</p>
-        </div>
-      </section>
-
-      <section class="panel" id="reminders" aria-labelledby="rem-title">
-        <h2 id="rem-title" data-i18n="rem.title">রিমাইন্ডার রাখুন</h2>
-        <div class="btn-row">
-          <a class="btn" id="gcal-mahalaya" target="_blank" rel="noopener" data-i18n="rem.gcal">গুগল ক্যালেন্ডারে যোগ করুন</a>
-          <button type="button" class="btn" id="ics-mahalaya" data-i18n="rem.ics">.ics ফাইল (iPhone/Outlook)</button>
-          <a class="btn btn-wa" id="wa-share" target="_blank" rel="noopener" data-i18n="rem.wa">হোয়াটসঅ্যাপে শেয়ার করুন</a>
-        </div>
-        <details class="more">
-          <summary data-i18n="rem.shashthi">মহাষষ্ঠীর রিমাইন্ডারও</summary>
+        <div class="sheet-body" data-lenis-prevent>
+          <ol class="schedule" id="schedule-list"></ol>
+          <p class="muted small" data-i18n="sch.note">তারিখ বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা অনুযায়ী (এ বছর সপ্তমী দুদিন)। গুপ্তপ্রেস পঞ্জিকায় অষ্টমী থেকে এক দিন আগে।</p>
+          <h3 data-i18n="rem.shashthi">মহাষষ্ঠীর রিমাইন্ডারও</h3>
           <div class="btn-row">
-            <a class="btn btn-ghost" id="gcal-shashthi" target="_blank" rel="noopener" data-i18n="rem.gcal">গুগল ক্যালেন্ডারে যোগ করুন</a>
-            <button type="button" class="btn btn-ghost" id="ics-shashthi" data-i18n="rem.ics">.ics ফাইল (iPhone/Outlook)</button>
+            <a class="btn btn-ghost btn-sm" id="gcal-shashthi" target="_blank" rel="noopener" data-i18n="rem.gcal">গুগল ক্যালেন্ডারে যোগ করুন</a>
+            <button type="button" class="btn btn-ghost btn-sm" id="ics-shashthi" data-i18n="rem.ics">.ics ফাইল (iPhone/Outlook)</button>
           </div>
-        </details>
-      </section>
+        </div>
+      </dialog>
 
-      <section class="panel" id="schedule" aria-labelledby="sch-title">
-        <h2 id="sch-title" data-i18n="sch.title">পুজোর নির্ঘণ্ট ২০২৬</h2>
-        <ol class="schedule" id="schedule-list"></ol>
-        <p class="muted small" data-i18n="sch.note">তারিখ বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা অনুযায়ী (এ বছর সপ্তমী দুদিন)। গুপ্তপ্রেস পঞ্জিকায় অষ্টমী থেকে এক দিন আগে।</p>
-      </section>
+      <dialog class="sheet" id="sheet-songs" aria-labelledby="sheet-songs-title">
+        <div class="sheet-head">
+          <h2 id="sheet-songs-title" data-i18n="pl.title">গান ও রেকর্ডিং</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sheet-body" data-lenis-prevent>
+          <div class="tabs" role="tablist" id="pl-tabs"></div>
+          <div id="pl-panels"></div>
+          <p class="muted small" data-i18n="pl.spotifyNote">স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ শোনা যায়। সব প্লেয়ার সরকারি চ্যানেলের — চাপলে তবেই লোড হয়।</p>
+        </div>
+      </dialog>
 
-      <section class="panel dhak-panel" id="dhak" aria-labelledby="dhak-title">
-        <h2 id="dhak-title" data-i18n="dhak.title">ঢাক বাজান</h2>
-        <button type="button" class="dhak" id="dhak-btn" data-i18n-attr="aria-label:dhak.label" aria-label="ঢাক — বাজাতে চাপুন">
+      <dialog class="sheet" id="sheet-dhak" aria-labelledby="sheet-dhak-title">
+        <div class="sheet-head">
+          <h2 id="sheet-dhak-title" data-i18n="dhak.title">ঢাক বাজান</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sheet-body dhak-panel" data-lenis-prevent>
+          <button type="button" class="dhak" id="dhak-btn" data-i18n-attr="aria-label:dhak.label" aria-label="ঢাক — বাজাতে চাপুন">
           <svg viewBox="0 0 200 200" aria-hidden="true" class="dhak-svg">
             <g class="dhak-body">
               <path class="plume" d="M60 46c-6-20 4-34 14-40 0 14 6 22 2 38M140 46c6-20-4-34-14-40 0 14-6 22-2 38M100 40c0-22 8-32 0-38-8 6 0 16 0 38" fill="none" stroke="#f3efe6" stroke-width="5" stroke-linecap="round" opacity=".85"/>
@@ -172,25 +195,24 @@
             <circle class="ripple" cx="100" cy="66" r="10" fill="none" stroke="#f4b942" stroke-width="3"/>
           </svg>
         </button>
-        <p class="muted small" data-i18n="dhak.hint">ঢাকে টোকা দিন (বা স্পেস/এন্টার চাপুন)</p>
-        <button type="button" class="btn btn-ghost" id="dhak-rhythm" data-i18n="dhak.rhythm">পুরো বোল বাজাও</button>
-        <div class="sponsor-slot" data-slot="dhak" data-by="dhak.by"></div>
-      </section>
+          <p class="muted small" data-i18n="dhak.hint">ঢাকে টোকা দিন (বা স্পেস/এন্টার চাপুন)</p>
+          <button type="button" class="btn btn-ghost" id="dhak-rhythm" data-i18n="dhak.rhythm">পুরো বোল বাজাও</button>
+          <div class="sponsor-slot" data-slot="dhak" data-by="dhak.by"></div>
+        </div>
+      </dialog>
 
-      <section class="panel" id="playlists" aria-labelledby="pl-title">
-        <h2 id="pl-title" data-i18n="pl.title">গান ও রেকর্ডিং</h2>
-        <div class="tabs" role="tablist" id="pl-tabs"></div>
-        <div id="pl-panels"></div>
-        <p class="muted small" data-i18n="pl.spotifyNote">স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ শোনা যায়। সব প্লেয়ার সরকারি চ্যানেলের — চাপলে তবেই লোড হয়।</p>
-      </section>
-
-      <section class="panel" id="faq" aria-labelledby="faq-title">
-        <h2 id="faq-title" data-i18n="faq.title">প্রশ্নোত্তর</h2>
-        <details><summary data-i18n="faq.q1">২০২৬ সালে মহালয়া কবে?</summary><p data-i18n="faq.a1">শনিবার, ১০ অক্টোবর ২০২৬। আকাশবাণীতে মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)।</p></details>
+      <dialog class="sheet" id="sheet-faq" aria-labelledby="sheet-faq-title">
+        <div class="sheet-head">
+          <h2 id="sheet-faq-title" data-i18n="faq.title">প্রশ্নোত্তর</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sheet-body" id="faq" data-lenis-prevent>
+          <details><summary data-i18n="faq.q1">২০২৬ সালে মহালয়া কবে?</summary><p data-i18n="faq.a1">শনিবার, ১০ অক্টোবর ২০২৬। আকাশবাণীতে মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)।</p></details>
         <details><summary data-i18n="faq.q2">মহালয়া লাইভ রেডিও অনলাইনে কীভাবে শুনব?</summary><p data-i18n="faq.a2">এই পাতার প্লেয়ারে "শুনুন" চাপুন — এটি আকাশবাণী কলকাতার সরকারি স্ট্রিম চালায়। না চললে আকাশবাণীর ওয়েবসাইট বা NewsOnAir অ্যাপ ব্যবহার করুন, অথবা MW ৬৫৭ kHz-এ রেডিও ধরুন।</p></details>
         <details><summary data-i18n="faq.q3">দুর্গাপুজো ২০২৬-এর তারিখ কী?</summary><p data-i18n="faq.a3">ষষ্ঠী ১৬ অক্টোবর, সপ্তমী ১৭–১৮ অক্টোবর, অষ্টমী ১৯ অক্টোবর, নবমী ২০ অক্টোবর, বিজয়া দশমী ২১ অক্টোবর (বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা)।</p></details>
         <details><summary data-i18n="faq.q4">বিদেশ থেকে কখন শুনব?</summary><p data-i18n="faq.a4">উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।</p></details>
-      </section>
+        </div>
+      </dialog>
     </main>
     <!--@partial footer-->
   </body>
