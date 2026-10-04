@@ -159,12 +159,28 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 - **OSM tiles:** `tile.openstreetmap.org` is a volunteer-run service with a [usage policy](https://operations.osmfoundation.org/policies/tiles/) that forbids heavy use. If traffic grows, switch `MAP_TILE_URL` to a commercial or free-tier provider (MapTiler, Stadia, Thunderforest…) and update the attribution.
 - **Spotify embeds** play 30-second previews unless the listener is logged in.
 - **Dates:** Puja dates follow the Bisuddha Siddhanta panjika (Saptami spans 17–18 Oct). Gupta Press / Benimadhab Sheel panjika runs one day earlier from Ashtami. The WB holiday list puts Shashthi on 17 Oct.
-- **Live listener count** needs a backend, so it is not built. The UI hook (`#listener-count`) stays hidden until `LISTENER_COUNT_ENDPOINT` is set to a URL returning `{"count": 123}`. A cheap option is a Cloudflare Worker with a Durable Object (or KV with short TTLs):
-  - clients `POST /ping` every 60 s while playing;
-  - the Worker counts unique pings in the last 2 minutes;
-  - `GET /count` returns the number.
-  
-  Never route the audio itself through it.
+
+## Visitor counter (total, online now, listening now)
+
+Shown as badges in the home hero ("N online now · N visitors so far"), "N listening now" in the player, and live numbers on `/advertise`. It's a tiny Cloudflare Worker with one Durable Object in `worker/`. The site works fine without it; if `VITE_COUNTER_URL` is empty, the badges stay hidden.
+
+- **How it counts:**
+  - each browser gets a random id in localStorage (no cookies, no IPs, nothing personal);
+  - the first visit adds 1 to the **total**;
+  - while the tab is visible it pings every 60 s;
+  - **online** means pinged in the last 150 s, and **listening** means the radio is playing.
+- **Local dev:**
+  1. `cd worker && npm install && npm run dev` (port 8787, no Cloudflare account needed).
+  2. Keep `.env.development.local` with `VITE_COUNTER_URL=http://localhost:8787`.
+  3. Run `npm run dev` in the site folder.
+- **Deploy (steps only — not done):**
+  1. `cd worker && npx wrangler login && npx wrangler deploy`. It prints a URL like `https://mahalaya-counter.<you>.workers.dev`.
+  2. In `worker/wrangler.toml`, set `ALLOWED_ORIGINS` to your real domain, then redeploy.
+  3. In Cloudflare Pages → Settings → Environment variables, add `VITE_COUNTER_URL` = that URL, then redeploy the site.
+- **Free-tier limit:** Workers Free allows **100,000 requests/day**. One visitor costs ~1 request per minute while the page is open. For example, 1,500 people listening through the 2-hour broadcast ≈ 180k requests, which exceeds the free tier.
+  - If the limit is hit, only the counter stops; the site and the radio keep working.
+  - For a big Mahalaya audience, switch the account to **Workers Paid (US$5/month, 10M requests included)** for that week.
+- **Honesty note:** counts are approximate. Anyone could inflate them with scripts, and a visitor who clears their storage or switches device counts twice. Don't sell ads on these numbers alone; Cloudflare Web Analytics (`ANALYTICS` in config) gives an independent figure.
 
 ## Docs
 

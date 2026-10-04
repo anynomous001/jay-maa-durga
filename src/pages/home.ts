@@ -8,6 +8,7 @@ import { initSchedule } from '../features/schedule';
 import { initDhak } from '../features/dhak';
 import { initPlaylists } from '../features/playlists';
 import { initSheets } from '../features/sheets';
+import { initVisitors } from '../features/visitors';
 
 initCommon();
 initCountdown();
@@ -18,6 +19,9 @@ initSchedule();
 initDhak();
 initPlaylists();
 initSheets();
+const visitors = initVisitors(() => radio.isActive());
+// Tell the counter right away when someone starts or stops listening.
+radio.onState((s) => (s === 'playing' || s === 'paused') && visitors.ping());
 
 // Last, so it animates the final rendered content.
 initMotion();

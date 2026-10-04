@@ -1,0 +1,17 @@
+# Visitor counter for Mahalaya Live — a single Durable Object keeps the counts.
+name = "mahalaya-counter"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[[durable_objects.bindings]]
+name = "COUNTER"
+class_name = "Counter"
+
+# SQLite-backed Durable Objects are available on the Workers free plan.
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Counter"]
+
+[vars]
+# Comma-separated origins allowed to call the API (your site + local dev).
+ALLOWED_ORIGINS = "https://mahalaya-live.pages.dev,http://localhost:5173,http://localhost:4173"

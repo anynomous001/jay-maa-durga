@@ -8,3 +8,8 @@ scripts/.cache
 .vite-preview.log
 .vercel
 .env*
+*.local
+.wrangler/
+worker/node_modules
+worker/.wrangler
+.wrangler-dev.log

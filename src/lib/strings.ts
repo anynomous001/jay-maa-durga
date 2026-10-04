@@ -91,6 +91,9 @@ export const dict: Record<string, Entry> = {
     en: 'On most phones audio keeps playing with the screen off, and lock-screen controls work.',
   },
   'radio.listeners': { bn: '{n} জন এখন শুনছেন', en: '{n} listening now' },
+  'vis.online': { bn: '{n} জন এখন অনলাইন', en: '{n} online now' },
+  'vis.total': { bn: 'মোট {n} জন দেখেছেন', en: '{n} visitors so far' },
+  'vis.label': { bn: 'ভিজিটর', en: 'Visitors' },
 
   // ── Wake ──
   'wake.title': { bn: 'মহালয়ার ভোরে জাগিয়ে দাও', en: 'Wake me for Mahalaya' },
@@ -273,8 +276,8 @@ export const dict: Record<string, Entry> = {
   'ad.perSlot': { bn: 'পুরো মরসুম', en: 'whole season' },
   'ad.book': { bn: 'এই স্লট নিন', en: 'Book this slot' },
   'ad.stat.visitors': { bn: 'মোট ভিজিটর', en: 'Total visitors' },
-  'ad.stat.peak': { bn: 'মহালয়ার ভোরে শ্রোতা', en: 'Listeners on Mahalaya dawn' },
-  'ad.stat.regions': { bn: 'শীর্ষ এলাকা', en: 'Top regions' },
+  'ad.stat.peak': { bn: 'এখন অনলাইন', en: 'Online right now' },
+  'ad.stat.regions': { bn: 'এখন রেডিও শুনছেন', en: 'Listening to the radio now' },
   'ad.stat.soon': { bn: 'শীঘ্রই', en: 'Coming soon' },
   'ad.pay': { bn: 'UPI-তে পেমেন্ট', en: 'Pay via UPI' },
   'ad.payStep': {

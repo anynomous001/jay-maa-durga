@@ -2,6 +2,7 @@ import qrcode from 'qrcode-generator';
 import { PRICES_TBD, SITE_NAME, SLOT_PRICES_INR, SPONSOR_SEASON_END, UPI_ID, UPI_PAYEE_NAME, WHATSAPP_NUMBER } from '../config';
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
+import { initVisitors } from '../features/visitors';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { SLOT_IDS, type SlotId, slotTaken } from '../lib/sponsors';
 import { istDateKey, now } from '../lib/time';
@@ -64,9 +65,11 @@ function waLink(slot?: SlotId) {
 function renderStats() {
   const dl = document.getElementById('stats')!;
   dl.innerHTML = '';
-  for (const k of ['visitors', 'peak', 'regions']) {
+  // Live numbers from the visitor counter replace "Coming soon" once they arrive.
+  const kinds: [string, string][] = [['visitors', 'total'], ['peak', 'online'], ['regions', 'listening']];
+  for (const [k, kind] of kinds) {
     const div = document.createElement('div');
-    div.innerHTML = '<dt></dt><dd></dd>';
+    div.innerHTML = `<dt></dt><dd data-visitors="${kind}"></dd>`;
     div.querySelector('dt')!.textContent = t(`ad.stat.${k}`);
     div.querySelector('dd')!.textContent = t('ad.stat.soon');
     dl.appendChild(div);
@@ -115,6 +118,8 @@ function renderAll() {
 select.addEventListener('change', renderPay);
 renderAll();
 onLangChange(renderAll);
+const visitors = initVisitors();
+onLangChange(() => visitors.ping());
 
 // Last, so it animates the final rendered content.
 initMotion();

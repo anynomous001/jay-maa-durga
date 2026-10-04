@@ -114,5 +114,9 @@ export const MAP_TILE_MAX_ZOOM = 19;
 /** Cloudflare Web Analytics — set enabled:true and paste the token at deploy. */
 export const ANALYTICS = { enabled: false, cloudflareToken: '' };
 
-/** Live listener count needs a backend (see README). UI hook stays hidden. */
-export const LISTENER_COUNT_ENDPOINT: string | null = null;
+/**
+ * Visitor counter (Cloudflare Worker in /worker). Empty = counters hidden.
+ * Set VITE_COUNTER_URL at build time (Cloudflare Pages env var), e.g.
+ * https://mahalaya-counter.<you>.workers.dev
+ */
+export const VISITOR_COUNTER_URL: string = import.meta.env.VITE_COUNTER_URL ?? '';

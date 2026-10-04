@@ -68,6 +68,16 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Motion | Settle-in zoom on load and scroll parallax (12%); off under reduced motion | **Pass** |
 | Lighthouse | Mobile home 99 / 100 / 100 / 100 (LCP 1.8 s, CLS 0.045); desktop home Performance 100 (LCP 0.5 s) | **Pass** |
 
+## Visitor counter
+
+| Check | How | Result |
+|---|---|---|
+| API | `wrangler dev` locally. A new id adds +1 to total; the same id again leaves the total unchanged; online and listening counts update. Bad id → 400. CORS only for allowed origins (an unknown origin gets no ACAO header) | **Pass** |
+| Two real visitors | Two separate headless Chrome profiles. Hero badges showed "2 online now". When A pressed Play, B's player showed "1 listening now". `/advertise` showed total / online / listening live (`d-advertise-live-stats.png`, `d-hero-visitors.png`) | **Pass** |
+| Persistence | Restarted the Worker: total kept (5); online reset to 0 as designed | **Pass** |
+| Production build | No `localhost` URL in the bundle; with `VITE_COUNTER_URL` unset, badges stay hidden and no requests are made. Lighthouse home 99/100/100/100 | **Pass** |
+| Not tested | Deployed behaviour on Cloudflare (needs your account) | — |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |

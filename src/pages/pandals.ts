@@ -7,11 +7,13 @@ import data from '../../data/pandals.json';
 import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, SITE_NAME, WHATSAPP_NUMBER } from '../config';
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
+import { initVisitors } from '../features/visitors';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { type LatLng, type TravelMode, directionsUrl, distanceKm, routeLegs, routeUrl } from '../lib/maps';
 import { sponsorFor, sponsorHref } from '../lib/sponsors';
 
 initCommon();
+initVisitors();
 
 interface Pandal extends LatLng {
   id: string;

@@ -8,7 +8,6 @@
  */
 import type HlsType from 'hls.js';
 import {
-  LISTENER_COUNT_ENDPOINT,
   MAHALAYA_BROADCAST_END,
   MAHALAYA_TRANSMISSION_START,
   MEDIA_SESSION_TITLE,
@@ -341,22 +340,6 @@ export function initRadio(): Radio {
     channels: $('channels'),
   });
 
-  // Hook for a future live-listener counter (needs a backend; see README).
-  if (LISTENER_COUNT_ENDPOINT) {
-    const el = $('listener-count');
-    const poll = async () => {
-      try {
-        const r = await fetch(LISTENER_COUNT_ENDPOINT!);
-        const { count } = (await r.json()) as { count: number };
-        el.textContent = t('radio.listeners', { n: num(count) });
-        el.hidden = false;
-      } catch {
-        el.hidden = true;
-      }
-    };
-    void poll();
-    setInterval(poll, 60_000);
-  }
   if (import.meta.env.DEV) (window as unknown as { __radio: Radio }).__radio = radio;
   return radio;
 }
