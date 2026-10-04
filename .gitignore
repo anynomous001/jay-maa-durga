@@ -4,3 +4,4 @@ dist
 *.log
 .vite
 scripts/.cache
+.vite-dev.log

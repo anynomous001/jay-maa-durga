@@ -2,12 +2,55 @@
 <html lang="bn">
   <head>
     <!--@partial head-->
-    <title>pandals — Mahalaya Live</title>
-    <script type="module" src="/src/pages/stub.ts"></script>
+    <title>দুর্গাপুজো ২০২৬ প্যান্ডেল ম্যাপ — কলকাতা | Kolkata Durga Puja Pandal Map 2026</title>
+    <meta name="description" content="উত্তর ও দক্ষিণ কলকাতার দুর্গাপুজো প্যান্ডেল ম্যাপ ২০২৬ — ম্যাপ, খোঁজ, কাছের প্যান্ডেল আর গুগল ম্যাপস ডিরেকশন। Kolkata Durga Puja 2026 pandal map with directions and pandal-hopping routes." />
+    <link rel="canonical" href="https://mahalaya-live.pages.dev/pandals/" />
+    <meta property="og:title" content="Kolkata Durga Puja Pandal Map 2026 — প্যান্ডেল ম্যাপ" />
+    <meta property="og:image" content="https://mahalaya-live.pages.dev/og.jpg" />
+    <script type="module" src="/src/pages/pandals.ts"></script>
   </head>
   <body>
     <!--@partial header-->
-    <main id="main"><section class="panel"><h1>pandals</h1><p>Coming soon.</p></section></main>
+    <main id="main" class="pm-main">
+      <section class="page-head">
+        <h1 data-i18n="pm.title">প্যান্ডেল ম্যাপ ২০২৬</h1>
+        <p class="lead" data-i18n="pm.intro">উত্তর ও দক্ষিণ কলকাতার পরিচিত পুজো — ম্যাপে দেখুন, খুঁজুন, আর এক চাপে গুগল ম্যাপসে রাস্তা পান।</p>
+        <div class="sponsor-slot" data-slot="map-partner" data-by="pm.partner"></div>
+      </section>
+
+      <div class="pm-controls" role="search">
+        <label class="sr-only" for="pm-search" data-i18n="pm.search">প্যান্ডেল বা এলাকা খুঁজুন</label>
+        <input id="pm-search" class="input" type="search" autocomplete="off" data-i18n-attr="placeholder:pm.search" placeholder="প্যান্ডেল বা এলাকা খুঁজুন" />
+        <div class="pm-zones" id="pm-zones" role="group" aria-label="Zone"></div>
+        <button type="button" class="btn btn-ghost" id="pm-near" data-i18n="pm.nearMe">আমার কাছে</button>
+      </div>
+      <p class="muted small" id="pm-status" role="status"></p>
+
+      <div class="pm-view-toggle" role="tablist" aria-label="View">
+        <button type="button" role="tab" id="pm-tab-list" aria-controls="pm-list-wrap" aria-selected="true" data-i18n="pm.showList">তালিকা</button>
+        <button type="button" role="tab" id="pm-tab-map" aria-controls="pm-map-wrap" aria-selected="false" data-i18n="pm.showMap">ম্যাপ</button>
+      </div>
+
+      <div class="pm-layout" id="pm-layout" data-view="list">
+        <div class="pm-map-wrap" id="pm-map-wrap" role="tabpanel" aria-labelledby="pm-tab-map">
+          <div id="pm-map" class="pm-map" aria-label="Pandal map"><p class="pm-map-loading" data-i18n="pm.loadingMap">ম্যাপ লোড হচ্ছে…</p></div>
+        </div>
+        <div class="pm-list-wrap" id="pm-list-wrap" role="tabpanel" aria-labelledby="pm-tab-list">
+          <ol class="pm-list" id="pm-list"></ol>
+        </div>
+      </div>
+
+      <section class="panel" id="routes" aria-labelledby="routes-title">
+        <h2 id="routes-title" data-i18n="pm.routes">প্যান্ডেল হপিং রুট</h2>
+        <p class="muted small" data-i18n="pm.routesNote">মোবাইলে গুগল ম্যাপস একসাথে সর্বোচ্চ ৫টি স্টপ খোলে, তাই বড় রুট দুই ভাগে।</p>
+        <div class="routes" id="pm-routes"></div>
+      </section>
+
+      <section class="panel">
+        <p><a class="btn btn-wa" id="pm-suggest" target="_blank" rel="noopener" data-i18n="pm.suggest">নতুন প্যান্ডেল জানান / ভুল লোকেশন রিপোর্ট করুন</a></p>
+        <p class="muted small" data-i18n="pm.dataNote">লোকেশন গুগল ম্যাপস থেকে একটি একটি করে মিলিয়ে দেখা। থিম ও সময় পুজো কমিটির ঘোষণা মিলিয়ে নিন।</p>
+      </section>
+    </main>
     <!--@partial footer-->
   </body>
 </html>
