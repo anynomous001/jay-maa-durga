@@ -22,7 +22,6 @@ export const WHATSAPP_NUMBER = '919874353532';
 export const SLOT_PRICES_INR: Record<string, number> = {
   dhak: 99,
   countdown: 99,
-  card: 99,
   'map-partner': 99,
   'pandal-nearby': 99,
   footer: 99,

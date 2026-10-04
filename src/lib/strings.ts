@@ -4,7 +4,6 @@ export const dict: Record<string, Entry> = {
   // ── Common chrome ──
   'nav.home': { bn: 'হোম', en: 'Home' },
   'nav.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
-  'nav.card': { bn: 'শুভেচ্ছা কার্ড', en: 'Greeting card' },
   'nav.advertise': { bn: 'বিজ্ঞাপন দিন', en: 'Advertise' },
   'skip': { bn: 'মূল অংশে যান', en: 'Skip to content' },
   'sponsored': { bn: 'স্পনসর', en: 'Sponsored' },
@@ -270,8 +269,6 @@ export const dict: Record<string, Entry> = {
   'slot.dhak.where': { bn: 'হোম পেজে ঢাক বাজানোর অংশে', en: 'Under the dhak on the home page' },
   'slot.countdown': { bn: '"কাউন্টডাউন সৌজন্যে …"', en: '“Countdown by …”' },
   'slot.countdown.where': { bn: 'হোম পেজের কাউন্টডাউনের নিচে', en: 'Below the home-page countdown' },
-  'slot.card': { bn: 'শুভেচ্ছা কার্ডে নাম', en: 'Greeting-card credit' },
-  'slot.card.where': { bn: 'প্রতিটি শেয়ার করা শুভেচ্ছা কার্ডের কোণে', en: 'A small credit on every shared greeting card' },
   'slot.map-partner': { bn: 'প্যান্ডেল ম্যাপ পার্টনার', en: 'Pandal map partner' },
   'slot.map-partner.where': { bn: 'প্যান্ডেল ম্যাপের মাথায়', en: 'Top of the pandal map page' },
   'slot.pandal-nearby': { bn: '"কাছেই খাবার" — প্যান্ডেল কার্ডে', en: '“Eat nearby” on pandal cards' },

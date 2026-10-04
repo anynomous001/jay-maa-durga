@@ -50,7 +50,6 @@ export default defineConfig({
         main: resolve(import.meta.dirname, 'index.html'),
         advertise: resolve(import.meta.dirname, 'advertise/index.html'),
         pandals: resolve(import.meta.dirname, 'pandals/index.html'),
-        card: resolve(import.meta.dirname, 'card/index.html'),
       },
     },
   },

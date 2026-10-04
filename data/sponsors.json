@@ -1,5 +1,5 @@
 {
-  "_readme": "One entry per booking. slot ∈ dhak | countdown | card | map-partner | pandal-nearby | footer. Dates are IST calendar days (inclusive). For pandal-nearby, list pandalIds the shop is near. link may be a URL or empty; whatsapp is digits with country code (no +). logo is a path under /public (e.g. /sponsors/tota.png) or empty for text-only.",
+  "_readme": "One entry per booking. slot ∈ dhak | countdown | map-partner | pandal-nearby | footer. Dates are IST calendar days (inclusive). For pandal-nearby, list pandalIds the shop is near. link may be a URL or empty; whatsapp is digits with country code (no +). logo is a path under /public (e.g. /sponsors/tota.png) or empty for text-only.",
   "sponsors": [
     {
       "id": "tota-cake-house",
