@@ -1,7 +1,8 @@
 // Builds the logo set from assets-src/logo-eyes.png (supplied by the site owner):
 // the cream "Durga eyes" motif is lifted out by brightness (keeping its brush
-// edges) and centred on a clean red square. Outputs favicon, header logo,
-// PWA icons (incl. maskable) and apple-touch icon.  Run: npm run logo
+// edges). App icons (PWA, maskable, apple-touch) put it on a red square —
+// phones need opaque icons; the header mark and favicons are transparent.
+// Run: npm run logo
 import sharp from 'sharp';
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -53,11 +54,50 @@ await (await icon(512, 0.9)).toFile(out('public/icons/icon-512.png'));
 await (await icon(192, 0.92)).toFile(out('public/icons/icon-192.png'));
 await (await icon(512, 0.6)).toFile(out('public/icons/maskable-512.png')); // inside Android's 80% safe zone
 await (await icon(180, 0.9)).toFile(out('public/icons/apple-touch-icon.png'));
-await (await icon(32, 1.3, 6)).toFile(out('public/favicon-32.png'));
-await (await icon(64, 1.25, 12)).toFile(out('public/favicon-64.png'));
-// Header logo (shown at 36 px; 72/108 for retina).
-for (const s of [72, 108]) {
-  await (await icon(s, 1.18, Math.round(s * 0.22))).toFile(out(`public/logo/logo-${s}.png`));
-  await (await icon(s, 1.18, Math.round(s * 0.22))).webp({ quality: 90 }).toFile(out(`public/logo/logo-${s}.webp`));
-}
 console.log('logo set written');
+
+// ── Transparent versions (header + browser tab) ──
+/** Motif trimmed to its own bounds, in a given colour, on transparent. */
+async function motifIn(color) {
+  const alpha = await sharp(SRC).extract(BOX).extractChannel('green').linear(2.1, -110).toBuffer();
+  const fill = await sharp({ create: { width: BOX.width, height: BOX.height, channels: 3, background: color } }).png().toBuffer();
+  const rgba = await sharp(fill).joinChannel(alpha).png().toBuffer();
+  return sharp(rgba).trim({ threshold: 1 }).png().toBuffer();
+}
+const cream = await motifIn(CREAM);
+const red = await motifIn({ r: 179, g: 18, b: 10 });
+
+// Header mark: wide, transparent, cream (shown at 34 px tall; 2x/3x for retina).
+for (const h of [68, 102]) {
+  await sharp(cream).resize({ height: h }).png().toFile(out(`public/logo/mark-${h}.png`));
+  await sharp(cream).resize({ height: h }).webp({ quality: 92, alphaQuality: 100 }).toFile(out(`public/logo/mark-${h}.webp`));
+}
+
+/** Square transparent favicon; the motif is scaled up and its brow tips trimmed so the eyes stay legible. */
+async function favicon(motif, size, file) {
+  const w = Math.round(size * 1.12);
+  const scaled = await sharp(motif).resize({ width: w }).toBuffer();
+  const h = (await sharp(scaled).metadata()).height;
+  const cut = Math.round((w - size) / 2);
+  const trimmed = await sharp(scaled).extract({ left: cut, top: 0, width: size, height: h }).toBuffer();
+  await sharp({ create: { width: size, height: size, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } })
+    .composite([{ input: trimmed, left: 0, top: Math.round((size - h) / 2) }])
+    .png()
+    .toFile(out(file));
+}
+await favicon(red, 32, 'public/favicon-32.png');
+await favicon(red, 64, 'public/favicon-64.png');
+
+// SVG favicon: same shape as a mask, red on light browser chrome, cream on dark.
+await favicon(cream, 64, 'scripts/.cache-favicon-mask.png');
+const maskPng = (await import('node:fs')).readFileSync(out('scripts/.cache-favicon-mask.png')).toString('base64');
+(await import('node:fs')).writeFileSync(
+  out('public/favicon.svg'),
+  `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64">
+  <style>rect{fill:#b3120a}@media (prefers-color-scheme:dark){rect{fill:#fbdcb0}}</style>
+  <mask id="m" style="mask-type:alpha" mask-type="alpha"><image width="64" height="64" href="data:image/png;base64,${maskPng}" xlink:href="data:image/png;base64,${maskPng}"/></mask>
+  <rect width="64" height="64" mask="url(#m)"/>
+</svg>\n`,
+);
+(await import('node:fs')).unlinkSync(out('scripts/.cache-favicon-mask.png'));
+console.log('transparent logo + favicons written');

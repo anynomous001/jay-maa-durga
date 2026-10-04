@@ -1,6 +1,6 @@
 /* Service worker: caches OUR static assets only.
  * Never touches the radio stream, embeds, map tiles or any cross-origin request. */
-const VERSION = 'v4';
+const VERSION = 'v5';
 const STATIC = `static-${VERSION}`;
 const PAGES = `pages-${VERSION}`;
 const PRECACHE = ['/', '/pandals/', '/policies/', '/manifest.webmanifest', '/favicon-32.png', '/icons/icon-192.png'];
