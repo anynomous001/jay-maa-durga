@@ -1,6 +1,7 @@
 import qrcode from 'qrcode-generator';
 import { PRICES_TBD, SITE_NAME, SLOT_PRICES_INR, SPONSOR_SEASON_END, UPI_ID, UPI_PAYEE_NAME, WHATSAPP_NUMBER } from '../config';
 import { initCommon } from '../lib/common';
+import { initMotion } from '../features/motion';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { SLOT_IDS, type SlotId, slotTaken } from '../lib/sponsors';
 import { istDateKey, now } from '../lib/time';
@@ -114,3 +115,6 @@ function renderAll() {
 select.addEventListener('change', renderPay);
 renderAll();
 onLangChange(renderAll);
+
+// Last, so it animates the final rendered content.
+initMotion();

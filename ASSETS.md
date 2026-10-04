@@ -26,6 +26,8 @@ The site hosts no copyrighted audio or images from third parties. Everything vis
 | Leaflet 1.9.4 | npm `leaflet` | BSD-2-Clause |
 | hls.js 1.7 (light build) | npm `hls.js` | Apache-2.0 |
 | qrcode-generator 2.0 | npm `qrcode-generator` (Kazuhiko Arase) | MIT |
+| GSAP 3.15 (core, ScrollTrigger, SplitText) | npm `gsap` (GreenSock / Webflow) | GSAP Standard "no charge" licence: free, including commercial use |
+| Lenis 1.3 | npm `lenis` (darkroom.engineering) | MIT |
 | Map tiles and data | © OpenStreetMap contributors, `tile.openstreetmap.org`. Not hosted by us; attribution shown on the map | Data ODbL; tiles per the OSMF tile usage policy |
 
 ## Embedded or linked (never downloaded or hosted)

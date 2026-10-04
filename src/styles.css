@@ -746,6 +746,13 @@ a.sponsor:hover {
   color: var(--muted);
 }
 
+/* Cross-document page transitions (Chromium); other browsers just navigate. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -758,6 +765,10 @@ a.sponsor:hover {
   .live-badge .dot {
     animation: none;
   }
+}
+
+.hl-word {
+  display: inline !important;
 }
 
 /* ── Inner pages ── */

@@ -32,6 +32,27 @@ Pages: `/` (radio, countdown, reminders, schedule, dhak, songs, FAQ), `/pandals/
 | `?lang=en` / `?lang=bn` | Force the language. |
 | `?hlsjs` | Force the hls.js player path (simulates Firefox / older Chrome). |
 
+## Motion
+
+All motion lives in `src/features/motion.ts` and `src/lib/smooth-scroll.ts`. It uses one easing family (`power3/4.out`, 0.9 s) everywhere.
+
+| Effect | Where | Notes |
+|---|---|---|
+| Smooth wheel scrolling (Lenis + GSAP ticker) | every page | Touch scrolling stays native on phones. The map and inner list have `data-lenis-prevent` so map zoom and list scrolling work |
+| Title intro (SplitText) | hero `h1` / page `h1` | English animates letter by letter (0.03 s stagger). **Bengali animates word by word**, because per-letter spans break conjuncts and vowel signs. Plain text is restored when the intro ends |
+| Reveal on scroll | panels, slot cards, routes | Fade and rise 60 px; only for elements that start below the fold, so nothing flashes on load |
+| Word-by-word highlight | the radio note paragraph | Scroll-scrubbed opacity; words stay `display:inline` so line breaks never change |
+| Magnetic buttons | play button and primary buttons | Mouse only (`hover: hover` and `pointer: fine`) |
+| Page transitions | cross-document View Transitions (CSS) | Chromium only; other browsers just navigate |
+
+`prefers-reduced-motion: reduce` turns all of it off (no Lenis, no splitting, no reveals or transitions).
+
+Not added, on purpose:
+- **Custom cursor and loader:** a loader hurts the 4 AM "tap and listen" moment and LCP; a custom cursor doesn't suit the calm theme.
+- **React Bits / Magic UI / Aceternity components:** they need React and Tailwind.
+
+The only animated background is the backdrop, well within the "max two" rule.
+
 ## Where to change things
 
 | What | File |

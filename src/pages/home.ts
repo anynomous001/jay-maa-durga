@@ -1,4 +1,5 @@
 import { initCommon } from '../lib/common';
+import { initMotion } from '../features/motion';
 import { initCountdown } from '../features/countdown';
 import { initRadio } from '../features/radio';
 import { initWake } from '../features/wake';
@@ -15,3 +16,6 @@ initReminders();
 initSchedule();
 initDhak();
 initPlaylists();
+
+// Last, so it animates the final rendered content.
+initMotion();

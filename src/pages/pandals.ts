@@ -6,6 +6,7 @@ import type * as Leaflet from 'leaflet';
 import data from '../../data/pandals.json';
 import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, SITE_NAME, WHATSAPP_NUMBER } from '../config';
 import { initCommon } from '../lib/common';
+import { initMotion } from '../features/motion';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { type LatLng, type TravelMode, directionsUrl, distanceKm, routeLegs, routeUrl } from '../lib/maps';
 import { sponsorFor, sponsorHref } from '../lib/sponsors';
@@ -257,3 +258,6 @@ function renderAll() {
 }
 renderAll();
 onLangChange(renderAll);
+
+// Last, so it animates the final rendered content.
+initMotion();

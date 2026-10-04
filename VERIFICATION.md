@@ -37,6 +37,19 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | — | Bilingual toggle | Bengali ↔ English: all strings, `<html lang>`, and the sponsor label switch | ✅ | ✅ | **Pass** |
 | — | Accessibility | No unlabeled controls (script check); skip link; reduced-motion CSS; Lighthouse Accessibility 100 on every page | ✅ | ✅ | **Pass** |
 
+## Motion (added after Phase 2)
+
+| Check | How | Result |
+|---|---|---|
+| Wheel scrolling glides; whole page reachable | Headless Chrome, 40 real mouse-wheel events: reached the bottom (3204 px) and every panel ended fully visible | **Pass** |
+| Anchor links still jump correctly | Skip link → `#main` lands at the top. On a 390 px viewport the route stop `#p-bagbazar` lands its card 16 px from the top | **Pass** |
+| Phones scroll natively | Lenis left at its default (`syncTouch: false`): touch input isn't smoothed | **Pass** (by configuration; not felt on a real phone) |
+| Map and inner list | Wheel over the map zooms Leaflet (page didn't scroll); wheel over the desktop list scrolls the list (`scrollTop` 1500) | **Pass** |
+| No flicker or layout shift on load | Layout-shift observer at 4× CPU throttle. Fixed during testing: the on-screen paragraph highlight re-wrapped lines (CLS 0.12). Now words stay inline, the effect runs only below the fold, and the title is split after fonts are ready | **Pass** (home CLS 0.009) |
+| Bengali text intact | The title splits by word for Bengali and is restored to plain text after the intro. Language toggle mid- and post-animation leaves no stale spans | **Pass** |
+| Reduced motion | `prefers-reduced-motion: reduce`: no Lenis class, no splits, all panels opacity 1 | **Pass** |
+| Accessibility | Initially failed `aria-prohibited-attr` (SplitText put `aria-label` on a `<p>`); fixed with `aria: 'none'` + spans | **Pass** (100) |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |
@@ -58,9 +71,11 @@ Removed at Pritam's request ("no need for greeting card"), along with its sponso
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|
-| `/` | 99 | 100 | 100 | 100 | 1.6 s | 0.035 |
-| `/pandals/` | 100 | 100 | 100 | 100 | 1.5 s | 0.006 |
-| `/advertise/` | 100 | 100 | 100 | 100 | 1.5 s | 0.004 |
+| `/` | 98 | 100 | 100 | 100 | 2.0 s | 0.009 |
+| `/pandals/` | 99 | 100 | 100 | 100 | 1.8 s | 0.033 |
+| `/advertise/` | 99 | 100 | 100 | 100 | 1.7 s | 0.05 |
+
+These figures are after adding GSAP and Lenis (+65 KB gzipped, shared). Before motion: 99 / 100 / 100 on Performance, with CLS ≤ 0.035.
 
 The first `/pandals/` run scored Performance 77 (CLS 0.58) and Accessibility 99 (heading order). Both were fixed by reserving space for injected content and adding a list heading; the table shows the re-run.
 
