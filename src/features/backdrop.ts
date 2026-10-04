@@ -3,6 +3,7 @@
  * shiuli (night-jasmine) flowers. Pure CSS animation on transform/opacity, so
  * it stays cheap on mid-range phones. Static under prefers-reduced-motion.
  */
+import { durgaSVG } from './durga';
 
 // Shiuli: six white petals around a saffron-orange tube. Drawn for this site.
 const SHIULI = `<svg viewBox="-12 -12 24 24" aria-hidden="true"><g fill="#fbf7ee">${[0, 60, 120, 180, 240, 300]
@@ -24,7 +25,7 @@ export function initBackdrop(): void {
   root.className = 'backdrop';
   root.setAttribute('aria-hidden', 'true');
 
-  let html = '<div class="bd-glow"></div>';
+  let html = `<div class="bd-glow"></div><div class="bd-durga${reduced ? ' still' : ''}">${durgaSVG()}</div>`;
   for (let i = 0; i < (small ? 28 : 50); i++) {
     html += `<i class="bd-star" style="left:${(r() * 100).toFixed(1)}%;top:${(r() * 55).toFixed(1)}%;--s:${(r() * 1.6 + 0.8).toFixed(1)}px;--d:${(r() * 4 + 3).toFixed(1)}s;--o:${(r() * 0.5 + 0.35).toFixed(2)}"></i>`;
   }

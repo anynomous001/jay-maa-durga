@@ -50,6 +50,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Reduced motion | `prefers-reduced-motion: reduce`: no Lenis class, no splits, all panels opacity 1 | **Pass** |
 | Accessibility | Initially failed `aria-prohibited-attr` (SplitText put `aria-label` on a `<p>`); fixed with `aria: 'none'` + spans | **Pass** (100) |
 
+## Maa Durga background
+
+| Check | How | Result |
+|---|---|---|
+| Placement and readability | Screenshots `d-durga.png` (desktop: right of the content, clear of the countdown) and `m-durga.png` (390 px: faint, behind the title; text stays legible) | **Pass** |
+| Chokkhu daan animation | After 4 s the eye strokes are fully drawn (`stroke-dashoffset: 0`), pupils at opacity 1, halo rotating | **Pass** |
+| Reduced motion | `.still` class: eyes fully painted, no rotation or float | **Pass** |
+| Performance | The Google Fonts stylesheet became the bottleneck (pandals FCP 3.4 s), so it now loads without blocking paint (`media="print"` → `all`). After: FCP ≈ 1.5 s on every page | **Pass** |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |
@@ -71,9 +80,9 @@ Removed at Pritam's request ("no need for greeting card"), along with its sponso
 
 | Page | Performance | Accessibility | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|
-| `/` | 98 | 100 | 100 | 100 | 2.0 s | 0.009 |
-| `/pandals/` | 99 | 100 | 100 | 100 | 1.8 s | 0.033 |
-| `/advertise/` | 99 | 100 | 100 | 100 | 1.7 s | 0.05 |
+| `/` | 100 | 100 | 100 | 100 | 1.5 s | 0.033 |
+| `/pandals/` | 99 | 100 | 100 | 100 | 1.5 s | 0.032 |
+| `/advertise/` | 100 | 100 | 100 | 100 | 1.5 s | 0.05 |
 
 These figures are after adding GSAP and Lenis (+65 KB gzipped, shared). Before motion: 99 / 100 / 100 on Performance, with CLS ≤ 0.035.
 

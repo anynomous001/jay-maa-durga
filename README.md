@@ -51,7 +51,9 @@ Not added, on purpose:
 - **Custom cursor and loader:** a loader hurts the 4 AM "tap and listen" moment and LCP; a custom cursor doesn't suit the calm theme.
 - **React Bits / Magic UI / Aceternity components:** they need React and Tailwind.
 
-The only animated background is the backdrop, well within the "max two" rule.
+The only animated background is the backdrop (stars, mist, shiuli, and the Maa Durga face in `src/features/durga.ts`).
+
+Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns slowly and the glow breathes. She sits to the right of the content on desktop and faintly behind the title on mobile, and fades as you scroll. Opacity and position are in `.bd-durga` in `src/styles.css`.
 
 ## Where to change things
 

@@ -884,6 +884,88 @@ a.sponsor:hover {
   height: auto;
 }
 
+/* ── Maa Durga (original SVG, src/features/durga.ts) ── */
+.bd-durga {
+  position: absolute;
+  left: 50%;
+  top: 7vh;
+  width: min(86vw, 420px);
+  transform: translateX(-50%);
+  opacity: 0.22;
+  /* Fade the lower half so it never competes with the content. */
+  -webkit-mask-image: linear-gradient(180deg, #000 45%, transparent 92%);
+  mask-image: linear-gradient(180deg, #000 45%, transparent 92%);
+}
+.dg-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  animation: dg-float 12s ease-in-out infinite;
+}
+.dg-halo {
+  transform-box: view-box;
+  transform-origin: 0 0;
+  animation: dg-turn 120s linear infinite;
+}
+.dg-glow {
+  animation: dg-breathe 8s ease-in-out infinite;
+}
+/* Chokkhu daan: the eyes are painted in, then the gaze appears. */
+.dg-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: dg-paint 2.2s cubic-bezier(0.65, 0, 0.35, 1) 0.8s forwards;
+}
+.dg-draw.dg-late {
+  animation-delay: 2s;
+}
+.dg-eye-white,
+.dg-pupil {
+  opacity: 0;
+  animation: dg-fade 1.4s ease-out 2.4s forwards;
+}
+.bd-durga.still .dg-svg,
+.bd-durga.still .dg-halo,
+.bd-durga.still .dg-glow {
+  animation: none;
+}
+.bd-durga.still .dg-draw {
+  animation: none;
+  stroke-dashoffset: 0;
+}
+.bd-durga.still .dg-eye-white,
+.bd-durga.still .dg-pupil {
+  animation: none;
+  opacity: 1;
+}
+@media (min-width: 900px) {
+  /* Beside the content rather than behind the countdown. */
+  .bd-durga {
+    left: auto;
+    right: max(-40px, calc(50vw - 700px));
+    top: 4vh;
+    width: min(46vw, 600px);
+    transform: none;
+    opacity: 0.3;
+  }
+}
+@keyframes dg-paint {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes dg-fade {
+  to { opacity: 1; }
+}
+@keyframes dg-turn {
+  to { transform: rotate(360deg); }
+}
+@keyframes dg-breathe {
+  50% { opacity: 0.55; }
+}
+@keyframes dg-float {
+  50% { transform: translateY(-8px); }
+}
+
 /* ── Animated backdrop (original) ── */
 .backdrop {
   position: fixed;

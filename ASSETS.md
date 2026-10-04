@@ -11,6 +11,7 @@ The site hosts no copyrighted audio or images from third parties. Everything vis
 | OG image | `public/og.jpg` (1200×630) | Background art: hand-written SVG (`scripts/og-art.svg`) with stars, horizon, sun and kash grass. Text drawn on canvas in the browser (`scripts/og.html`) using the fonts below | Original, © site owner |
 | Header logo mark | `partials/header.html` (inline SVG) | Hand-written SVG | Original |
 | Animated backdrop (stars, mist, falling shiuli flowers) | `src/features/backdrop.ts`, `src/styles.css` | Shiuli drawn as an original 6-petal SVG; animation in CSS. Mood requested by the owner; no code, values or assets taken from any other site | Original |
+| Maa Durga face (background) | `src/features/durga.ts` | Hand-written SVG in the Kolkata pratima style (shola mukut, trinayan, fish-shaped eyes, nath, jhumka, halo). Drawn from scratch; no photo, idol image or third-party artwork traced or copied. CSS animation: eyes painted in on load (chokkhu daan), slow halo turn, breathing glow | Original, © site owner |
 | Dhak illustration | `index.html` (inline SVG) | Hand-written SVG | Original |
 | Dhak sound | `src/features/dhak.ts` | Synthesised live with the Web Audio API: sine "membrane" with a pitch drop, filtered noise for the skin slap and stick crack. No samples | Original, no third-party audio |
 | Dhak rhythm pattern | `src/features/dhak.ts` | Original 8-beat pattern | Original |

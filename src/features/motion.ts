@@ -110,6 +110,14 @@ export function initMotion(): void {
       });
     }
     reveals();
+    const durga = document.querySelector('.bd-durga');
+    if (durga) {
+      gsap.to(durga, {
+        opacity: 0.1,
+        ease: 'none',
+        scrollTrigger: { start: 0, end: () => innerHeight * 1.2, scrub: true },
+      });
+    }
     const note = document.querySelector<HTMLElement>('[data-motion="highlight"]');
     // Only when it scrolls into view later — splitting on-screen text at load is a visible jolt.
     if (note && belowFold(note)) wordHighlight(note);
