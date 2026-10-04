@@ -68,6 +68,14 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Motion | Settle-in zoom on load and scroll parallax (12%); off under reduced motion | **Pass** |
 | Lighthouse | Mobile home 99 / 100 / 100 / 100 (LCP 1.8 s, CLS 0.045); desktop home Performance 100 (LCP 0.5 s) | **Pass** |
 
+## Pandal map background
+
+| Check | How | Result |
+|---|---|---|
+| Look | Fixed full-page illustration with a darker shade where the map and cards sit (`d-pandals-bg.png`, `m-pandals-bg.png`). The animated night-sky backdrop is turned off on this page | **Pass** |
+| Weight | Phones load the 480/720 px portrait crop (41–66 KB AVIF) | **Pass** |
+| Lighthouse (mobile) | `/pandals/` 99 / 100 / 100 / 100, LCP 1.9 s, CLS 0.033 | **Pass** |
+
 ## Visitor counter
 
 | Check | How | Result |

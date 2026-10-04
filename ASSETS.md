@@ -23,6 +23,7 @@ The site hosts no copyrighted audio or images from third parties. Everything vis
 | Asset | Where | Notes | Licence |
 |---|---|---|---|
 | Hero illustration: pandal at dusk with dhakis and the Durga idol | Source `assets-src/hero-pandal.png` (1672×941); derived `public/hero/*` (landscape 640–1672 px and a portrait crop for phones, in AVIF, WebP and JPEG, made by `scripts/make-hero.mjs`) | Supplied by Pritam on 2026-10-04. Origin not recorded; it looks AI-generated | **To confirm:** Pritam must confirm the image's source and that it may be used commercially. If it came from an AI tool, check that tool's terms |
+| Pandal-route night illustration (queue to a pandal, food stall, volunteers) — background of `/pandals/` | Source `assets-src/bg-pandals.png` (1672×940); derived `public/bg/pandals/*` (same responsive set, portrait crop centred at 78%) | Supplied by Pritam on 2026-10-04. Origin not recorded; it looks AI-generated | **To confirm:** same as above |
 
 ## Third-party (used, not modified)
 

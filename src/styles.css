@@ -1789,3 +1789,44 @@ dialog.sheet::backdrop {
   font-size: 0.82rem;
   color: #a8e6c4;
 }
+
+/* ── Pandal map page: illustrated pandal route as a fixed background ── */
+.page-bg,
+.page-bg-shade {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+}
+.page-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 60% 50%;
+}
+.page-bg-shade {
+  background:
+    linear-gradient(180deg, rgba(8, 10, 28, 0.55) 0%, rgba(8, 10, 28, 0.62) 22%, rgba(8, 10, 28, 0.82) 48%, rgba(8, 10, 28, 0.9) 100%);
+}
+/* The photo replaces the animated night-sky backdrop on this page. */
+.page-pandals .backdrop {
+  display: none;
+}
+.page-pandals .page-head h1,
+.page-pandals .page-head .lead,
+.page-pandals .site-header {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+}
+.page-pandals .page-head .lead {
+  color: #ece6f4;
+}
+.page-pandals .pm-card,
+.page-pandals .panel {
+  background: rgba(16, 19, 42, 0.9);
+}
+@media (min-width: 960px) {
+  .page-bg-shade {
+    background:
+      linear-gradient(90deg, rgba(8, 10, 28, 0.45) 0%, rgba(8, 10, 28, 0.05) 55%, rgba(8, 10, 28, 0.2) 100%),
+      linear-gradient(180deg, rgba(8, 10, 28, 0.2) 0%, rgba(8, 10, 28, 0.35) 30%, rgba(8, 10, 28, 0.78) 70%);
+  }
+}

@@ -9,7 +9,16 @@
     <meta property="og:image" content="https://mahalaya-live.pages.dev/og.jpg" />
     <script type="module" src="/src/pages/pandals.ts"></script>
   </head>
-  <body>
+  <body class="page-pandals">
+    <picture class="page-bg" aria-hidden="true">
+      <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="/bg/pandals/port-480.avif 480w, /bg/pandals/port-720.avif 720w" sizes="100vw" />
+      <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="/bg/pandals/port-480.webp 480w, /bg/pandals/port-720.webp 720w" sizes="100vw" />
+      <source media="(max-aspect-ratio: 4/5)" srcset="/bg/pandals/port-480.jpg 480w, /bg/pandals/port-720.jpg 720w" sizes="100vw" />
+      <source type="image/avif" srcset="/bg/pandals/land-640.avif 640w, /bg/pandals/land-960.avif 960w, /bg/pandals/land-1280.avif 1280w, /bg/pandals/land-1672.avif 1672w" sizes="100vw" />
+      <source type="image/webp" srcset="/bg/pandals/land-640.webp 640w, /bg/pandals/land-960.webp 960w, /bg/pandals/land-1280.webp 1280w, /bg/pandals/land-1672.webp 1672w" sizes="100vw" />
+      <img src="/bg/pandals/land-1280.jpg" srcset="/bg/pandals/land-640.jpg 640w, /bg/pandals/land-960.jpg 960w, /bg/pandals/land-1280.jpg 1280w, /bg/pandals/land-1672.jpg 1672w" sizes="100vw" width="1672" height="940" alt="" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="page-bg-shade" aria-hidden="true"></div>
     <!--@partial header-->
     <main id="main" class="pm-main">
       <section class="page-head">
