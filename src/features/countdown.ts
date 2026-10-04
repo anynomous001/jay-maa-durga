@@ -60,6 +60,7 @@ export function initCountdown(): void {
     const phase = phaseAt(n);
     if (phase !== lastPhase) {
       lastPhase = phase;
+      setHero(phase);
       const counting = phase === 'toMahalaya' || phase === 'toShashthi';
       grid.hidden = !counting;
       msg.hidden = counting;
@@ -89,6 +90,17 @@ export function initCountdown(): void {
       msg.textContent = t('cd.pujo', { day: name });
     } else {
       msg.textContent = t('cd.over');
+    }
+  }
+
+  /** Hero copy follows the season: Mahalaya → Sharodiya (Puja) → Bijoya. */
+  function setHero(phase: Phase) {
+    const season = phase === 'toMahalaya' || phase === 'live' ? '' : phase === 'over' ? '.bijoya' : '.puja';
+    for (const part of ['kicker', 'title', 'sub']) {
+      const el = document.querySelector<HTMLElement>(`.hero [data-i18n^="hero.${part}"]`);
+      if (!el) continue;
+      el.dataset.i18n = `hero.${part}${season}`;
+      el.textContent = t(el.dataset.i18n);
     }
   }
 
