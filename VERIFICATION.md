@@ -85,6 +85,16 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | One sound at a time | Radio playing → tap Audio → radio paused. Radio Play again → mini player closed | **Pass** |
 | Real dhak | Clips load (200) when the Dhak sheet opens. Tap plays one of 4 real strokes (rotating, ±2.5% pitch). "Play a full rhythm" toggles to "Stop" and plays a 10 s passage with the drum pulsing on its 44 beats. Closing the sheet stops it. Decoded clips: peak 0.89, no clipping. CC BY-SA credit shown under the drum | **Pass** (listen once yourself — I can measure audio, not hear it) |
 
+## Booking from the spots themselves (no advertise page)
+
+| Check | How | Result |
+|---|---|---|
+| Home spots | "Your brand here — ₹149 · Book now" on spotlight + countdown; tap → booking sheet over the hero, "Pay ₹149", live audience line (`d-inline-booking-home.png`) | **Pass** |
+| Map spots | Map partner "₹99"; "Eat nearby" on Maddox Square → sheet with Maddox pre-ticked, "Pay ₹49"; mock pay → approve → card shows the shop with address + directions; other cards still offer ₹49 (`d-eat-nearby-live.png`) | **Pass** |
+| Lazy loading | Booking code (2.5 KB gz) loads on first tap only; `/advertise` redirects to `/` (`public/_redirects`) | **Pass** |
+| No payments configured | Tapping a spot opens WhatsApp with a pre-filled message instead | By design |
+| Lighthouse (mobile) | `/` 98 / 100 / 100 / 100; `/pandals/` 99 / 100 / 100 / 100 | **Pass** |
+
 ## Sponsor booking + Razorpay (local, test mode)
 
 | Check | How | Result |

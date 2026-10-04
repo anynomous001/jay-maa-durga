@@ -1944,7 +1944,7 @@ dialog.sheet::backdrop {
   }
 }
 
-/* ── Booking sheet (advertise) ── */
+/* ── Booking sheet (opens from any "your brand here" spot) ── */
 .slot-card .btn {
   margin-top: 0.25rem;
 }
@@ -2270,4 +2270,65 @@ textarea.input {
   gap: 0.35rem;
   align-items: center;
   font-size: 0.9rem;
+}
+
+/* "Your brand here" spots are buttons that open the booking sheet */
+button.sponsor.cta,
+button.pm-eat.cta {
+  width: 100%;
+  font: inherit;
+  cursor: pointer;
+  background: rgba(8, 10, 28, 0.45);
+}
+button.sponsor.cta {
+  font-size: 0.92rem;
+  text-align: center;
+}
+button.pm-eat.cta {
+  text-align: left;
+  border: 0;
+  border-top: 1px dashed var(--line);
+  background: none;
+  font-size: 0.82rem;
+  padding: 0.45rem 0 0;
+  color: var(--muted);
+}
+button.sponsor.cta:hover,
+button.pm-eat.cta:hover {
+  color: var(--accent);
+}
+[data-book-slot][aria-busy='true'] {
+  opacity: 0.6;
+  cursor: progress;
+}
+.bk-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1rem;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.bk-steps li {
+  counter-increment: step;
+}
+.bk-steps li::before {
+  content: counter(step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  background: rgba(244, 185, 66, 0.18);
+  color: var(--accent);
+  font-size: 0.75rem;
+}
+.bk-audience {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  color: #a8e6c4;
 }

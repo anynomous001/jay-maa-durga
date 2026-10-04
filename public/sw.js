@@ -1,9 +1,9 @@
 /* Service worker: caches OUR static assets only.
  * Never touches the radio stream, embeds, map tiles or any cross-origin request. */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const STATIC = `static-${VERSION}`;
 const PAGES = `pages-${VERSION}`;
-const PRECACHE = ['/', '/pandals/', '/advertise/', '/manifest.webmanifest', '/favicon.svg', '/icons/icon-192.png'];
+const PRECACHE = ['/', '/pandals/', '/policies/', '/manifest.webmanifest', '/favicon.svg', '/icons/icon-192.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(PAGES).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));

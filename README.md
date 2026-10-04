@@ -22,7 +22,7 @@ npm run build      # typecheck + data validation + production build → dist/
 npm run preview    # serve dist/ on http://localhost:4173
 ```
 
-Pages: `/` (radio, countdown, reminders, schedule, dhak, songs, FAQ), `/pandals/` (map), `/advertise/`.
+Pages: `/` (everything in the hero: radio, countdown, reminders, plus schedule/songs/dhak/FAQ sheets), `/pandals/` (map), `/policies/` (terms, privacy, refunds, contact), `/admin/` (private booking review).
 
 ### Test hooks (safe to leave in production)
 
@@ -60,7 +60,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 | What | File |
 |---|---|
 | Site name, tagline, URL, WhatsApp number, operator details for `/policies/` | `src/config.ts` |
-| Slot prices, season end, "TBD" marker (shared with the payments Worker) | `data/pricing.json` |
+| Slot prices by position (home ₹149, dhak/map ₹99, "Eat nearby" ₹49), season end (shared with the payments Worker) | `data/pricing.json` |
 | Key times (transmission 03:50–05:45 IST, auto-start time, reminder time), Puja dates | `src/config.ts` (`MAHALAYA_*`, `AUTO_START_AT`, `PUJA_DAYS`) |
 | Radio stream URLs | `src/config.ts` (`RADIO_CHANNELS`) |
 | Map tile provider | `src/config.ts` (`MAP_TILE_URL`, `MAP_TILE_ATTRIBUTION`) |
@@ -95,7 +95,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 - `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`. Paid bookings from `/advertise` don't go here — they're approved in `/admin/` and served by the Worker.
 - `logo` is optional. Put the file in `public/sponsors/`.
 - `link` takes precedence over `whatsapp`; if both are empty, the card isn't clickable.
-- Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Advertise here / বিজ্ঞাপন দিন" CTA.
+- Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Your brand here — ₹price · Book now" button, which opens the booking sheet.
 - For `pandal-nearby`, list the pandal ids the shop is near, e.g. `["maddox-square","singhi-park"]`.
 - Every sponsor is labelled "স্পনসর / Sponsored". No slot sits on or around the radio player; the broadcast belongs to Prasar Bharati.
 
@@ -172,7 +172,7 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 ## Sponsor bookings & payments (Razorpay)
 
 Flow:
-1. **Book.** An advertiser taps **Book this slot** on `/advertise` and fills in the form: business name (EN/BN), tagline, description, logo, website, shop address + Google Maps link, nearby pandals (for "Eat nearby"), contact name/phone/WhatsApp/email, and a start date.
+1. **Book.** An advertiser taps any **"Your brand here — ₹…"** spot (home spotlight/countdown, the dhak sheet, the map-partner banner, or "Eat nearby" on a pandal card). The booking sheet opens right there with that slot (and pandal) pre-selected. They fill in business name (EN/BN), tagline, description, logo, website, shop address + Google Maps link, nearby pandals (for "Eat nearby"), contact name/phone/WhatsApp/email, and a start date.
 2. **Hold.** The Worker validates everything and holds the slot for 15 minutes (so two people can't buy it at once). It creates a **Razorpay order for the price in `data/pricing.json`**; the browser never sets the amount.
 3. **Pay.** Razorpay Checkout takes UPI, cards, netbanking or wallets. The Worker verifies the payment signature, and the `payment.captured` webhook is a backup if the browser closes. The booking becomes **paid → needs review**.
 4. **Review.** You open **`/admin/`** (token = `ADMIN_TOKEN`) and see the logo and every detail.

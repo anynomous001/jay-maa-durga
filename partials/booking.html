@@ -1,51 +1,4 @@
-<!doctype html>
-<html lang="bn">
-  <head>
-    <!--@partial head-->
-    <title>বিজ্ঞাপন দিন — Advertise on Mahalaya Live | Durga Puja 2026</title>
-    <meta name="description" content="মহালয়া থেকে বিজয়া দশমী পর্যন্ত পুজোর মরসুমে আপনার দোকান বা ব্র্যান্ডের বিজ্ঞাপন দিন। Sponsor slots, prices and UPI payment for Mahalaya Live." />
-    <link rel="canonical" href="https://mahalaya-live.pages.dev/advertise/" />
-    <meta property="og:title" content="Advertise on Mahalaya Live — Durga Puja 2026" />
-    <meta property="og:image" content="https://mahalaya-live.pages.dev/og.jpg" />
-    <script type="module" src="/src/pages/advertise.ts"></script>
-  </head>
-  <body>
-    <!--@partial header-->
-    <main id="main">
-      <section class="page-head">
-        <h1 data-i18n="ad.title">বিজ্ঞাপন দিন</h1>
-        <p class="lead" data-i18n="ad.intro">মহালয়া থেকে বিজয়া দশমী — পুজোর মরসুমে আপনার দোকান বা ব্র্যান্ডকে তুলে ধরুন। প্রতিটি স্লটে স্পষ্ট "স্পনসর" লেখা থাকে। রেডিও সম্প্রচারের পাশে কোনো বিজ্ঞাপন থাকে না।</p>
-      </section>
-
-      <section class="panel" aria-labelledby="slots-title">
-        <h2 id="slots-title" data-i18n="ad.slots">স্লট ও দাম</h2>
-        <div class="slot-list" id="slot-list"></div>
-        <p class="muted small" data-i18n="ad.runs">সব স্লট বুকিং-এর দিন থেকে বিজয়া দশমী (২১ অক্টোবর ২০২৬) পর্যন্ত চলবে।</p>
-      </section>
-
-      <section class="panel" aria-labelledby="aud-title">
-        <h2 id="aud-title" data-i18n="ad.audience">কারা দেখবেন</h2>
-        <p data-i18n="ad.audienceText">বাংলাভাষী শ্রোতা — কলকাতা ও প্রবাসী বাঙালি। আসল ভিজিটর সংখ্যা এখানে শীঘ্রই দেওয়া হবে।</p>
-        <dl class="stats" id="stats"></dl>
-      </section>
-
-      <section class="panel" aria-labelledby="how-title">
-        <h2 id="how-title" data-i18n="ad.how">কীভাবে বুক করবেন</h2>
-        <ol class="how-steps">
-          <li data-i18n="ad.how1">পছন্দের স্লটে "এই স্লট নিন" চাপুন।</li>
-          <li data-i18n="ad.how2">দোকানের নাম, লোগো, ঠিকানা, ওয়েবসাইট ইত্যাদি দিন।</li>
-          <li data-i18n="ad.how3">Razorpay-তে নিরাপদে পেমেন্ট করুন — UPI, কার্ড, নেটব্যাংকিং বা ওয়ালেট।</li>
-          <li data-i18n="ad.how4">আমরা ২৪ ঘণ্টার মধ্যে দেখে নিয়ে বিজ্ঞাপন চালু করি। কোনো কারণে না চালালে পুরো টাকা ফেরত।</li>
-        </ol>
-        <p class="muted small">
-          <span data-i18n="ad.questions">প্রশ্ন আছে?</span>
-          <a id="wa-contact" target="_blank" rel="noopener" data-i18n="ad.contact">হোয়াটসঅ্যাপে কথা বলুন</a> ·
-          <a href="/policies/" data-i18n="ad.policies">শর্তাবলি, গোপনীয়তা ও রিফান্ড নীতি</a>
-        </p>
-      </section>
-    </main>
-
-    <dialog class="sheet booking" id="booking-sheet" aria-labelledby="booking-title">
+<dialog class="sheet booking" id="booking-sheet" aria-labelledby="booking-title">
       <div class="sheet-head">
         <h2 id="booking-title" data-i18n="bk.title">স্লট বুক করুন</h2>
         <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
@@ -53,6 +6,14 @@
       <div class="sheet-body" data-lenis-prevent>
         <form id="booking-form" novalidate>
           <div class="bk-summary" id="bk-summary"></div>
+          <ol class="bk-steps">
+            <li data-i18n="bk.step1">তথ্য দিন</li>
+            <li data-i18n="bk.step2">Razorpay-তে পেমেন্ট</li>
+            <li data-i18n="bk.step3">২৪ ঘণ্টায় যাচাই করে চালু · না চালালে পুরো টাকা ফেরত</li>
+          </ol>
+          <p class="bk-audience" data-visitors-wrap hidden>
+            <span data-visitors="online" data-visitors-text="vis.online"></span> · <span data-visitors="total" data-visitors-text="vis.total"></span>
+          </p>
           <input type="hidden" name="slot" id="bk-slot" />
 
           <fieldset class="bk-group">
@@ -110,5 +71,3 @@
         </div>
       </div>
     </dialog>
-  </body>
-</html>

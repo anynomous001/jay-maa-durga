@@ -112,7 +112,11 @@ function enforcePandalLimit() {
   });
 }
 
-export function openBooking(slot: SlotId, takenPandals: string[] = []) {
+export function openBooking(
+  slot: SlotId,
+  takenPandals: string[] = [],
+  opts: { preselectPandal?: string; unavailable?: boolean } = {},
+) {
   pandalsTaken = new Set(takenPandals);
   current = null;
   showView('form');
@@ -123,14 +127,24 @@ export function openBooking(slot: SlotId, takenPandals: string[] = []) {
   $('bk-summary').querySelector('strong')!.textContent = t(`slot.${slot}`);
   $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slot)} · ${t('slot.' + slot + '.where')}`;
   $('bk-pandals-field').hidden = slot !== 'pandal-nearby';
-  if (slot === 'pandal-nearby') renderPandalPicks();
+  if (slot === 'pandal-nearby') {
+    // Coming from a pandal card: start with that pandal ticked.
+    $('bk-pandals').innerHTML = '';
+    renderPandalPicks();
+    const pre = opts.preselectPandal && $('bk-pandals').querySelector<HTMLInputElement>(`input[value="${CSS.escape(opts.preselectPandal)}"]`);
+    if (pre && !pre.disabled) {
+      pre.checked = true;
+      enforcePandalLimit();
+    }
+  }
   const start = $('bk-start') as HTMLInputElement;
   start.min = istDateKey(now());
   start.max = PRICING.seasonEnd;
   if (!start.value || start.value < start.min) start.value = start.min;
   const submit = $('bk-submit') as HTMLButtonElement;
-  submit.disabled = false;
+  submit.disabled = Boolean(opts.unavailable);
   submit.textContent = t('bk.pay', { price: priceText(slot) });
+  if (opts.unavailable) setError(t('bk.unavailable'));
   sheet.showModal();
   window.dispatchEvent(new CustomEvent('sheet:open'));
 }
@@ -229,7 +243,11 @@ async function submit(e: SubmitEvent) {
   }
 }
 
+let initialised = false;
+
 export function initBooking() {
+  if (initialised) return;
+  initialised = true;
   sheet = $('booking-sheet') as HTMLDialogElement;
   form = $('booking-form') as HTMLFormElement;
   form.addEventListener('submit', (e) => void submit(e as SubmitEvent));

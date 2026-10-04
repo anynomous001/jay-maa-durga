@@ -48,7 +48,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(import.meta.dirname, 'index.html'),
-        advertise: resolve(import.meta.dirname, 'advertise/index.html'),
         pandals: resolve(import.meta.dirname, 'pandals/index.html'),
         policies: resolve(import.meta.dirname, 'policies/index.html'),
         admin: resolve(import.meta.dirname, 'admin/index.html'),

@@ -5,6 +5,7 @@ import { getLang, initI18n, onLangChange } from './i18n';
 import { loadRemoteSponsors, renderSlots } from './sponsors';
 import { initBackdrop } from '../features/backdrop';
 import { startSmoothScroll } from './smooth-scroll';
+import { initBookTriggers } from '../features/book-trigger';
 
 export function initCommon(): void {
   initBackdrop();
@@ -17,6 +18,7 @@ export function initCommon(): void {
   syncName();
   renderSlots();
   void loadRemoteSponsors();
+  initBookTriggers();
   onLangChange(() => {
     syncName();
     renderSlots();
