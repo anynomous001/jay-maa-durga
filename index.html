@@ -46,6 +46,8 @@
         ]
       }
     </script>
+    <link rel="preload" as="image" type="image/avif" media="(max-aspect-ratio: 4/5)" imagesrcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/avif" media="(min-aspect-ratio: 4/5)" imagesrcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" imagesizes="100vw" fetchpriority="high" />
     <script type="module" src="/src/pages/home.ts"></script>
   </head>
   <body class="page-home">
@@ -79,9 +81,9 @@
               <h2 class="sr-only" id="radio-title" data-i18n="radio.title">লাইভ রেডিও</h2>
               <div class="player" id="player" data-state="idle">
                 <button type="button" class="play-btn" id="play-btn" aria-describedby="player-status">
-                  <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-                  <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
-                  <svg class="i-spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="42 100" stroke-linecap="round"/></svg>
+                  <svg width="34" height="34" class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                  <svg width="34" height="34" class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg>
+                  <svg width="34" height="34" class="i-spin" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="42 100" stroke-linecap="round"/></svg>
                   <span class="play-label" data-i18n="radio.play">শুনুন</span>
                 </button>
                 <div class="player-meta">
@@ -117,9 +119,9 @@
             </section>
 
             <div class="reminders" id="reminders" role="group" data-i18n-attr="aria-label:rem.title" aria-label="রিমাইন্ডার রাখুন">
-              <a class="icon-btn" id="gcal-mahalaya" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.8" fill="currentColor"/></svg><span data-i18n="rem.gcalShort">গুগল ক্যালেন্ডার</span></a>
-              <button type="button" class="icon-btn" id="ics-mahalaya"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0-4-4m4 4 4-4M5 18h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="rem.icsShort">.ics রিমাইন্ডার</span></button>
-              <a class="icon-btn icon-wa" id="wa-share" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.6c.3-.6.7-.6 1-.6l.6.1.9 2.1-.6.9c.5 1 1.3 1.8 2.3 2.3l.9-.6 2.1.9v.6c0 .4-.4 1-.9 1.2-.6.2-1.8.2-3.6-.9a8 8 0 0 1-2.9-3.2c-.6-1.3-.3-2.3.2-2.8Z" fill="currentColor"/></svg><span data-i18n="rem.waShort">শেয়ার</span></a>
+              <a class="icon-btn" id="gcal-mahalaya" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.8" fill="currentColor"/></svg><span data-i18n="rem.gcalShort">গুগল ক্যালেন্ডার</span></a>
+              <button type="button" class="icon-btn" id="ics-mahalaya"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10m0 0-4-4m4 4 4-4M5 18h14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="rem.icsShort">.ics রিমাইন্ডার</span></button>
+              <a class="icon-btn icon-wa" id="wa-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.6c.3-.6.7-.6 1-.6l.6.1.9 2.1-.6.9c.5 1 1.3 1.8 2.3 2.3l.9-.6 2.1.9v.6c0 .4-.4 1-.9 1.2-.6.2-1.8.2-3.6-.9a8 8 0 0 1-2.9-3.2c-.6-1.3-.3-2.3.2-2.8Z" fill="currentColor"/></svg><span data-i18n="rem.waShort">শেয়ার</span></a>
             </div>
           </div>
 
@@ -144,11 +146,11 @@
           </div>
 
           <nav class="dock" data-i18n-attr="aria-label:dock.label" aria-label="আরও">
-            <button type="button" class="dock-btn" data-open="sheet-schedule" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.schedule">নির্ঘণ্ট</span></button>
-            <button type="button" class="dock-btn" data-open="sheet-songs" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor"/></svg><span data-i18n="dock.songs">গান</span></button>
-            <button type="button" class="dock-btn" data-open="sheet-dhak" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="7" ry="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 8v7c0 1.5 3.1 2.7 7 2.7s7-1.2 7-2.7V8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 3.5 7 6.5M15 3.5l2 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.dhak">ঢাক</span></button>
-            <button type="button" class="dock-btn" data-open="sheet-faq" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg><span data-i18n="dock.faq">প্রশ্নোত্তর</span></button>
-            <a class="dock-btn" href="/pandals/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.8" r="2.4" fill="currentColor"/></svg><span data-i18n="dock.map">প্যান্ডেল ম্যাপ</span></a>
+            <button type="button" class="dock-btn" data-open="sheet-schedule" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.schedule">নির্ঘণ্ট</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-songs" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor"/></svg><span data-i18n="dock.songs">গান</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-dhak" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="8" rx="7" ry="2.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 8v7c0 1.5 3.1 2.7 7 2.7s7-1.2 7-2.7V8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 3.5 7 6.5M15 3.5l2 3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.dhak">ঢাক</span></button>
+            <button type="button" class="dock-btn" data-open="sheet-faq" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg><span data-i18n="dock.faq">প্রশ্নোত্তর</span></button>
+            <a class="dock-btn" href="/pandals/"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.9 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9.8" r="2.4" fill="currentColor"/></svg><span data-i18n="dock.map">প্যান্ডেল ম্যাপ</span></a>
           </nav>
         </div>
       </section>

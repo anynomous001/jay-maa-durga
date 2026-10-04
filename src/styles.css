@@ -726,9 +726,41 @@ a.sponsor:hover {
 }
 
 
+/* Cross-document page transitions (Chromium); other browsers just navigate.
+   No cross-fade (it ghosts both pages on top of each other): the old page dips
+   to the dark background, then the new one fades in. The shared header stays
+   perfectly still. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
+  }
+  ::view-transition-old(root) {
+    animation: vt-out 0.14s ease-in both;
+  }
+  ::view-transition-new(root) {
+    animation: vt-in 0.26s ease-out 0.14s both; /* starts once the old page is gone */
+  }
+  .site-header {
+    view-transition-name: site-header;
+  }
+  ::view-transition-group(site-header) {
+    animation: none;
+  }
+  ::view-transition-old(site-header) {
+    display: none;
+  }
+  ::view-transition-new(site-header) {
+    animation: none;
+  }
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
   }
 }
 
@@ -1789,6 +1821,13 @@ dialog.sheet::backdrop {
 .page-bg-shade {
   background:
     linear-gradient(180deg, rgba(8, 10, 28, 0.55) 0%, rgba(8, 10, 28, 0.62) 22%, rgba(8, 10, 28, 0.82) 48%, rgba(8, 10, 28, 0.9) 100%);
+}
+/* The home hero photo already shows the idol: skip the drawn face (it flashed before the photo loaded). */
+.page-home .bd-durga {
+  display: none;
+}
+.hero-media {
+  background: #0c0f1f;
 }
 /* The photo replaces the animated night-sky backdrop on this page. */
 .page-pandals .backdrop {
