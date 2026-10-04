@@ -6,3 +6,5 @@ dist
 scripts/.cache
 .vite-dev.log
 .vite-preview.log
+.vercel
+.env*
