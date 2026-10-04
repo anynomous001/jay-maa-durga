@@ -91,7 +91,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 }
 ```
 
-- `slot` is one of `dhak`, `countdown`, `map-partner`, `pandal-nearby` or `footer`.
+- `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`.
 - `logo` is optional. Put the file in `public/sponsors/`.
 - `link` takes precedence over `whatsapp`; if both are empty, the card isn't clickable.
 - Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Advertise here / বিজ্ঞাপন দিন" CTA.

@@ -3,8 +3,8 @@ import data from '../../data/sponsors.json';
 import { getLang, t } from './i18n';
 import { istDateKey, now } from './time';
 
-export type SlotId = 'dhak' | 'countdown' | 'spotlight' | 'map-partner' | 'pandal-nearby' | 'footer';
-export const SLOT_IDS: SlotId[] = ['spotlight', 'countdown', 'dhak', 'map-partner', 'pandal-nearby', 'footer'];
+export type SlotId = 'dhak' | 'countdown' | 'spotlight' | 'map-partner' | 'pandal-nearby';
+export const SLOT_IDS: SlotId[] = ['spotlight', 'countdown', 'dhak', 'map-partner', 'pandal-nearby'];
 
 export interface Sponsor {
   id: string;

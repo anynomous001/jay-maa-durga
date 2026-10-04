@@ -725,28 +725,7 @@ a.sponsor:hover {
   color: var(--accent);
 }
 
-/* ── Footer ── */
-.site-footer {
-  max-width: 64rem;
-  margin: 2rem auto 0;
-  padding: 1.5rem 1rem 3rem;
-  border-top: 1px solid var(--line);
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-.footer-sponsor .sponsor {
-  margin: 0 auto 1.25rem;
-}
-.disclaimer {
-  max-width: 40rem;
-  margin: 0 auto 0.8rem;
-}
-.footer-links a {
-  color: var(--muted);
-}
 
-/* Cross-document page transitions (Chromium); other browsers just navigate. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;

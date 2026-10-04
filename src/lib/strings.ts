@@ -8,11 +8,6 @@ export const dict: Record<string, Entry> = {
   'skip': { bn: 'মূল অংশে যান', en: 'Skip to content' },
   'sponsored': { bn: 'স্পনসর', en: 'Sponsored' },
   'adhere.cta': { bn: 'এখানে আপনার বিজ্ঞাপন — বিজ্ঞাপন দিন', en: 'Your brand here — Advertise' },
-  'footer.disclaimer': {
-    bn: 'রেডিও সম্প্রচার ও রেকর্ডিং প্রসার ভারতী / আকাশবাণীর সম্পত্তি। এই সাইট শুধু তাদের সরকারি লাইভ স্ট্রিম চালায়; কোনো অডিও আমরা রাখি না।',
-    en: 'The radio broadcast and recording belong to Prasar Bharati / Akashvani. This site only plays their official live stream; we host no audio.',
-  },
-  'footer.made': { bn: 'পশ্চিমবঙ্গ থেকে ভালোবাসা নিয়ে তৈরি', en: 'Made with love in West Bengal' },
 
   // ── Hero / countdown ──
   'hero.kicker': { bn: 'শনিবার, ১০ অক্টোবর ২০২৬ · ভোর', en: 'Saturday, 10 October 2026 · before dawn' },
@@ -307,6 +302,4 @@ export const dict: Record<string, Entry> = {
     bn: 'আপনার দোকানের কাছের প্যান্ডেলগুলোর কার্ডে (প্রতি এলাকা)',
     en: 'On the cards of pandals near your shop (per area)',
   },
-  'slot.footer': { bn: 'ফুটার স্পনসর', en: 'Footer sponsor strip' },
-  'slot.footer.where': { bn: 'প্যান্ডেল ম্যাপ ও বিজ্ঞাপন পাতার নিচে', en: 'Bottom of the pandal map and advertise pages' },
 };

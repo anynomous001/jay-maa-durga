@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from 'vite';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
 
-/** Inlines <!--@partial name--> with partials/name.html (shared header/footer). */
+/** Inlines <!--@partial name--> with partials/name.html (shared head/header). */
 function partials(): Plugin {
   return {
     name: 'html-partials',

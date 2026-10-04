@@ -25,7 +25,6 @@ export const SLOT_PRICES_INR: Record<string, number> = {
   spotlight: 99,
   'map-partner': 99,
   'pandal-nearby': 99,
-  footer: 99,
 };
 /** While true, prices show a "TBD" marker on the advertise page. */
 export const PRICES_TBD = true;
