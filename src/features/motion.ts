@@ -147,4 +147,15 @@ export function initMotion(): void {
   });
   // Lazy-loaded fonts change line heights; recompute trigger positions once ready.
   void document.fonts.ready.then(() => ScrollTrigger.refresh());
+  // Page height changes (list ↔ map view, filters, search) move everything below;
+  // re-measure so scroll reveals still fire at the right place.
+  let lastH = document.documentElement.scrollHeight;
+  let timer = 0;
+  new ResizeObserver(() => {
+    const h = document.documentElement.scrollHeight;
+    if (Math.abs(h - lastH) < 40) return;
+    lastH = h;
+    clearTimeout(timer);
+    timer = window.setTimeout(() => ScrollTrigger.refresh(), 150);
+  }).observe(document.body);
 }
