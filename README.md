@@ -92,7 +92,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 }
 ```
 
-- `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`. Paid bookings from `/advertise` don't go here — they're approved in `/admin/` and served by the Worker.
+- `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`. Paid bookings (made from the sponsor spots) don't go here — they're approved in `/admin/` and served by the Worker.
 - `logo` is optional. Put the file in `public/sponsors/`.
 - `link` takes precedence over `whatsapp`; if both are empty, the card isn't clickable.
 - Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Your brand here — ₹price · Book now" button, which opens the booking sheet.
@@ -228,7 +228,7 @@ Mock payments are impossible in production: they only work when `ALLOW_MOCK=true
 
 ## Visitor counter (total, online now, listening now)
 
-Shown as badges in the home hero ("N online now · N visitors so far"), "N listening now" in the player, and live numbers on `/advertise`. It's a tiny Cloudflare Worker with one Durable Object in `worker/`. The site works fine without it; if `VITE_COUNTER_URL` is empty, the badges stay hidden.
+Shown as badges in the home hero ("N online now · N visitors so far"), "N listening now" in the player, and a live audience line in the booking sheet. It's part of the Worker in `worker/`. The site works fine without it; if `VITE_API_URL` is empty, the badges stay hidden.
 
 - **How it counts:**
   - each browser gets a random id in localStorage (no cookies, no IPs, nothing personal);
