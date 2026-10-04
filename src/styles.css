@@ -2371,3 +2371,25 @@ button.pm-eat.cta:hover {
   font-size: 0.82rem;
   color: #a8e6c4;
 }
+
+/* Pandal-hopping routes: no parent box, just the route cards (glass) */
+.page-pandals #routes {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-top: 2rem;
+}
+.page-pandals #routes > h2,
+.page-pandals #routes > p {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+.page-pandals #routes > p {
+  color: #d6d0e4;
+}
+.page-pandals .route {
+  background: rgba(16, 19, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
+}
