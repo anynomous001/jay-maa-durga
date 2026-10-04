@@ -1943,3 +1943,331 @@ dialog.sheet::backdrop {
     background: rgba(14, 17, 40, 0.96);
   }
 }
+
+/* ── Booking sheet (advertise) ── */
+.slot-card .btn {
+  margin-top: 0.25rem;
+}
+.how-steps {
+  margin: 0 0 1rem;
+  padding-left: 1.3rem;
+}
+.how-steps li {
+  padding: 0.2rem 0;
+}
+.booking .sheet-body {
+  padding-top: 0.75rem;
+}
+.bk-summary {
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 1rem;
+  border-radius: 14px;
+  background: rgba(244, 185, 66, 0.1);
+  border: 1px solid rgba(244, 185, 66, 0.35);
+  font-size: 0.92rem;
+}
+.bk-group {
+  border: 0;
+  margin: 0 0 1.1rem;
+  padding: 0.9rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.bk-group legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+.field:last-child {
+  margin-bottom: 0;
+}
+.field label,
+.field .field-label {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.field .input {
+  background: rgba(8, 10, 28, 0.6);
+}
+textarea.input {
+  resize: vertical;
+  min-height: 3.2rem;
+}
+.hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.field-error {
+  font-size: 0.82rem;
+  color: #ff9f8a;
+}
+.input[aria-invalid='true'] {
+  border-color: #ff9f8a;
+}
+.logo-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.logo-row img {
+  border-radius: 10px;
+  object-fit: contain;
+  background: #fff;
+}
+.pandal-picks {
+  max-height: 14rem;
+  overflow-y: auto;
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  border-radius: 12px;
+  background: rgba(8, 10, 28, 0.45);
+}
+.pick {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 40px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.pick:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+.pick.is-taken {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pick input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.consent {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0.5rem 0 1rem;
+}
+.consent input {
+  margin-top: 0.25rem;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  accent-color: var(--accent);
+}
+.form-error {
+  padding: 0.6rem 0.8rem;
+  border-radius: 12px;
+  background: rgba(239, 106, 79, 0.14);
+  border: 1px solid rgba(239, 106, 79, 0.45);
+  font-size: 0.9rem;
+}
+.bk-pay {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1.05rem;
+}
+.bk-pay:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+.bk-secure {
+  text-align: center;
+  margin-top: 0.6rem;
+}
+.bk-mock,
+.bk-done {
+  text-align: center;
+  padding: 1rem 0.5rem;
+}
+.bk-mock-tag {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 6px;
+  background: #b3261e;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+.bk-mock .btn-row,
+.bk-done .btn {
+  justify-content: center;
+}
+.bk-done-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 0.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(127, 209, 168, 0.18);
+  color: var(--ok);
+  font-size: 2rem;
+}
+
+/* Sponsor extras from bookings */
+.sponsor .s-desc,
+.sponsor .s-addr {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.15rem;
+}
+.pm-eat-addr {
+  display: block;
+  font-size: 0.78rem;
+  margin-top: 0.15rem;
+}
+.pm-eat a {
+  color: inherit;
+  text-decoration: none;
+}
+.pm-eat a:hover {
+  color: var(--accent);
+}
+.pm-eat-logo {
+  vertical-align: middle;
+  border-radius: 6px;
+  background: #fff;
+  object-fit: contain;
+}
+
+/* ── Policies ── */
+.policies .panel h2 {
+  font-size: 1.25rem;
+}
+.policies .panel h3 {
+  margin-top: 1rem;
+  font-size: 1.05rem;
+}
+.policies ol,
+.policies ul {
+  padding-left: 1.3rem;
+}
+.policies li {
+  margin-bottom: 0.5rem;
+}
+
+/* ── Admin ── */
+.admin-login-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.35rem;
+}
+.admin-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+  margin: 1rem 0;
+}
+.admin-mock {
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  background: rgba(179, 38, 30, 0.25);
+  border: 1px solid rgba(255, 120, 100, 0.5);
+}
+.admin-list {
+  display: grid;
+  gap: 0.9rem;
+}
+.admin-card {
+  padding: 1rem;
+}
+.admin-card header {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.admin-card header img,
+.admin-nologo {
+  width: 64px;
+  height: 64px;
+  flex: none;
+  border-radius: 12px;
+  object-fit: contain;
+  background: #fff;
+}
+.admin-nologo {
+  display: grid;
+  place-items: center;
+  color: #555;
+  font-size: 0.7rem;
+}
+.admin-card h2 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+.admin-card header p {
+  margin: 0.15rem 0;
+}
+.admin-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.admin-status {
+  display: inline-block;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.1);
+}
+.admin-status.s-paid {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.admin-status.s-approved {
+  background: #1f7a4d;
+  color: #fff;
+}
+.admin-warn {
+  color: #ffb199;
+  font-size: 0.85rem;
+}
+.admin-card dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.25rem 1rem;
+  margin: 0.9rem 0;
+  font-size: 0.9rem;
+}
+.admin-card dl div {
+  display: contents;
+}
+.admin-card dt {
+  color: var(--muted);
+}
+.admin-card dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+.admin-actions .input {
+  flex: 1 1 14rem;
+}
+.admin-refund {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  font-size: 0.9rem;
+}

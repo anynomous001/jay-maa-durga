@@ -1,114 +1,211 @@
 /**
- * Visitor counter for Mahalaya Live (Cloudflare Worker + one Durable Object).
+ * Mahalaya Live API (Cloudflare Worker).
  *
- *   POST /visit  { id, listening }  → counts a new unique visitor, marks them online
- *   POST /ping   { id, listening }  → heartbeat (every ~60 s while the page is visible)
- *   GET  /stats                     → { total, online, listening }
- *
- * `id` is a random string the browser keeps in localStorage — no cookies, no IPs,
- * nothing personal is stored. "Online" = pinged within the last 150 seconds.
+ * Visitors      POST /visit, POST /ping, GET /stats
+ * Sponsors      GET  /availability            which slots / pandals are free
+ *               GET  /sponsors                approved, live sponsors (for the site)
+ *               GET  /logos/:key              sponsor logos (from R2)
+ * Booking       POST /bookings                multipart form → hold + Razorpay order
+ *               POST /bookings/:id/verify     checkout signature → paid
+ *               GET  /bookings/:id            status for the advertiser
+ *               POST /webhooks/razorpay       payment.captured / order.paid backup
+ * Admin (Bearer ADMIN_TOKEN)
+ *               GET  /admin/bookings
+ *               POST /admin/bookings/:id/approve
+ *               POST /admin/bookings/:id/reject   { note, refund }
  */
-import { DurableObject } from 'cloudflare:workers';
+import pricing from '../../data/pricing.json';
+import { Bookings, type Booking } from './bookings';
+import { Counter, VISITOR_ID_RE } from './counter';
+import type { Env } from './env';
+import { corsHeaders, json, safeEqual } from './http';
+import { createOrder, isMock, paymentsConfigured, refund, verifyCheckout, verifyWebhook } from './razorpay';
+import { checkLogo, validateBooking } from './validate';
 
-interface Env {
-  COUNTER: DurableObjectNamespace<Counter>;
-  ALLOWED_ORIGINS: string;
+export { Bookings, Counter };
+
+const UUID_RE = /^[0-9a-f-]{36}$/;
+
+function publicSponsor(b: Booking, origin: string) {
+  return {
+    id: b.id,
+    slot: b.slot,
+    name: b.business_name,
+    name_bn: b.business_name_bn || undefined,
+    tagline: b.tagline,
+    tagline_bn: b.tagline_bn || undefined,
+    description: b.description || undefined,
+    logo: b.logo_key ? `${origin}/logos/${b.logo_key}` : '',
+    link: b.website,
+    whatsapp: b.whatsapp,
+    address: b.address || undefined,
+    mapsUrl: b.maps_url || undefined,
+    startDate: b.start_date,
+    endDate: b.end_date,
+    active: true,
+    pandalIds: b.pandal_ids,
+  };
 }
 
-export interface Stats {
-  total: number;
-  online: number;
-  listening: number;
+/** What the admin page sees (everything) — never exposed publicly. */
+const adminView = (b: Booking, origin: string) => ({ ...b, logo_url: b.logo_key ? `${origin}/logos/${b.logo_key}` : '' });
+
+function isAdmin(req: Request, env: Env): boolean {
+  if (!env.ADMIN_TOKEN) return false;
+  const h = req.headers.get('Authorization') ?? '';
+  return h.startsWith('Bearer ') && safeEqual(h.slice(7), env.ADMIN_TOKEN);
 }
-
-const ONLINE_WINDOW_MS = 150_000;
-const MIN_PING_GAP_MS = 10_000;
-const ID_RE = /^[a-z0-9-]{16,40}$/;
-
-export class Counter extends DurableObject<Env> {
-  private total = 0;
-  /** Live presence lives in memory; it naturally empties if nobody is around. */
-  private seen = new Map<string, { at: number; listening: boolean }>();
-
-  constructor(ctx: DurableObjectState, env: Env) {
-    super(ctx, env);
-    ctx.blockConcurrencyWhile(async () => {
-      this.total = (await ctx.storage.get<number>('total')) ?? 0;
-    });
-  }
-
-  async visit(id: string, listening: boolean): Promise<Stats> {
-    const key = `v:${id}`;
-    if (!(await this.ctx.storage.get(key))) {
-      this.total++;
-      await this.ctx.storage.put({ [key]: 1, total: this.total });
-    }
-    return this.ping(id, listening);
-  }
-
-  ping(id: string, listening: boolean): Stats {
-    const now = Date.now();
-    const prev = this.seen.get(id);
-    // Ignore over-eager clients but still answer with fresh numbers.
-    if (!prev || now - prev.at >= MIN_PING_GAP_MS || prev.listening !== listening) {
-      this.seen.set(id, { at: now, listening });
-    }
-    return this.stats();
-  }
-
-  stats(): Stats {
-    const cutoff = Date.now() - ONLINE_WINDOW_MS;
-    let online = 0;
-    let listening = 0;
-    for (const [id, s] of this.seen) {
-      if (s.at < cutoff) {
-        this.seen.delete(id);
-        continue;
-      }
-      online++;
-      if (s.listening) listening++;
-    }
-    return { total: this.total, online, listening };
-  }
-}
-
-function cors(req: Request, env: Env): Record<string, string> {
-  const origin = req.headers.get('Origin') ?? '';
-  const allowed = env.ALLOWED_ORIGINS.split(',').map((s) => s.trim());
-  return allowed.includes(origin)
-    ? { 'Access-Control-Allow-Origin': origin, 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type', Vary: 'Origin' }
-    : {};
-}
-
-const json = (body: unknown, headers: Record<string, string>, status = 200) =>
-  new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store', ...headers },
-  });
 
 export default {
   async fetch(req: Request, env: Env): Promise<Response> {
-    const h = cors(req, env);
-    if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: h });
-    const { pathname } = new URL(req.url);
+    const cors = corsHeaders(req, env);
+    if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: cors });
+    const url = new URL(req.url);
+    const { pathname } = url;
+    const origin = url.origin;
     const counter = env.COUNTER.get(env.COUNTER.idFromName('global'));
+    const bookings = env.BOOKINGS.get(env.BOOKINGS.idFromName('global'));
 
-    if (req.method === 'GET' && pathname === '/stats') return json(await counter.stats(), h);
-
-    if (req.method === 'POST' && (pathname === '/visit' || pathname === '/ping')) {
-      if (Number(req.headers.get('Content-Length') ?? 0) > 200) return json({ error: 'too large' }, h, 413);
-      let body: { id?: unknown; listening?: unknown };
-      try {
-        body = await req.json();
-      } catch {
-        return json({ error: 'bad json' }, h, 400);
+    try {
+      // ── Visitors ──
+      if (req.method === 'GET' && pathname === '/stats') return json(await counter.stats(), cors);
+      if (req.method === 'POST' && (pathname === '/visit' || pathname === '/ping')) {
+        if (Number(req.headers.get('Content-Length') ?? 0) > 200) return json({ error: 'too large' }, cors, 413);
+        const body = (await req.json().catch(() => ({}))) as { id?: unknown; listening?: unknown };
+        const id = typeof body.id === 'string' ? body.id : '';
+        if (!VISITOR_ID_RE.test(id)) return json({ error: 'bad id' }, cors, 400);
+        const listening = body.listening === true;
+        return json(pathname === '/visit' ? await counter.visit(id, listening) : await counter.ping(id, listening), cors);
       }
-      const id = typeof body.id === 'string' ? body.id : '';
-      if (!ID_RE.test(id)) return json({ error: 'bad id' }, h, 400);
-      const listening = body.listening === true;
-      const stats = pathname === '/visit' ? await counter.visit(id, listening) : await counter.ping(id, listening);
-      return json(stats, h);
+
+      // ── Public sponsor data ──
+      if (req.method === 'GET' && pathname === '/availability') {
+        return json({ ...(await bookings.availability()), prices: pricing.slots, seasonEnd: pricing.seasonEnd, payments: paymentsConfigured(env) }, cors);
+      }
+      if (req.method === 'GET' && pathname === '/sponsors') {
+        const live = (await bookings.live()) as Booking[];
+        return json({ sponsors: live.map((b) => publicSponsor(b, origin)) }, { ...cors, 'Cache-Control': 'public, max-age=30' });
+      }
+      if (req.method === 'GET' && pathname.startsWith('/logos/')) {
+        const key = pathname.slice('/logos/'.length);
+        if (!/^[0-9a-f-]{36}\.(png|jpg|webp)$/.test(key)) return json({ error: 'not found' }, cors, 404);
+        const obj = await env.LOGOS.get(key);
+        if (!obj) return json({ error: 'not found' }, cors, 404);
+        return new Response(obj.body, {
+          headers: {
+            'Content-Type': obj.httpMetadata?.contentType ?? 'application/octet-stream',
+            'Cache-Control': 'public, max-age=86400',
+            'X-Content-Type-Options': 'nosniff',
+            'Content-Security-Policy': "default-src 'none'",
+            ...cors,
+          },
+        });
+      }
+
+      // ── Booking + payment ──
+      if (req.method === 'POST' && pathname === '/bookings') {
+        if (!paymentsConfigured(env)) return json({ error: 'payments_not_configured' }, cors, 503);
+        const len = Number(req.headers.get('Content-Length') ?? 0);
+        if (len > 600 * 1024) return json({ error: 'too_large' }, cors, 413);
+        const fd = await req.formData();
+        const { input, errors } = validateBooking(fd);
+        const logo = await checkLogo(fd.get('logo') as File | null);
+        if (!logo.ok) errors.logo = logo.error;
+        if (!input || Object.keys(errors).length) return json({ error: 'invalid', errors }, cors, 400);
+
+        const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
+        const hold = await bookings.createHold(input, ip);
+        if (!hold.ok) return json({ error: hold.error }, cors, hold.error === 'rate_limited' ? 429 : 409);
+
+        let logoKey = '';
+        try {
+          if (logo.ok && logo.bytes) {
+            logoKey = `${hold.id}.${logo.ext}`;
+            await env.LOGOS.put(logoKey, logo.bytes, { httpMetadata: { contentType: logo.type } });
+          }
+          const order = await createOrder(env, hold.amount, hold.id.slice(0, 36), {
+            booking: hold.id,
+            slot: input.slot,
+            business: input.business_name.slice(0, 200),
+          });
+          await bookings.setOrder(hold.id, order.id, logoKey);
+          return json(
+            {
+              id: hold.id,
+              orderId: order.id,
+              amount: hold.amount,
+              currency: 'INR',
+              keyId: env.RAZORPAY_KEY_ID ?? '',
+              mock: isMock(env),
+              prefill: { name: input.contact_name, email: input.email, contact: input.phone ? `+${input.phone}` : '' },
+            },
+            cors,
+          );
+        } catch (err) {
+          await bookings.release(hold.id);
+          if (logoKey) await env.LOGOS.delete(logoKey);
+          console.error(err);
+          return json({ error: 'payment_init_failed' }, cors, 502);
+        }
+      }
+
+      const verifyMatch = pathname.match(/^\/bookings\/([0-9a-f-]{36})\/verify$/);
+      if (req.method === 'POST' && verifyMatch) {
+        const body = (await req.json().catch(() => ({}))) as Record<string, string>;
+        const b = (await bookings.get(verifyMatch[1])) as Booking | null;
+        if (!b || b.order_id !== body.razorpay_order_id) return json({ error: 'not_found' }, cors, 404);
+        const ok = await verifyCheckout(env, body.razorpay_order_id, body.razorpay_payment_id ?? '', body.razorpay_signature ?? '');
+        if (!ok) return json({ error: 'bad_signature' }, cors, 400);
+        const paid = (await bookings.markPaid(b.order_id, body.razorpay_payment_id)) as Booking | null;
+        return json({ id: b.id, status: paid?.status }, cors);
+      }
+
+      const statusMatch = pathname.match(/^\/bookings\/([0-9a-f-]{36})$/);
+      if (req.method === 'GET' && statusMatch) {
+        const b = (await bookings.get(statusMatch[1])) as Booking | null;
+        if (!b) return json({ error: 'not_found' }, cors, 404);
+        return json({ id: b.id, status: b.status, slot: b.slot, business: b.business_name, note: b.status === 'rejected' || b.status === 'refunded' ? b.review_note : '' }, cors);
+      }
+
+      if (req.method === 'POST' && pathname === '/webhooks/razorpay') {
+        const raw = await req.text();
+        if (!(await verifyWebhook(env, raw, req.headers.get('X-Razorpay-Signature') ?? ''))) return json({ error: 'bad_signature' }, {}, 400);
+        const evt = JSON.parse(raw) as { event: string; payload: { payment?: { entity: { id: string; order_id: string } } } };
+        if ((evt.event === 'payment.captured' || evt.event === 'order.paid') && evt.payload.payment) {
+          await bookings.markPaid(evt.payload.payment.entity.order_id, evt.payload.payment.entity.id);
+        }
+        return json({ ok: true });
+      }
+
+      // ── Admin ──
+      if (pathname.startsWith('/admin/')) {
+        if (!isAdmin(req, env)) return json({ error: 'unauthorised' }, cors, 401);
+        if (req.method === 'GET' && pathname === '/admin/bookings') {
+          const list = (await bookings.list()) as Booking[];
+          return json({ bookings: list.map((b) => adminView(b, origin)), mock: isMock(env) }, cors);
+        }
+        const m = pathname.match(/^\/admin\/bookings\/([0-9a-f-]{36})\/(approve|reject)$/);
+        if (req.method === 'POST' && m && UUID_RE.test(m[1])) {
+          const b = (await bookings.get(m[1])) as Booking | null;
+          if (!b) return json({ error: 'not_found' }, cors, 404);
+          if (m[2] === 'approve') {
+            if (b.status !== 'paid') return json({ error: `cannot approve a ${b.status} booking` }, cors, 409);
+            return json({ booking: adminView((await bookings.setStatus(b.id, 'approved')) as Booking, origin) }, cors);
+          }
+          const body = (await req.json().catch(() => ({}))) as { note?: string; refund?: boolean };
+          const note = String(body.note ?? '').slice(0, 300);
+          if (!['paid', 'approved'].includes(b.status)) return json({ error: `cannot reject a ${b.status} booking` }, cors, 409);
+          let refundResult = { ok: false, detail: 'not requested' };
+          if (body.refund && b.payment_id) refundResult = await refund(env, b.payment_id);
+          const updated = (await bookings.setStatus(b.id, refundResult.ok ? 'refunded' : 'rejected', note)) as Booking;
+          return json({ booking: adminView(updated, origin), refund: refundResult }, cors);
+        }
+      }
+
+      return json({ error: 'not found' }, cors, 404);
+    } catch (err) {
+      console.error(err);
+      return json({ error: 'server_error' }, cors, 500);
     }
-    return json({ error: 'not found' }, h, 404);
   },
 } satisfies ExportedHandler<Env>;

@@ -6,7 +6,7 @@
  *   [data-visitors="total|online|listening"]  → formatted number
  *   [data-visitors-wrap]                      → un-hidden once numbers arrive
  */
-import { VISITOR_COUNTER_URL } from '../config';
+import { API_URL } from '../config';
 import { getLang, onLangChange, t } from '../lib/i18n';
 
 interface Stats {
@@ -50,8 +50,8 @@ function render() {
 
 /** `isListening` reports whether this visitor's radio is playing. */
 export function initVisitors(isListening: () => boolean = () => false): { ping: () => void } {
-  if (!VISITOR_COUNTER_URL) return { ping: () => {} };
-  const base = VISITOR_COUNTER_URL.replace(/\/$/, '');
+  if (!API_URL) return { ping: () => {} };
+  const base = API_URL;
   const id = visitorId();
 
   const send = async (path: '/visit' | '/ping') => {

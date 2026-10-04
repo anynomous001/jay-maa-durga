@@ -1,37 +1,50 @@
-import qrcode from 'qrcode-generator';
-import { PRICES_TBD, SITE_NAME, SLOT_PRICES_INR, SPONSOR_SEASON_END, UPI_ID, UPI_PAYEE_NAME, WHATSAPP_NUMBER } from '../config';
-import { initCommon } from '../lib/common';
+import { API_URL, PRICES_TBD, PRICING, SITE_NAME, SPONSOR_SEASON_END, WHATSAPP_NUMBER } from '../config';
+import { initBooking, openBooking } from '../features/booking';
 import { initMotion } from '../features/motion';
 import { initVisitors } from '../features/visitors';
-import { getLang, num, onLangChange, t } from '../lib/i18n';
+import { initCommon } from '../lib/common';
+import { num, onLangChange, t } from '../lib/i18n';
 import { SLOT_IDS, type SlotId, slotTaken } from '../lib/sponsors';
 import { istDateKey, now } from '../lib/time';
 
 initCommon();
 
-/** NPCI UPI deep link. Spaces as %20 (some apps mis-handle "+"). */
-export function upiLink(slot: SlotId | ''): string {
-  const params: [string, string][] = [
-    ['pa', UPI_ID],
-    ['pn', UPI_PAYEE_NAME],
-    ['cu', 'INR'],
-  ];
-  if (slot) {
-    params.push(['am', SLOT_PRICES_INR[slot].toFixed(2)]);
-    params.push(['tn', `${SITE_NAME} sponsor - ${slot}`]);
+interface Availability {
+  taken: Record<string, boolean>;
+  pandalsTaken: string[];
+  payments: boolean;
+}
+/** Live availability from the API (includes paid bookings and 15-minute holds). */
+let avail: Availability | null = null;
+
+async function loadAvailability() {
+  if (!API_URL) return;
+  try {
+    const r = await fetch(`${API_URL}/availability`, { cache: 'no-store' });
+    if (r.ok) avail = (await r.json()) as Availability;
+  } catch {
+    avail = null;
   }
-  // Keep "@" literal in the VPA: some older UPI apps don't decode %40.
-  return 'upi://pay?' + params.map(([k, v]) => `${k}=${encodeURIComponent(v).replace(/%40/g, '@')}`).join('&');
+  renderSlots();
 }
 
-const price = (slot: SlotId) => `₹${num(SLOT_PRICES_INR[slot])}`;
+const price = (slot: SlotId) => `₹${num(PRICING.slots[slot].price)}`;
 const seasonOver = () => istDateKey(now()) > SPONSOR_SEASON_END;
+const isTaken = (slot: SlotId) => (avail ? avail.taken[slot] : slotTaken(slot));
+/** Online booking works only when the API is reachable and payments are set up. */
+const canBookOnline = () => Boolean(API_URL && avail?.payments);
+
+function waLink(slot?: SlotId) {
+  const text = t('ad.waText', { site: SITE_NAME }) + (slot ? t(`slot.${slot}`) : '');
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
 
 function renderSlots() {
   const box = document.getElementById('slot-list')!;
   box.innerHTML = '';
   for (const slot of SLOT_IDS) {
-    const taken = slotTaken(slot);
+    // "Eat nearby" is sold per pandal, so it stays open while pandals are free.
+    const taken = slot === 'pandal-nearby' ? false : isTaken(slot);
     const card = document.createElement('article');
     card.className = 'slot-card';
     card.id = `slot-${slot}`;
@@ -44,22 +57,27 @@ function renderSlots() {
     st.textContent = taken ? t('ad.taken') : t('ad.free');
     st.classList.add(taken ? 'is-taken' : 'is-free');
     if (!taken && !seasonOver()) {
-      const a = document.createElement('a');
-      a.className = 'btn btn-ghost';
-      a.href = waLink(slot);
-      a.target = '_blank';
-      a.rel = 'noopener';
-      a.textContent = t('ad.book');
-      card.appendChild(a);
+      if (canBookOnline()) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn';
+        b.textContent = t('ad.book');
+        b.addEventListener('click', () => openBooking(slot, avail?.pandalsTaken ?? []));
+        card.appendChild(b);
+      } else {
+        // No payments configured yet: fall back to booking over WhatsApp.
+        const a = document.createElement('a');
+        a.className = 'btn btn-ghost';
+        a.href = waLink(slot);
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.textContent = t('ad.book');
+        card.appendChild(a);
+      }
     }
     box.appendChild(card);
   }
   if (location.hash) document.querySelector(location.hash)?.classList.add('is-target');
-}
-
-function waLink(slot?: SlotId) {
-  const text = t('ad.waText', { site: SITE_NAME }) + (slot ? t(`slot.${slot}`) : '');
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
 function renderStats() {
@@ -76,50 +94,21 @@ function renderStats() {
   }
 }
 
-const select = document.getElementById('slot-select') as HTMLSelectElement;
-function renderSelect() {
-  const free = SLOT_IDS.filter((s) => !slotTaken(s));
-  const wanted = (select.value || location.hash.replace('#slot-', '')) as SlotId;
-  select.innerHTML = '';
-  for (const slot of SLOT_IDS) {
-    const o = document.createElement('option');
-    o.value = slot;
-    o.disabled = slotTaken(slot);
-    o.textContent = `${t(`slot.${slot}`)} — ${o.disabled ? t('ad.taken') : price(slot)}`;
-    select.appendChild(o);
-  }
-  select.value = free.includes(wanted) ? wanted : (free[0] ?? SLOT_IDS[0]);
-}
-
-function renderPay() {
-  const slot = select.value as SlotId;
-  const link = upiLink(slot);
-  (document.getElementById('upi-link') as HTMLAnchorElement).href = link;
-  document.getElementById('upi-id')!.textContent = UPI_ID;
-  (document.getElementById('wa-contact') as HTMLAnchorElement).href = waLink(slot);
-  const qr = qrcode(0, 'M');
-  qr.addData(link);
-  qr.make();
-  const box = document.getElementById('qr')!;
-  box.innerHTML = qr.createSvgTag({ cellSize: 6, margin: 4, scalable: true });
-  const svg = box.querySelector('svg')!;
-  svg.setAttribute('role', 'img');
-  svg.setAttribute('aria-label', `UPI QR: ${UPI_ID}, ${price(slot)}`);
-  box.dataset.payload = link;
-}
-
 function renderAll() {
   renderSlots();
   renderStats();
-  renderSelect();
-  renderPay();
-  document.documentElement.dataset.lang = getLang();
+  (document.getElementById('wa-contact') as HTMLAnchorElement).href = waLink();
 }
-select.addEventListener('change', renderPay);
+
+initBooking();
 renderAll();
+void loadAvailability();
 onLangChange(renderAll);
 const visitors = initVisitors();
 onLangChange(() => visitors.ping());
+// After a payment or a lost race, refresh which slots are free.
+addEventListener('booking:paid', () => void loadAvailability());
+addEventListener('booking:conflict', () => void loadAvailability());
 
 // Last, so it animates the final rendered content.
 initMotion();

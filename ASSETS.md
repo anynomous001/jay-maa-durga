@@ -15,7 +15,6 @@ The site hosts no copyrighted audio or images from third parties. Everything vis
 | Dhak illustration | `index.html` (inline SVG) | Hand-written SVG | Original |
 | Dhak fallback sound | `src/features/dhak.ts` | Web Audio synthesis, used only if the recorded clips fail to load | Original |
 | Dhak rhythm pattern | `src/features/dhak.ts` | Original 8-beat pattern | Original |
-| UPI QR code | generated in the browser at runtime | `qrcode-generator` library, from config values | n/a |
 | All copy (Bengali and English) | `src/lib/strings.ts`, HTML | Written for this project | Original |
 
 ## Provided by the site owner
@@ -41,9 +40,9 @@ Two other Commons dhak recordings were downloaded for comparison only and are no
 | Noto Serif Bengali font | Google Fonts (Noto Project), loaded from fonts.googleapis.com; also used to draw the OG text | SIL Open Font License 1.1 |
 | Leaflet 1.9.4 | npm `leaflet` | BSD-2-Clause |
 | hls.js 1.7 (light build) | npm `hls.js` | Apache-2.0 |
-| qrcode-generator 2.0 | npm `qrcode-generator` (Kazuhiko Arase) | MIT |
 | GSAP 3.15 (core, ScrollTrigger, SplitText) | npm `gsap` (GreenSock / Webflow) | GSAP Standard "no charge" licence: free, including commercial use |
 | Lenis 1.3 | npm `lenis` (darkroom.engineering) | MIT |
+| Razorpay Checkout | `checkout.razorpay.com/v1/checkout.js`, loaded only when an advertiser pays | Razorpay's terms |
 | Map tiles and data | © OpenStreetMap contributors, `tile.openstreetmap.org`. Not hosted by us; attribution shown on the map | Data ODbL; tiles per the OSMF tile usage policy |
 
 ## Embedded or linked (never downloaded or hosted)

@@ -1,0 +1,8 @@
+# Copy to .dev.vars (git-ignored) for `npm run dev`.
+# Without Razorpay keys, ALLOW_MOCK=true lets you test the whole booking flow with fake payments.
+ALLOW_MOCK=true
+ADMIN_TOKEN=change-me-to-a-long-random-string
+# Razorpay TEST keys (Dashboard → Settings → API Keys, in Test Mode):
+# RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxxxx
+# RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxxxxxx
+# RAZORPAY_WEBHOOK_SECRET=xxxxxxxx

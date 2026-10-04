@@ -3,6 +3,7 @@
  * (or in /data/*.json). All times are written with an explicit +05:30 offset
  * so they mean the same instant for every visitor, wherever they are.
  */
+import pricing from '../data/pricing.json';
 
 // ── Identity ────────────────────────────────────────────────────────────────
 export const SITE_NAME = 'Mahalaya Live';
@@ -13,21 +14,30 @@ export const SITE_TAGLINE_EN = 'The dawn’s welcome song';
 export const SITE_URL = 'https://mahalaya-live.pages.dev';
 
 // ── Contact & payments ──────────────────────────────────────────────────────
-export const UPI_ID = '9874353532@upi';
-export const UPI_PAYEE_NAME = 'Pritam';
 /** WhatsApp number in international format without "+" or spaces. */
 export const WHATSAPP_NUMBER = '919874353532';
 
-/** Price per sponsor slot in ₹. */
-export const SLOT_PRICES_INR: Record<string, number> = {
-  dhak: 99,
-  countdown: 99,
-  spotlight: 99,
-  'map-partner': 99,
-  'pandal-nearby': 99,
+/**
+ * Who runs the site — shown on /policies/ (Razorpay checks these pages before
+ * activating live payments). PLACEHOLDERS: fill in before going live.
+ */
+export const OPERATOR = {
+  legalName: 'Pritam [surname]',
+  address: '[Full postal address, West Bengal, PIN]',
+  email: '[contact email]',
+  phone: '+91 98743 53532',
 };
+
+/**
+ * Prices live in data/pricing.json so the payments Worker charges exactly what
+ * the site shows. Payments go through Razorpay via the Worker in /worker.
+ */
+export const PRICING = pricing;
+export const SLOT_PRICES_INR: Record<string, number> = Object.fromEntries(
+  Object.entries(pricing.slots).map(([k, v]) => [k, v.price]),
+);
 /** While true, prices show a "TBD" marker on the advertise page. */
-export const PRICES_TBD = true;
+export const PRICES_TBD = pricing.tbd;
 
 // ── Key instants (Asia/Kolkata) ─────────────────────────────────────────────
 /** Official AIR schedule: transmission 03:50–05:45 IST; recitation from ~04:00. */
@@ -63,7 +73,7 @@ export const PUJA_DAYS: PujaDay[] = [
 export const SHASHTHI_START = '2026-10-16T00:00:00+05:30';
 export const DASHAMI_END = '2026-10-22T00:00:00+05:30';
 /** Sponsor slots run through Bijoya Dashami. */
-export const SPONSOR_SEASON_END = '2026-10-21';
+export const SPONSOR_SEASON_END = pricing.seasonEnd;
 
 // ── Radio ───────────────────────────────────────────────────────────────────
 export interface RadioChannel {
@@ -114,8 +124,9 @@ export const MAP_TILE_MAX_ZOOM = 19;
 export const ANALYTICS = { enabled: false, cloudflareToken: '' };
 
 /**
- * Visitor counter (Cloudflare Worker in /worker). Empty = counters hidden.
- * Set VITE_COUNTER_URL at build time (Cloudflare Pages env var), e.g.
- * https://mahalaya-counter.<you>.workers.dev
+ * The site's small API (Cloudflare Worker in /worker): visitor counter, sponsor
+ * bookings + Razorpay payments, and approved sponsors. Empty = those features
+ * hide gracefully. Set VITE_API_URL at build time (Cloudflare Pages env var),
+ * e.g. https://mahalaya-api.<you>.workers.dev
  */
-export const VISITOR_COUNTER_URL: string = import.meta.env.VITE_COUNTER_URL ?? '';
+export const API_URL: string = (import.meta.env.VITE_API_URL ?? import.meta.env.VITE_COUNTER_URL ?? '').replace(/\/$/, '');

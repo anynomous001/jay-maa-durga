@@ -1,5 +1,5 @@
-# Visitor counter for Mahalaya Live — a single Durable Object keeps the counts.
-name = "mahalaya-counter"
+# Mahalaya Live API: visitor counter + sponsor bookings (Razorpay) + approved sponsors.
+name = "mahalaya-api"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
 
@@ -7,11 +7,31 @@ compatibility_date = "2026-09-01"
 name = "COUNTER"
 class_name = "Counter"
 
+[[durable_objects.bindings]]
+name = "BOOKINGS"
+class_name = "Bookings"
+
 # SQLite-backed Durable Objects are available on the Workers free plan.
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["Counter"]
 
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["Bookings"]
+
+# Sponsor logos. Create once with: npx wrangler r2 bucket create mahalaya-sponsor-logos
+[[r2_buckets]]
+binding = "LOGOS"
+bucket_name = "mahalaya-sponsor-logos"
+
 [vars]
 # Comma-separated origins allowed to call the API (your site + local dev).
 ALLOWED_ORIGINS = "https://mahalaya-live.pages.dev,http://localhost:5173,http://localhost:4173"
+
+# Secrets — never put these in this file:
+#   npx wrangler secret put RAZORPAY_KEY_ID
+#   npx wrangler secret put RAZORPAY_KEY_SECRET
+#   npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
+#   npx wrangler secret put ADMIN_TOKEN
+# For local dev, put them in worker/.dev.vars (git-ignored); see .dev.vars.example.

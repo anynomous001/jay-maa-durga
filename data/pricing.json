@@ -1,0 +1,13 @@
+{
+  "_readme": "Single source of truth for sponsor prices, shared by the site and the payments Worker (the Worker charges exactly these amounts). price is in rupees. exclusive: one advertiser at a time (pandal-nearby is exclusive per pandal instead). maxPandals: how many pandal cards one 'pandal-nearby' booking covers. tbd: shows a 'TBD' marker next to prices.",
+  "currency": "INR",
+  "seasonEnd": "2026-10-21",
+  "tbd": true,
+  "slots": {
+    "spotlight": { "price": 99, "exclusive": true },
+    "countdown": { "price": 99, "exclusive": true },
+    "dhak": { "price": 99, "exclusive": true },
+    "map-partner": { "price": 99, "exclusive": true },
+    "pandal-nearby": { "price": 99, "exclusive": false, "maxPandals": 3 }
+  }
+}

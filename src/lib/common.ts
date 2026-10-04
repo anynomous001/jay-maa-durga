@@ -2,7 +2,7 @@
 import '../styles.css';
 import { ANALYTICS, SITE_NAME, SITE_NAME_BN } from '../config';
 import { getLang, initI18n, onLangChange } from './i18n';
-import { renderSlots } from './sponsors';
+import { loadRemoteSponsors, renderSlots } from './sponsors';
 import { initBackdrop } from '../features/backdrop';
 import { startSmoothScroll } from './smooth-scroll';
 
@@ -16,6 +16,7 @@ export function initCommon(): void {
   };
   syncName();
   renderSlots();
+  void loadRemoteSponsors();
   onLangChange(() => {
     syncName();
     renderSlots();

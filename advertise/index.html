@@ -29,23 +29,86 @@
         <dl class="stats" id="stats"></dl>
       </section>
 
-      <section class="panel pay" aria-labelledby="pay-title">
-        <h2 id="pay-title" data-i18n="ad.pay">UPI-তে পেমেন্ট</h2>
-        <p data-i18n="ad.payStep">আগে হোয়াটসঅ্যাপে স্লট নিশ্চিত করুন, তারপর পেমেন্ট করুন।</p>
-        <a class="btn btn-wa" id="wa-contact" target="_blank" rel="noopener" data-i18n="ad.contact">হোয়াটসঅ্যাপে কথা বলুন</a>
-        <div class="pay-grid">
-          <div>
-            <label for="slot-select" class="field-label" data-i18n="ad.pickSlot">স্লট বাছুন</label>
-            <select id="slot-select" class="select"></select>
-            <p class="upi-line"><span data-i18n="ad.upiId">UPI আইডি</span>: <code id="upi-id"></code></p>
-            <a class="btn" id="upi-link" data-i18n="ad.payBtn">UPI অ্যাপে পেমেন্ট করুন</a>
-          </div>
-          <figure class="qr">
-            <div id="qr" class="qr-box"></div>
-            <figcaption class="muted small" data-i18n="ad.qr">অন্য ফোন থেকে স্ক্যান করুন</figcaption>
-          </figure>
-        </div>
+      <section class="panel" aria-labelledby="how-title">
+        <h2 id="how-title" data-i18n="ad.how">কীভাবে বুক করবেন</h2>
+        <ol class="how-steps">
+          <li data-i18n="ad.how1">পছন্দের স্লটে "এই স্লট নিন" চাপুন।</li>
+          <li data-i18n="ad.how2">দোকানের নাম, লোগো, ঠিকানা, ওয়েবসাইট ইত্যাদি দিন।</li>
+          <li data-i18n="ad.how3">Razorpay-তে নিরাপদে পেমেন্ট করুন — UPI, কার্ড, নেটব্যাংকিং বা ওয়ালেট।</li>
+          <li data-i18n="ad.how4">আমরা ২৪ ঘণ্টার মধ্যে দেখে নিয়ে বিজ্ঞাপন চালু করি। কোনো কারণে না চালালে পুরো টাকা ফেরত।</li>
+        </ol>
+        <p class="muted small">
+          <span data-i18n="ad.questions">প্রশ্ন আছে?</span>
+          <a id="wa-contact" target="_blank" rel="noopener" data-i18n="ad.contact">হোয়াটসঅ্যাপে কথা বলুন</a> ·
+          <a href="/policies/" data-i18n="ad.policies">শর্তাবলি, গোপনীয়তা ও রিফান্ড নীতি</a>
+        </p>
       </section>
     </main>
+
+    <dialog class="sheet booking" id="booking-sheet" aria-labelledby="booking-title">
+      <div class="sheet-head">
+        <h2 id="booking-title" data-i18n="bk.title">স্লট বুক করুন</h2>
+        <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+      </div>
+      <div class="sheet-body" data-lenis-prevent>
+        <form id="booking-form" novalidate>
+          <div class="bk-summary" id="bk-summary"></div>
+          <input type="hidden" name="slot" id="bk-slot" />
+
+          <fieldset class="bk-group">
+            <legend data-i18n="bk.business">ব্যবসার তথ্য</legend>
+            <div class="field"><label for="bk-name" data-i18n="bk.name">ব্যবসার নাম (ইংরেজিতে) *</label><input class="input" id="bk-name" name="business_name" maxlength="60" required autocomplete="organization" /></div>
+            <div class="field"><label for="bk-name-bn" data-i18n="bk.nameBn">ব্যবসার নাম (বাংলায়)</label><input class="input" id="bk-name-bn" name="business_name_bn" maxlength="60" lang="bn" /></div>
+            <div class="field"><label for="bk-tagline" data-i18n="bk.tagline">এক লাইনে পরিচয় (ইংরেজিতে) *</label><input class="input" id="bk-tagline" name="tagline" maxlength="80" required data-i18n-attr="placeholder:bk.taglinePh" placeholder="যেমন: Fresh rosogolla since 1952" /></div>
+            <div class="field"><label for="bk-tagline-bn" data-i18n="bk.taglineBn">এক লাইনে পরিচয় (বাংলায়)</label><input class="input" id="bk-tagline-bn" name="tagline_bn" maxlength="80" lang="bn" /></div>
+            <div class="field"><label for="bk-desc" data-i18n="bk.desc">ব্যবসা সম্পর্কে আরও কিছু</label><textarea class="input" id="bk-desc" name="description" maxlength="400" rows="3"></textarea><small class="hint" data-i18n="bk.descHint">স্পটলাইট কার্ডে দেখানো হয়; বাকি স্লটে আমাদের যাচাইয়ের জন্য।</small></div>
+            <div class="field">
+              <label for="bk-logo" data-i18n="bk.logo">লোগো (PNG / JPG / WebP, ৩০০ KB পর্যন্ত)</label>
+              <div class="logo-row"><input class="input" id="bk-logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp" /><img id="bk-logo-preview" alt="" hidden width="56" height="56" /></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="bk-group">
+            <legend data-i18n="bk.where">কোথায় পাওয়া যাবে</legend>
+            <div class="field"><label for="bk-web" data-i18n="bk.website">ওয়েবসাইট / ফেসবুক / ইনস্টাগ্রাম লিংক</label><input class="input" id="bk-web" name="website" type="url" inputmode="url" maxlength="200" placeholder="https://" /></div>
+            <div class="field"><label for="bk-addr" data-i18n="bk.address">দোকানের ঠিকানা</label><textarea class="input" id="bk-addr" name="address" maxlength="200" rows="2" autocomplete="street-address"></textarea></div>
+            <div class="field"><label for="bk-maps" data-i18n="bk.maps">গুগল ম্যাপস লিংক</label><input class="input" id="bk-maps" name="maps_url" type="url" inputmode="url" maxlength="200" placeholder="https://maps.app.goo.gl/…" /></div>
+            <div class="field" id="bk-pandals-field" hidden>
+              <span class="field-label" id="bk-pandals-label" data-i18n="bk.pandals">কোন প্যান্ডেলের কাছে? (সর্বোচ্চ ৩টি) *</span>
+              <input class="input" id="bk-pandal-search" type="search" data-i18n-attr="placeholder:pm.search" placeholder="প্যান্ডেল বা এলাকা খুঁজুন" aria-labelledby="bk-pandals-label" />
+              <div class="pandal-picks" id="bk-pandals" role="group" aria-labelledby="bk-pandals-label"></div>
+            </div>
+          </fieldset>
+
+          <fieldset class="bk-group">
+            <legend data-i18n="bk.contact">যোগাযোগ (শুধু আমাদের জন্য — হোয়াটসঅ্যাপ নম্বর ছাড়া সাইটে দেখানো হবে না)</legend>
+            <div class="field"><label for="bk-person" data-i18n="bk.person">আপনার নাম *</label><input class="input" id="bk-person" name="contact_name" maxlength="60" required autocomplete="name" /></div>
+            <div class="field"><label for="bk-phone" data-i18n="bk.phone">মোবাইল নম্বর *</label><input class="input" id="bk-phone" name="phone" type="tel" inputmode="tel" maxlength="16" required autocomplete="tel" /></div>
+            <div class="field"><label for="bk-wa" data-i18n="bk.whatsapp">হোয়াটসঅ্যাপ নম্বর (বিজ্ঞাপনে "চ্যাট" বোতামের জন্য)</label><input class="input" id="bk-wa" name="whatsapp" type="tel" inputmode="tel" maxlength="16" /></div>
+            <div class="field"><label for="bk-email" data-i18n="bk.email">ইমেল (রসিদের জন্য)</label><input class="input" id="bk-email" name="email" type="email" maxlength="120" autocomplete="email" /></div>
+            <div class="field"><label for="bk-start" data-i18n="bk.start">কবে থেকে চালু হবে</label><input class="input" id="bk-start" name="start_date" type="date" /><small class="hint" data-i18n="bk.startHint">বিজয়া দশমী (২১ অক্টোবর) পর্যন্ত চলবে।</small></div>
+          </fieldset>
+
+          <label class="consent"><input type="checkbox" name="consent" value="yes" required /> <span data-i18n-html="bk.consent">আমি নিশ্চিত করছি যে এই ব্যবসা ও লোগো আমার/আমাদের। বিজ্ঞাপনে "স্পনসর" লেখা থাকবে, চালুর আগে যাচাই করা হবে, না চালালে পুরো টাকা ফেরত। <a href="/policies/" target="_blank">শর্তাবলি</a> মেনে নিচ্ছি।</span></label>
+          <p class="form-error" id="bk-error" role="alert" hidden></p>
+          <button type="submit" class="btn bk-pay" id="bk-submit"></button>
+          <p class="muted small bk-secure" data-i18n="bk.secure">পেমেন্ট হয় Razorpay-তে (UPI, কার্ড, নেটব্যাংকিং, ওয়ালেট)। আপনার কার্ড বা UPI তথ্য আমরা কখনো দেখি না।</p>
+        </form>
+
+        <div class="bk-mock" id="bk-mock" hidden>
+          <p class="bk-mock-tag">TEST MODE</p>
+          <p data-i18n="bk.mockText">Razorpay কী এখনো যোগ করা হয়নি — এটা পরীক্ষার পেমেন্ট, আসল টাকা কাটবে না।</p>
+          <div class="btn-row"><button type="button" class="btn" id="bk-mock-pay"></button><button type="button" class="btn btn-ghost" id="bk-mock-cancel" data-i18n="bk.cancel">বাতিল</button></div>
+        </div>
+
+        <div class="bk-done" id="bk-done" hidden>
+          <p class="bk-done-icon" aria-hidden="true">✓</p>
+          <h3 data-i18n="bk.doneTitle">পেমেন্ট সফল — ধন্যবাদ!</h3>
+          <p data-i18n="bk.doneText">আপনার বিজ্ঞাপন এখন যাচাইয়ের অপেক্ষায়। ২৪ ঘণ্টার মধ্যে চালু হলে হোয়াটসঅ্যাপে জানাব। কোনো কারণে চালাতে না পারলে পুরো টাকা ফেরত।</p>
+          <p class="muted small"><span data-i18n="bk.ref">বুকিং নম্বর</span>: <code id="bk-ref"></code></p>
+          <a class="btn btn-wa" id="bk-done-wa" target="_blank" rel="noopener" data-i18n="bk.doneWa">হোয়াটসঅ্যাপে জানান</a>
+        </div>
+      </div>
+    </dialog>
   </body>
 </html>

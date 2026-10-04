@@ -114,11 +114,15 @@ function filtered(): Pandal[] {
 function eatNearbyHTML(p: Pandal): string {
   const s = sponsorFor('pandal-nearby', p.id);
   if (!s) return `<a class="pm-eat cta" href="/advertise/#slot-pandal-nearby">${esc(t('pm.eatCta'))}</a>`;
-  const label = `<span class="s-label">${esc(t('sponsored'))}</span> ${esc(t('pm.eatNearby'))}: <strong>${esc((bn() && s.name_bn) || s.name)}</strong> — ${esc((bn() && s.tagline_bn) || s.tagline)}`;
+  const logo = s.logo ? `<img src="${esc(s.logo)}" alt="" width="28" height="28" loading="lazy" class="pm-eat-logo" /> ` : '';
+  const label = `<span class="s-label">${esc(t('sponsored'))}</span> ${logo}${esc(t('pm.eatNearby'))}: <strong>${esc((bn() && s.name_bn) || s.name)}</strong> — ${esc((bn() && s.tagline_bn) || s.tagline)}`;
+  const addr = s.address
+    ? `<span class="pm-eat-addr">📍 ${esc(s.address)}${s.mapsUrl ? ` · <a href="${esc(s.mapsUrl)}" target="_blank" rel="noopener sponsored">${esc(t('pm.directions'))}</a>` : ''}</span>`
+    : '';
   const href = sponsorHref(s);
   return href
-    ? `<a class="pm-eat" href="${esc(href)}" target="_blank" rel="sponsored noopener">${label}</a>`
-    : `<p class="pm-eat">${label}</p>`;
+    ? `<div class="pm-eat"><a href="${esc(href)}" target="_blank" rel="sponsored noopener">${label}</a>${addr}</div>`
+    : `<div class="pm-eat">${label}${addr}</div>`;
 }
 
 function cardHTML(p: Pandal): string {
@@ -260,6 +264,8 @@ function renderAll() {
 }
 renderAll();
 onLangChange(renderAll);
+// Approved bookings arrive from the API after first paint.
+addEventListener('sponsors:update', () => renderList());
 
 // Last, so it animates the final rendered content.
 initMotion();

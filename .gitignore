@@ -13,3 +13,5 @@ scripts/.cache
 worker/node_modules
 worker/.wrangler
 .wrangler-dev.log
+.dev.vars
+worker/.dev.vars

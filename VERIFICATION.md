@@ -30,7 +30,7 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | 5 | Playlists | Every YouTube item checked through oEmbed (owner and embedding allowed; 4 non-embeddable uploads swapped out). Spotify items checked through the embed data. Iframes are created only on tap | ✅ | ✅ | **Pass** |
 | 6 | **Dhak** | Pointer and keyboard both trigger it; the animation class is applied. Sound rendered through an `OfflineAudioContext` stand-in: peak 0.42 (no clipping), ~380 ms audible, ~140 Hz fundamental | ✅ | ✅ | **Pass** |
 | 7 | Sponsor slots | Tota Cake House shows in the dhak slot with "স্পনসর / Sponsored"; empty slots show the "Advertise here" CTA linking to `/advertise/#slot-…` | ✅ | ✅ | **Pass** |
-| 7a | **UPI link and QR** | Link: `upi://pay?pa=9874353532@upi&pn=Pritam&cu=INR&am=99.00&tn=Mahalaya%20Live%20sponsor%20-%20countdown`. The QR was decoded with the browser's `BarcodeDetector` and matches the link exactly. Booked slots are disabled in the picker | ✅ | ✅ (`m-advertise-pay.png`) | **Pass** (no real payment made) |
+| 7a | ~~UPI link and QR~~ | Replaced by Razorpay booking (see "Sponsor booking + Razorpay") | — | — | Superseded |
 | 8 | SEO | Title and description cover Mahalaya 2026 live / live radio in Bengali and English. JSON-LD Event (03:50–05:45 IST) and FAQPage; `sitemap.xml`; `robots.txt`; OG 1200×630 JPEG (79 KB). Lighthouse SEO 100 | ✅ | ✅ | **Pass** |
 | 9 | PWA / service worker | Production preview: page controlled by the SW. Cache holds only our HTML, JS, CSS and icons. While the stream played, no `.m3u8`, `.aac` or bitgravity entries were cached | ✅ | — | **Pass** |
 | 10 | Analytics placeholder | `ANALYTICS.enabled = false`, so no beacon request is made. Listener-count hook hidden | ✅ | — | **Pass** |
@@ -85,6 +85,18 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | One sound at a time | Radio playing → tap Audio → radio paused. Radio Play again → mini player closed | **Pass** |
 | Real dhak | Clips load (200) when the Dhak sheet opens. Tap plays one of 4 real strokes (rotating, ±2.5% pitch). "Play a full rhythm" toggles to "Stop" and plays a 10 s passage with the drum pulsing on its 44 beats. Closing the sheet stops it. Decoded clips: peak 0.89, no clipping. CC BY-SA credit shown under the drum | **Pass** (listen once yourself — I can measure audio, not hear it) |
 
+## Sponsor booking + Razorpay (local, test mode)
+
+| Check | How | Result |
+|---|---|---|
+| Form validation | Empty submit → per-field errors (business name, tagline, your name, phone, consent) + banner; errors clear as you type. Server rejects bad URL/phone, an over-long name, markup, an unknown pandal, a missing consent | **Pass** |
+| Logo | PNG accepted and served from R2 (`image/png`, `nosniff`); an SVG renamed to look like a PNG is refused (`bad_type`) | **Pass** |
+| No double-selling | The house sponsor makes `dhak` booked. A second spotlight booking during the 15-min hold → `slot_taken`. Chosen pandals become taken for "Eat nearby" | **Pass** |
+| Payment | Test-mode checkout (`d-booking-form.png`, `d-booking-done.png`). Wrong signature → 400; correct → **paid**. Signed webhook marks paid; forged webhook → 400 | **Pass** (real Razorpay checkout not run: needs your keys) |
+| Review | `/admin/` with token lists the booking with logo + all details (`d-admin-review.png`). No/invalid token → 401. Approve → live on the home page (`d-home-live-sponsors.png`: "Countdown by Ghosh Saree Ghar" + Mitra Sweets spotlight with description and address) | **Pass** |
+| Reject + refund | Reject with refund → `refunded`, slot/pandals freed (mock refund; real refunds call Razorpay's refund API) | **Pass** |
+| Mobile | Booking sheet and pandal picker at 390 px (`m-booking-sheet.png`) | **Pass** |
+
 ## Visitor counter
 
 | Check | How | Result |
@@ -128,5 +140,5 @@ The first `/pandals/` run scored Performance 77 (CLS 0.58) and Accessibility 99 
 
 1. Android Chrome and iPhone Safari: press Play, lock the screen, and check that audio continues and the lock screen shows "Mahishasuramardini — Live" (it does from 02:50 IST on 10 Oct, or via `?now=2026-10-10T03:30:00%2B05:30`).
 2. Tap the `.ics` button on an iPhone and add the event; tap "Add to Google Calendar" while logged in.
-3. Scan the UPI QR with a UPI app and check the payee name for `9874353532@upi` before sharing the page.
+3. After Razorpay activation, make one real ₹1–₹99 booking end to end (pay → admin approve → reject+refund) before announcing it.
 4. Try "Wake me" overnight once with `?now=` set a few minutes before 03:50.

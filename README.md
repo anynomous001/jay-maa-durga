@@ -59,7 +59,8 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 
 | What | File |
 |---|---|
-| Site name, tagline, URL, UPI ID, WhatsApp number, slot prices, the `PRICES_TBD` flag | `src/config.ts` |
+| Site name, tagline, URL, WhatsApp number, operator details for `/policies/` | `src/config.ts` |
+| Slot prices, season end, "TBD" marker (shared with the payments Worker) | `data/pricing.json` |
 | Key times (transmission 03:50–05:45 IST, auto-start time, reminder time), Puja dates | `src/config.ts` (`MAHALAYA_*`, `AUTO_START_AT`, `PUJA_DAYS`) |
 | Radio stream URLs | `src/config.ts` (`RADIO_CHANNELS`) |
 | Map tile provider | `src/config.ts` (`MAP_TILE_URL`, `MAP_TILE_ATTRIBUTION`) |
@@ -91,7 +92,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 }
 ```
 
-- `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`.
+- `slot` is one of `spotlight` (home hero card), `countdown`, `dhak`, `map-partner` or `pandal-nearby`. Paid bookings from `/advertise` don't go here — they're approved in `/admin/` and served by the Worker.
 - `logo` is optional. Put the file in `public/sponsors/`.
 - `link` takes precedence over `whatsapp`; if both are empty, the card isn't clickable.
 - Dates are IST calendar days, inclusive. Outside them, or with `active: false`, the slot shows the "Advertise here / বিজ্ঞাপন দিন" CTA.
@@ -168,6 +169,63 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 - **Spotify embeds** play 30-second previews unless the listener is logged in.
 - **Dates:** Puja dates follow the Bisuddha Siddhanta panjika (Saptami spans 17–18 Oct). Gupta Press / Benimadhab Sheel panjika runs one day earlier from Ashtami. The WB holiday list puts Shashthi on 17 Oct.
 
+## Sponsor bookings & payments (Razorpay)
+
+Flow:
+1. **Book.** An advertiser taps **Book this slot** on `/advertise` and fills in the form: business name (EN/BN), tagline, description, logo, website, shop address + Google Maps link, nearby pandals (for "Eat nearby"), contact name/phone/WhatsApp/email, and a start date.
+2. **Hold.** The Worker validates everything and holds the slot for 15 minutes (so two people can't buy it at once). It creates a **Razorpay order for the price in `data/pricing.json`**; the browser never sets the amount.
+3. **Pay.** Razorpay Checkout takes UPI, cards, netbanking or wallets. The Worker verifies the payment signature, and the `payment.captured` webhook is a backup if the browser closes. The booking becomes **paid → needs review**.
+4. **Review.** You open **`/admin/`** (token = `ADMIN_TOKEN`) and see the logo and every detail.
+   - **Approve:** the ad appears on the site within ~30 s, with no rebuild.
+   - **Reject:** refunds through Razorpay (or tick it off and refund manually).
+   - **Take down:** for live ads.
+
+Everything lives in the same Worker as the visitor counter (`worker/`):
+- bookings in a SQLite Durable Object;
+- logos in an R2 bucket (PNG/JPG/WebP ≤ 300 KB; SVG refused because it can carry scripts).
+
+House sponsors in `data/sponsors.json` (e.g. Tota Cake House on the dhak) still work and count as "booked".
+
+**Local testing (no Razorpay account needed):**
+1. `cp worker/.dev.vars.example worker/.dev.vars` (it has `ALLOW_MOCK=true`).
+2. `cd worker && npm run dev`.
+3. `npm run dev` in the site folder. Booking shows a red **TEST MODE** payment step.
+4. Open `/admin/` with the token from `.dev.vars`.
+
+Mock payments are impossible in production: they only work when `ALLOW_MOCK=true` and no Razorpay keys are set.
+
+**Going live with Razorpay (steps only — not done):**
+1. Sign up at razorpay.com and finish **KYC** (PAN, bank account; an individual/proprietor is fine). Activation usually takes 1–3 working days, so start now if you want it before Mahalaya.
+2. Razorpay checks your website. Before you submit:
+   - fill in your legal name, address and email in `OPERATOR` (`src/config.ts`);
+   - deploy, so `/policies/` (Terms, Privacy, Refund & Cancellation, Delivery, Contact) is reachable.
+3. Test first: in **Test Mode**, copy the test Key ID/Secret into `worker/.dev.vars` (remove `ALLOW_MOCK`). Pay with Razorpay's test UPI/cards.
+4. Production:
+   ```
+   cd worker
+   npx wrangler r2 bucket create mahalaya-sponsor-logos
+   npx wrangler secret put RAZORPAY_KEY_ID        # rzp_live_…
+   npx wrangler secret put RAZORPAY_KEY_SECRET
+   npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
+   npx wrangler secret put ADMIN_TOKEN            # long random string
+   npx wrangler deploy
+   ```
+5. In the Razorpay Dashboard → Webhooks:
+   - add `https://<your-worker>/webhooks/razorpay`;
+   - events: `payment.captured`, `order.paid`;
+   - use the same webhook secret.
+6. Set `VITE_API_URL` (Cloudflare Pages env var) to the Worker URL and redeploy the site.
+
+**Fees:** Razorpay's standard fee is about 2% per transaction (+GST), deducted before settlement. Check your plan.
+
+**Security notes:**
+- Keys and the admin token live only in Worker secrets / `.dev.vars` (git-ignored).
+- Amounts come from `data/pricing.json` on the server.
+- Every checkout is verified by HMAC signature.
+- Inputs are length-checked and stripped of markup.
+- Logos are type-checked by their bytes.
+- The admin API needs the token.
+
 ## Visitor counter (total, online now, listening now)
 
 Shown as badges in the home hero ("N online now · N visitors so far"), "N listening now" in the player, and live numbers on `/advertise`. It's a tiny Cloudflare Worker with one Durable Object in `worker/`. The site works fine without it; if `VITE_COUNTER_URL` is empty, the badges stay hidden.
@@ -179,12 +237,12 @@ Shown as badges in the home hero ("N online now · N visitors so far"), "N liste
   - **online** means pinged in the last 150 s, and **listening** means the radio is playing.
 - **Local dev:**
   1. `cd worker && npm install && npm run dev` (port 8787, no Cloudflare account needed).
-  2. Keep `.env.development.local` with `VITE_COUNTER_URL=http://localhost:8787`.
+  2. Keep `.env.development.local` with `VITE_API_URL=http://localhost:8787`.
   3. Run `npm run dev` in the site folder.
 - **Deploy (steps only — not done):**
   1. `cd worker && npx wrangler login && npx wrangler deploy`. It prints a URL like `https://mahalaya-counter.<you>.workers.dev`.
   2. In `worker/wrangler.toml`, set `ALLOWED_ORIGINS` to your real domain, then redeploy.
-  3. In Cloudflare Pages → Settings → Environment variables, add `VITE_COUNTER_URL` = that URL, then redeploy the site.
+  3. In Cloudflare Pages → Settings → Environment variables, add `VITE_API_URL` = that URL, then redeploy the site.
 - **Free-tier limit:** Workers Free allows **100,000 requests/day**. One visitor costs ~1 request per minute while the page is open. For example, 1,500 people listening through the 2-hour broadcast ≈ 180k requests, which exceeds the free tier.
   - If the limit is hit, only the counter stops; the site and the radio keep working.
   - For a big Mahalaya audience, switch the account to **Workers Paid (US$5/month, 10M requests included)** for that week.
