@@ -59,7 +59,9 @@ export class Radio {
     this.audio = els.audio;
     const saved = localStorage.getItem(CHANNEL_KEY);
     this.channel = RADIO_CHANNELS.find((c) => c.id === saved) ?? RADIO_CHANNELS[0];
-    this.nativeHls = this.audio.canPlayType('application/vnd.apple.mpegurl') !== '';
+    // `?hlsjs` forces the hls.js path (to test non-Safari/Firefox behaviour).
+    this.nativeHls =
+      this.audio.canPlayType('application/vnd.apple.mpegurl') !== '' && !new URLSearchParams(location.search).has('hlsjs');
     this.bindAudio();
     this.renderChannels();
     els.btn.addEventListener('click', () => (this.isActive() ? this.pause() : this.play()));
@@ -344,5 +346,6 @@ export function initRadio(): Radio {
     void poll();
     setInterval(poll, 60_000);
   }
+  if (import.meta.env.DEV) (window as unknown as { __radio: Radio }).__radio = radio;
   return radio;
 }

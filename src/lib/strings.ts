@@ -184,9 +184,16 @@ export const dict: Record<string, Entry> = {
   },
   'ad.audience': { bn: 'কারা দেখবেন', en: 'Audience' },
   'ad.audienceText': {
-    bn: 'বাংলাভাষী শ্রোতা — কলকাতা, উত্তর ২৪ পরগনা ও প্রবাসী বাঙালি। আসল ভিজিটর সংখ্যা এখানে শীঘ্রই দেওয়া হবে।',
-    en: 'Bengali-speaking visitors — Kolkata, North 24 Parganas and the diaspora. Real visitor numbers will be published here soon.',
+    bn: 'বাংলাভাষী শ্রোতা — কলকাতা ও প্রবাসী বাঙালি। আসল ভিজিটর সংখ্যা এখানে শীঘ্রই দেওয়া হবে।',
+    en: 'Bengali-speaking visitors — Kolkata and the diaspora. Real visitor numbers will be published here soon.',
   },
+  'ad.tbdMark': { bn: 'চূড়ান্ত নয়', en: 'TBD' },
+  'ad.perSlot': { bn: 'পুরো মরসুম', en: 'whole season' },
+  'ad.book': { bn: 'এই স্লট নিন', en: 'Book this slot' },
+  'ad.stat.visitors': { bn: 'মোট ভিজিটর', en: 'Total visitors' },
+  'ad.stat.peak': { bn: 'মহালয়ার ভোরে শ্রোতা', en: 'Listeners on Mahalaya dawn' },
+  'ad.stat.regions': { bn: 'শীর্ষ এলাকা', en: 'Top regions' },
+  'ad.stat.soon': { bn: 'শীঘ্রই', en: 'Coming soon' },
   'ad.pay': { bn: 'UPI-তে পেমেন্ট', en: 'Pay via UPI' },
   'ad.payStep': {
     bn: 'আগে হোয়াটসঅ্যাপে স্লট নিশ্চিত করুন, তারপর পেমেন্ট করুন।',
