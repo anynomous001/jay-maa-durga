@@ -53,7 +53,10 @@ export const dict: Record<string, Entry> = {
   'rem.gcalShort': { bn: 'গুগল ক্যালেন্ডার', en: 'Google Calendar' },
   'rem.icsShort': { bn: '.ics রিমাইন্ডার', en: '.ics reminder' },
   'rem.waShort': { bn: 'শেয়ার', en: 'Share' },
-  'radio.noteShort': { bn: '১০ অক্টোবর ভোর ৩:৫০–৫:৪৫ (ভারতীয় সময়) · আকাশবাণী কলকাতা', en: '10 Oct, 3:50–5:45 AM IST · Akashvani Kolkata' },
+  'radio.noteShort': {
+    bn: '১০ অক্টোবর ভোর ৩:৫০–৫:৪৫ (ভারতীয় সময়) · সম্প্রচার ও স্বত্ব: প্রসার ভারতী / আকাশবাণী',
+    en: '10 Oct, 3:50–5:45 AM IST · Broadcast © Prasar Bharati / Akashvani',
+  },
   'radio.fallbackMw': { bn: 'MW ৬৫৭ kHz', en: 'MW 657 kHz' },
   'wake.how': { bn: 'কীভাবে কাজ করে', en: 'How it works' },
   'slot.spotlight': { bn: 'স্পটলাইট কার্ড', en: 'Spotlight card' },
@@ -305,5 +308,5 @@ export const dict: Record<string, Entry> = {
     en: 'On the cards of pandals near your shop (per area)',
   },
   'slot.footer': { bn: 'ফুটার স্পনসর', en: 'Footer sponsor strip' },
-  'slot.footer.where': { bn: 'সব পাতার নিচে', en: 'Bottom of every page' },
+  'slot.footer.where': { bn: 'প্যান্ডেল ম্যাপ ও বিজ্ঞাপন পাতার নিচে', en: 'Bottom of the pandal map and advertise pages' },
 };
