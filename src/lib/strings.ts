@@ -150,6 +150,11 @@ export const dict: Record<string, Entry> = {
   'dhak.hint': { bn: 'ঢাকে টোকা দিন (বা স্পেস/এন্টার চাপুন)', en: 'Tap the drum (or press Space/Enter)' },
   'dhak.label': { bn: 'ঢাক — বাজাতে চাপুন', en: 'Dhak — press to play' },
   'dhak.rhythm': { bn: 'পুরো বোল বাজাও', en: 'Play a full rhythm' },
+  'dhak.stop': { bn: 'থামাও', en: 'Stop' },
+  'dhak.credit': {
+    bn: 'ঢাকের রেকর্ডিং: <a href="https://commons.wikimedia.org/wiki/File:Durga_Puja_Dhak_Dhol.ogg" target="_blank" rel="noopener">Mamta Jagdish Dhody</a>, উইকিমিডিয়া কমন্স, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> (ছোট অংশে কাটা)।',
+    en: 'Dhak recording: <a href="https://commons.wikimedia.org/wiki/File:Durga_Puja_Dhak_Dhol.ogg" target="_blank" rel="noopener">Mamta Jagdish Dhody</a>, Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> (cut into short clips).',
+  },
   'dhak.by': { bn: 'ঢাক সৌজন্যে', en: 'Dhak presented by' },
 
   // ── Playlists ──
@@ -158,10 +163,13 @@ export const dict: Record<string, Entry> = {
   'pl.mahalaya-songs': { bn: 'মহালয়ার গান', en: 'Mahalaya songs' },
   'pl.puja-songs': { bn: 'পুজোর গান', en: 'Durga Puja songs' },
   'pl.load': { bn: 'চালান', en: 'Load player' },
+  'pl.audio': { bn: 'অডিও', en: 'Audio' },
+  'pl.video': { bn: 'ভিডিও', en: 'Video' },
+  'pl.nowPlaying': { bn: 'এখন বাজছে', en: 'Now playing' },
   'pl.open': { bn: 'অ্যাপে খুলুন', en: 'Open in app' },
   'pl.spotifyNote': {
-    bn: 'স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ শোনা যায়। সব প্লেয়ার সরকারি চ্যানেলের — চাপলে তবেই লোড হয়।',
-    en: 'Spotify plays 30-second previews unless you’re logged in. All players are official channel embeds and load only when you tap.',
+    bn: '"অডিও" চাপলে ছোট প্লেয়ারে গান চলতে থাকবে, আপনি সাইটে ঘুরে বেড়াতে পারবেন (ইউটিউবের নিয়মে ছোট ভিডিও-জানলাটা দেখা যাবে)। স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ। সব প্লেয়ার সরকারি চ্যানেলের।',
+    en: '“Audio” keeps the song playing in a small player while you browse (YouTube requires its small video window to stay visible). Spotify plays 30-second previews unless you’re logged in. All players are official channel embeds.',
   },
   'pl.empty': { bn: 'তালিকা তৈরি হচ্ছে…', en: 'List coming soon…' },
 

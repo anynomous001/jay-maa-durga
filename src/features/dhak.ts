@@ -1,7 +1,11 @@
 /**
- * Dhak — fully synthesised with Web Audio (no samples, nothing to license).
- * "bass" = deep membrane boom; "kathi" = the stick's bright crack.
+ * Dhak. Plays short clips cut from a real Durga Puja dhak recording
+ * ("Durga Puja Dhak Dhol" by Mamta Jagdish Dhody, Wikimedia Commons,
+ * CC BY-SA 4.0 — credited in the dhak sheet and ASSETS.md). The clips are
+ * fetched only when the dhak sheet opens. If they can't load, it falls back
+ * to the Web Audio synthesis below ("bass" boom + "kathi" stick crack).
  */
+import { onLangChange, t } from '../lib/i18n';
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
 let noiseBuf: AudioBuffer | null = null;
@@ -72,7 +76,7 @@ function kathi(t: number, level = 1) {
 }
 
 let alt = 0;
-export function hit(): void {
+function synthHit(): void {
   const c = audio();
   const t = c.currentTime + 0.005;
   // Alternate a full stroke with a lighter flam so repeated taps feel alive.
@@ -91,7 +95,7 @@ const PATTERN: [number, 'B' | 'K' | 'BK'][] = [
   [4, 'BK'], [4.5, 'K'], [4.75, 'K'], [5, 'B'], [5.5, 'K'], [6, 'BK'], [6.25, 'K'], [6.5, 'K'], [6.75, 'K'], [7, 'BK'],
 ];
 
-export function rhythm(onBeat: (delayMs: number) => void): void {
+function synthRhythm(onBeat: (delayMs: number) => void): void {
   const c = audio();
   const beat = 60 / 128 / 1; // seconds per beat at 128 BPM
   const t0 = c.currentTime + 0.05;
@@ -105,25 +109,120 @@ export function rhythm(onBeat: (delayMs: number) => void): void {
   }
 }
 
+// ── Real recording ──
+interface DhakMeta {
+  hitLength: number;
+  hits: number[];
+  rhythmBeats: number[];
+}
+let samples: Promise<{ hits: AudioBuffer; rhythm: AudioBuffer; meta: DhakMeta } | null> | null = null;
+
+function loadSamples() {
+  if (!samples) {
+    const c = audio();
+    const get = async (url: string) => c.decodeAudioData(await (await fetch(url)).arrayBuffer());
+    samples = Promise.all([get('/audio/dhak-hits.m4a'), get('/audio/dhak-rhythm.m4a'), fetch('/audio/dhak.json').then((r) => r.json())])
+      .then(([hits, rhythm, meta]) => ({ hits, rhythm, meta: meta as DhakMeta }))
+      .catch(() => null);
+  }
+  return samples;
+}
+
+let nextHit = 0;
+let rhythmSrc: AudioBufferSourceNode | null = null;
+let beatTimers: number[] = [];
+
+async function playHit() {
+  const s = await loadSamples();
+  if (!s) return synthHit();
+  const c = audio();
+  const src = c.createBufferSource();
+  src.buffer = s.hits;
+  src.playbackRate.value = jitter(1, 0.025); // tiny variation so repeats feel played
+  src.connect(master!);
+  const offset = s.meta.hits[nextHit++ % s.meta.hits.length];
+  src.start(c.currentTime + 0.003, offset, s.meta.hitLength);
+}
+
+function stopRhythm() {
+  rhythmSrc?.stop();
+  rhythmSrc = null;
+  beatTimers.forEach(clearTimeout);
+  beatTimers = [];
+}
+
+async function playRhythm(onBeat: (delayMs: number) => void, onEnd: () => void) {
+  const s = await loadSamples();
+  if (!s) {
+    synthRhythm(onBeat);
+    beatTimers.push(window.setTimeout(onEnd, 8000));
+    return;
+  }
+  const c = audio();
+  stopRhythm();
+  const src = c.createBufferSource();
+  src.buffer = s.rhythm;
+  src.connect(master!);
+  src.onended = () => {
+    if (rhythmSrc === src) {
+      rhythmSrc = null;
+      onEnd();
+    }
+  };
+  src.start();
+  rhythmSrc = src;
+  beatTimers = s.meta.rhythmBeats.map((b) => window.setTimeout(() => onBeat(0), b * 1000));
+}
+
 export function initDhak(): void {
   const btn = document.getElementById('dhak-btn')!;
+  const rhythmBtn = document.getElementById('dhak-rhythm')!;
+  let playing = false;
   const animate = () => {
     btn.classList.remove('hit');
     void btn.offsetWidth; // restart CSS animation
     btn.classList.add('hit');
   };
+  const syncRhythmBtn = () => (rhythmBtn.textContent = t(playing ? 'dhak.stop' : 'dhak.rhythm'));
+  const tap = () => {
+    void playHit();
+    animate();
+  };
+  // Start fetching the recording as soon as the dhak sheet is opened (a user gesture).
+  document.querySelector('[data-open="sheet-dhak"]')?.addEventListener('click', () => {
+    audio();
+    void loadSamples();
+  });
   btn.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
-    hit();
-    animate();
+    tap();
   });
   // Keyboard: Enter/Space fire click without pointerdown.
   btn.addEventListener('click', (e) => {
     if (e.detail !== 0) return; // pointer clicks were already handled on pointerdown
-    hit();
-    animate();
+    tap();
   });
-  document.getElementById('dhak-rhythm')!.addEventListener('click', () =>
-    rhythm((ms) => setTimeout(animate, ms)),
-  );
+  rhythmBtn.addEventListener('click', () => {
+    if (playing) {
+      stopRhythm();
+      playing = false;
+    } else {
+      playing = true;
+      void playRhythm(
+        (ms) => window.setTimeout(animate, ms),
+        () => {
+          playing = false;
+          syncRhythmBtn();
+        },
+      );
+    }
+    syncRhythmBtn();
+  });
+  // Closing the sheet stops the drum.
+  document.getElementById('sheet-dhak')?.addEventListener('close', () => {
+    stopRhythm();
+    playing = false;
+    syncRhythmBtn();
+  });
+  onLangChange(syncRhythmBtn);
 }

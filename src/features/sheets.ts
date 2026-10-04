@@ -29,9 +29,8 @@ export function initSheets(): void {
     dlg.addEventListener('close', () => {
       lockScroll(false);
       opener?.focus();
-      // Stop any playing embed when its sheet closes.
+      // Stop any video playing inside the sheet (the audio mini player lives outside it).
       dlg.querySelectorAll('iframe').forEach((f) => f.remove());
-      dlg.querySelectorAll<HTMLElement>('.track').forEach((li) => li.dispatchEvent(new CustomEvent('track:reset')));
     });
   });
 }

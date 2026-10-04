@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8" /><title>Dhak clip cutter (dev only)</title>
+<style>body{font-family:system-ui;background:#222;color:#eee;margin:1rem}</style></head>
+<body>
+<p id="msg">Cutting…</p>
+<script type="module">
+// Cuts short clips from the CC BY-SA recording "Durga Puja Dhak Dhol" by
+// Mamta Jagdish Dhody (Wikimedia Commons). Outputs WAVs into public/audio/,
+// then scripts/encode-dhak.sh turns them into small AAC .m4a files.
+const SRC = '/assets-src/dhak/durga-puja-dhak-dhol-mamta-dhody.ogg';
+const RHYTHM = [20.0, 30.0];        // seconds of steady playing for "play full bol"
+const SEARCH = [18, 64];            // where to look for strong single strokes
+const HIT_LEN = 0.85, HITS = 4, GAP = 0.15;
+
+const raw = await (await fetch(SRC)).arrayBuffer();
+const buf = await new OfflineAudioContext(2, 1, 44100).decodeAudioData(raw);
+const sr = buf.sampleRate;
+// Mono mixdown is plenty for a drum on phone speakers and halves the size.
+const mono = new Float32Array(buf.length);
+for (let c = 0; c < buf.numberOfChannels; c++) buf.getChannelData(c).forEach((v, i) => (mono[i] += v / buf.numberOfChannels));
+
+const win = Math.round(sr * 0.01);
+const env = (t) => { const i = Math.round(t * sr); let s = 0; for (let j = i; j < i + win; j++) s += mono[j] * mono[j]; return Math.sqrt(s / win); };
+// Onsets: energy jump over 30 ms; keep the strongest, at least 2 s apart.
+const onsets = [];
+for (let t = SEARCH[0]; t < SEARCH[1]; t += 0.01) {
+  const rise = env(t) - env(t - 0.03);
+  if (rise > 0.15) onsets.push({ t, s: env(t + 0.02) });
+}
+onsets.sort((a, b) => b.s - a.s);
+const picked = [];
+for (const o of onsets) if (picked.every((p) => Math.abs(p.t - o.t) > 2)) { picked.push(o); if (picked.length === HITS) break; }
+picked.sort((a, b) => a.t - b.t);
+
+function slice(t0, t1, fadeIn, fadeOut) {
+  const out = mono.slice(Math.round(t0 * sr), Math.round(t1 * sr));
+  const fi = Math.round(fadeIn * sr), fo = Math.round(fadeOut * sr);
+  for (let i = 0; i < fi; i++) out[i] *= i / fi;
+  for (let i = 0; i < fo; i++) out[out.length - 1 - i] *= i / fo;
+  return out;
+}
+function normalise(a, target = 0.89) { let p = 0; for (const v of a) p = Math.max(p, Math.abs(v)); const g = target / p; for (let i = 0; i < a.length; i++) a[i] *= g; return a; }
+function wav(a) {
+  const b = new ArrayBuffer(44 + a.length * 2), v = new DataView(b);
+  const w = (o, s) => [...s].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
+  w(0, 'RIFF'); v.setUint32(4, 36 + a.length * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, sr, true);
+  v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true); w(36, 'data'); v.setUint32(40, a.length * 2, true);
+  for (let i = 0; i < a.length; i++) v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, a[i])) * 0x7fff, true);
+  return new Blob([b], { type: 'audio/wav' });
+}
+// Hits sprite: slices separated by short silences, with their offsets.
+const parts = picked.map((o) => slice(o.t - 0.015, o.t - 0.015 + HIT_LEN, 0.004, 0.28));
+const gap = new Float32Array(Math.round(GAP * sr));
+const total = parts.reduce((n, p) => n + p.length + gap.length, 0);
+const sprite = new Float32Array(total); const offsets = []; let pos = 0;
+for (const p of parts) { offsets.push(+(pos / sr).toFixed(4)); sprite.set(p, pos); pos += p.length + gap.length; }
+normalise(sprite);
+const rhythm = normalise(slice(RHYTHM[0], RHYTHM[1], 0.03, 0.6));
+// Beat times inside the rhythm clip (for the drum animation).
+const beats = [];
+for (let t = RHYTHM[0] + 0.05; t < RHYTHM[1] - 0.6; t += 0.01) if (env(t) - env(t - 0.03) > 0.18 && (!beats.length || t - RHYTHM[0] - beats[beats.length - 1] > 0.12)) beats.push(+(t - RHYTHM[0]).toFixed(2));
+
+const save = (path, body) => fetch('/__save-asset?path=' + path, { method: 'POST', body });
+await save('public/audio/dhak-hits.wav', wav(sprite));
+await save('public/audio/dhak-rhythm.wav', wav(rhythm));
+await save('public/audio/dhak.json', new Blob([JSON.stringify({ hitLength: HIT_LEN, hits: offsets, rhythmBeats: beats, source: { title: 'Durga Puja Dhak Dhol', author: 'Mamta Jagdish Dhody', url: 'https://commons.wikimedia.org/wiki/File:Durga_Puja_Dhak_Dhol.ogg', licence: 'CC BY-SA 4.0', changes: 'mono mix, cut to short clips, normalised', hitTimesInSource: picked.map((o) => +o.t.toFixed(2)), rhythmInSource: RHYTHM } }, null, 1)], { type: 'application/json' }));
+document.getElementById('msg').textContent = `Saved: hits at ${picked.map((o) => o.t.toFixed(2)).join(', ')}s; rhythm ${RHYTHM.join('–')}s with ${beats.length} beats`;
+window.__done = true;
+</script>
+</body>
+</html>

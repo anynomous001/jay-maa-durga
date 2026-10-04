@@ -76,6 +76,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Weight | Phones load the 480/720 px portrait crop (41–66 KB AVIF) | **Pass** |
 | Lighthouse (mobile) | `/pandals/` 99 / 100 / 100 / 100, LCP 1.9 s, CLS 0.033 | **Pass** |
 
+## Glass sheets, songs audio/video, real dhak
+
+| Check | How | Result |
+|---|---|---|
+| Glass sheets | Sheets, schedule rows, song cards and FAQ items use the countdown card's glass (translucent + 18 px blur + light border). Solid fallback where `backdrop-filter` isn't supported (`d-sheet-songs-glass.png`, `d-sheet-dhak-glass.png`) | **Pass** |
+| Audio / Video per song | YouTube items show Audio + Video; Spotify shows Audio. **Audio** → sheet closes, floating mini player (YouTube 200×200, its minimum allowed size) keeps playing (`d-mini-player.png`). **Video** → 16:9 player inside the sheet (604×340), removed when the sheet closes | **Pass** |
+| One sound at a time | Radio playing → tap Audio → radio paused. Radio Play again → mini player closed | **Pass** |
+| Real dhak | Clips load (200) when the Dhak sheet opens. Tap plays one of 4 real strokes (rotating, ±2.5% pitch). "Play a full rhythm" toggles to "Stop" and plays a 10 s passage with the drum pulsing on its 44 beats. Closing the sheet stops it. Decoded clips: peak 0.89, no clipping. CC BY-SA credit shown under the drum | **Pass** (listen once yourself — I can measure audio, not hear it) |
+
 ## Visitor counter
 
 | Check | How | Result |

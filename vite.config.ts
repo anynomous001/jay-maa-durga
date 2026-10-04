@@ -16,7 +16,7 @@ function partials(): Plugin {
   };
 }
 
-/** Dev-only: lets scripts/og.html save the browser-rendered OG image into public/. */
+/** Dev-only: lets scripts/og.html and scripts/dhak.html save generated assets into public/. */
 function saveAsset(): Plugin {
   return {
     name: 'save-asset',
@@ -26,7 +26,7 @@ function saveAsset(): Plugin {
         const url = new URL(req.url ?? '', 'http://x');
         const target = resolve(import.meta.dirname, url.searchParams.get('path') ?? '');
         const rel = relative(resolve(import.meta.dirname, 'public'), target);
-        if (req.method !== 'POST' || rel.startsWith('..') || !/\.(png|jpg)$/.test(target)) {
+        if (req.method !== 'POST' || rel.startsWith('..') || !/\.(png|jpg|wav|json)$/.test(target)) {
           res.statusCode = 400;
           return res.end('bad request');
         }
