@@ -5,9 +5,20 @@
     <title>Terms, Privacy, Refunds & Contact — Mahalaya Live</title>
     <meta name="description" content="Terms of service, privacy policy, refund and cancellation policy, delivery policy and contact details for advertising on Mahalaya Live." />
     <link rel="canonical" href="https://mahalaya-live.pages.dev/policies/" />
+    <link rel="preload" as="image" type="image/avif" media="(max-aspect-ratio: 4/5)" imagesrcset="/bg/policies/port-480.avif 480w, /bg/policies/port-720.avif 720w" imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/avif" media="(min-aspect-ratio: 4/5)" imagesrcset="/bg/policies/land-640.avif 640w, /bg/policies/land-960.avif 960w, /bg/policies/land-1280.avif 1280w, /bg/policies/land-1672.avif 1672w" imagesizes="100vw" fetchpriority="high" />
     <script type="module" src="/src/pages/policies.ts"></script>
   </head>
-  <body>
+  <body class="page-policies">
+    <picture class="page-bg" aria-hidden="true">
+      <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="/bg/policies/port-480.avif 480w, /bg/policies/port-720.avif 720w" sizes="100vw" />
+      <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="/bg/policies/port-480.webp 480w, /bg/policies/port-720.webp 720w" sizes="100vw" />
+      <source media="(max-aspect-ratio: 4/5)" srcset="/bg/policies/port-480.jpg 480w, /bg/policies/port-720.jpg 720w" sizes="100vw" />
+      <source type="image/avif" srcset="/bg/policies/land-640.avif 640w, /bg/policies/land-960.avif 960w, /bg/policies/land-1280.avif 1280w, /bg/policies/land-1672.avif 1672w" sizes="100vw" />
+      <source type="image/webp" srcset="/bg/policies/land-640.webp 640w, /bg/policies/land-960.webp 960w, /bg/policies/land-1280.webp 1280w, /bg/policies/land-1672.webp 1672w" sizes="100vw" />
+      <img src="/bg/policies/land-1280.jpg" srcset="/bg/policies/land-640.jpg 640w, /bg/policies/land-960.jpg 960w, /bg/policies/land-1280.jpg 1280w, /bg/policies/land-1672.jpg 1672w" sizes="100vw" width="1672" height="941" alt="" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="page-bg-shade" aria-hidden="true"></div>
     <!--@partial header-->
     <main id="main" class="policies">
       <section class="page-head">

@@ -123,7 +123,7 @@ A 401 response means embedding is disabled, so don't add it.
 
 ### Hero image
 
-The home hero is `assets-src/hero-pandal.png`, and the pandal map page background is `assets-src/bg-pandals.png` (both listed in `scripts/make-hero.mjs`). To replace it, drop in a new PNG with the same name and run `npm run hero`. That writes resized AVIF/WebP/JPEG files to `public/hero/`: a landscape set, plus a portrait crop centred around 70% across for phones (change the crop in `scripts/make-hero.mjs`). The dark gradient that keeps text readable is `.hero-shade` in `src/styles.css`.
+The home hero is `assets-src/hero-pandal.png`, the pandal map page background is `assets-src/bg-pandals.png`, and the policies page background is `assets-src/bg-policies.png` (all listed in `scripts/make-hero.mjs`). To replace it, drop in a new PNG with the same name and run `npm run hero`. That writes resized AVIF/WebP/JPEG files to `public/hero/`: a landscape set, plus a portrait crop centred around 70% across for phones (change the crop in `scripts/make-hero.mjs`). The dark gradient that keeps text readable is `.hero-shade` in `src/styles.css`.
 
 ### Dhak sound
 

@@ -1807,7 +1807,7 @@ dialog.sheet::backdrop {
   color: #a8e6c4;
 }
 
-/* ── Pandal map page: illustrated pandal route as a fixed background ── */
+/* ── Pandal map and policies pages: illustration as a fixed background ── */
 .page-bg,
 .page-bg-shade {
   position: fixed;
@@ -1832,19 +1832,26 @@ dialog.sheet::backdrop {
   background: #0c0f1f;
 }
 /* The photo replaces the animated night-sky backdrop on this page. */
-.page-pandals .backdrop {
+.page-pandals .backdrop,
+.page-policies .backdrop {
   display: none;
 }
 .page-pandals .page-head h1,
 .page-pandals .page-head .lead,
-.page-pandals .site-header {
+.page-pandals .site-header,
+.page-policies .page-head h1,
+.page-policies .page-head .lead,
+.page-policies .page-head .muted,
+.page-policies .site-header {
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
 }
-.page-pandals .page-head .lead {
+.page-pandals .page-head .lead,
+.page-policies .page-head .lead {
   color: #ece6f4;
 }
 .page-pandals .pm-card,
-.page-pandals .panel {
+.page-pandals .panel,
+.page-policies .panel {
   background: rgba(16, 19, 42, 0.9);
 }
 @media (min-width: 960px) {

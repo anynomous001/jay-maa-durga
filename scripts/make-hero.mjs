@@ -10,6 +10,7 @@ const IMAGES = [
   // focusX: where the portrait crop is centred (0–1 across the image).
   { src: 'assets-src/hero-pandal.png', out: 'public/hero', focusX: 0.705 },
   { src: 'assets-src/bg-pandals.png', out: 'public/bg/pandals', focusX: 0.78 },
+  { src: 'assets-src/bg-policies.png', out: 'public/bg/policies', focusX: 0.66 },
 ];
 
 for (const img of IMAGES) {
