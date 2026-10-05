@@ -2714,3 +2714,22 @@ button.pm-eat.cta:hover {
 @media (min-width: 960px) and (max-height: 740px) {
   .hero-copy .hero-sub { display: none; }
 }
+
+/* ── Backgrounds stay put while the page scrolls (phones especially) ──
+   Fixed to the screen and sized to the *large* viewport, so the picture
+   still covers the bottom when the browser's address bar slides away. */
+.hero-media,
+.hero-shade,
+.page-bg,
+.page-bg-shade {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 100vh;
+  height: 100lvh;
+}
+@media (max-width: 959px) {
+  /* Keep the bottom of the photo visible behind the cards instead of fading to solid. */
+  .hero-shade {
+    background: linear-gradient(180deg, rgba(8, 10, 28, 0.82) 0%, rgba(8, 10, 28, 0.3) 28%, rgba(8, 10, 28, 0.15) 44%, rgba(8, 10, 28, 0.55) 70%, rgba(8, 10, 28, 0.8) 100%);
+  }
+}
