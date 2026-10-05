@@ -263,6 +263,24 @@ Shown as badges in the home hero ("N online now · N visitors so far"), "N liste
   - For a big Mahalaya audience, switch the account to **Workers Paid (US$5/month, 10M requests included)** for that week.
 - **Honesty note:** counts are approximate. Anyone could inflate them with scripts, and a visitor who clears their storage or switches device counts twice. Don't sell ads on these numbers alone; Cloudflare Web Analytics (`ANALYTICS` in config) gives an independent figure.
 
+## Channel tracking (`?ref=`)
+
+Add `?ref=<channel>` to every link you post, one tag per place. The counter credits each new visitor to the tag they **first** arrived with, and keeps counting their return visits, pandal-map visits and radio plays under it.
+
+| Where you post | Link |
+|---|---|
+| WhatsApp groups / status | `https://maa-aschen-nine.vercel.app/?ref=wa` |
+| Reddit | `https://maa-aschen-nine.vercel.app/?ref=reddit` |
+| Cake shop (QR / card) | `https://maa-aschen-nine.vercel.app/?ref=cake` |
+| Facebook | `https://maa-aschen-nine.vercel.app/?ref=fb` |
+| Straight to the map | `https://maa-aschen-nine.vercel.app/pandals/?ref=fb` (any tag works on any page) |
+
+- **Results:** open `<worker>/stats/refs`, e.g. https://mahalaya-api.chakrobortypritam-work.workers.dev/stats/refs. Per channel: `visitors` (unique), `visits` (all page loads, returning included), `mapVisits` (pandal-map loads), `listeners` (played the radio at least once).
+- **Built-in tags:** `direct` = no tag (typed, bookmarked, or a link without `?ref`); `share` = the site's own WhatsApp **Share** button, i.e. word of mouth.
+- **New tags** need no code: any lowercase slug up to 24 characters (`a-z`, `0-9`, `-`), e.g. `?ref=insta` or `?ref=poster-gariahat`. After 40 different tags, new ones are pooled as `other`.
+- The tag is removed from the address bar after it's read, so a visitor who copies the link doesn't pass their tag on.
+- Visitors from before tagging went live count as `direct`.
+
 ## Docs
 
 - `ASSETS.md` — every asset, its source and licence.

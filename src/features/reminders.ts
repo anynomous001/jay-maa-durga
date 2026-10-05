@@ -35,7 +35,7 @@ export function initReminders(): void {
     const ev = events();
     ($('gcal-mahalaya') as HTMLAnchorElement).href = googleCalendarUrl(ev.mahalaya);
     ($('gcal-shashthi') as HTMLAnchorElement).href = googleCalendarUrl(ev.shashthi);
-    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/' }));
+    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/?ref=share' }));
   };
   render();
   onLangChange(render);

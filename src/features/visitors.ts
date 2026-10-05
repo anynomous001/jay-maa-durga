@@ -16,6 +16,19 @@ interface Stats {
 }
 
 const ID_KEY = 'visitor-id';
+
+/**
+ * Channel tag from links like ?ref=wa. Read once, then removed from the
+ * address bar so a copied link doesn't carry someone else's tag.
+ */
+function takeRef(): string {
+  const url = new URL(location.href);
+  const ref = (url.searchParams.get('ref') ?? '').toLowerCase();
+  if (!url.searchParams.has('ref')) return '';
+  url.searchParams.delete('ref');
+  history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+  return /^[a-z0-9-]{1,24}$/.test(ref) ? ref : '';
+}
 const PING_MS = 60_000; // keep well inside the Workers free tier (see README)
 
 function visitorId(): string {
@@ -53,13 +66,15 @@ export function initVisitors(isListening: () => boolean = () => false): { ping: 
   if (!API_URL) return { ping: () => {} };
   const base = API_URL;
   const id = visitorId();
+  const ref = takeRef();
+  const page = location.pathname.startsWith('/pandals') ? 'pandals' : '';
 
   const send = async (path: '/visit' | '/ping') => {
     try {
       const r = await fetch(base + path, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, listening: isListening() }),
+        body: JSON.stringify(path === '/visit' ? { id, listening: isListening(), ref, page } : { id, listening: isListening() }),
         keepalive: true,
       });
       if (r.ok) {

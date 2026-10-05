@@ -70,13 +70,16 @@ export default {
     try {
       // ── Visitors ──
       if (req.method === 'GET' && pathname === '/stats') return json(await counter.stats(), cors);
+      if (req.method === 'GET' && pathname === '/stats/refs') return json(await counter.channels(), cors);
       if (req.method === 'POST' && (pathname === '/visit' || pathname === '/ping')) {
         if (Number(req.headers.get('Content-Length') ?? 0) > 200) return json({ error: 'too large' }, cors, 413);
-        const body = (await req.json().catch(() => ({}))) as { id?: unknown; listening?: unknown };
+        const body = (await req.json().catch(() => ({}))) as { id?: unknown; listening?: unknown; ref?: unknown; page?: unknown };
         const id = typeof body.id === 'string' ? body.id : '';
         if (!VISITOR_ID_RE.test(id)) return json({ error: 'bad id' }, cors, 400);
         const listening = body.listening === true;
-        return json(pathname === '/visit' ? await counter.visit(id, listening) : await counter.ping(id, listening), cors);
+        const ref = typeof body.ref === 'string' ? body.ref.toLowerCase() : '';
+        const page = body.page === 'pandals' ? 'pandals' : '';
+        return json(pathname === '/visit' ? await counter.visit(id, listening, ref, page) : await counter.ping(id, listening), cors);
       }
 
       // ── Public sponsor data ──
