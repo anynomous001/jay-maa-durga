@@ -123,7 +123,7 @@ A 401 response means embedding is disabled, so don't add it.
 
 ### Hero image
 
-The home hero is `assets-src/hero-pandal.png`, and the pandal map page background is `assets-src/bg-pandals.png` (both listed in `scripts/make-hero.mjs`). To replace it, drop in a new PNG with the same name and run `npm run hero`. That writes resized AVIF/WebP/JPEG files to `public/hero/`: a landscape set, plus a portrait crop centred around 70% across for phones (change the crop in `scripts/make-hero.mjs`). The dark gradient that keeps text readable is `.hero-shade` in `src/styles.css`.
+The home hero is `assets-src/hero-pandal.png`, the pandal map page background is `assets-src/bg-pandals.png`, and the policies page background is `assets-src/bg-policies.png` (all listed in `scripts/make-hero.mjs`). To replace it, drop in a new PNG with the same name and run `npm run hero`. That writes resized AVIF/WebP/JPEG files to `public/hero/`: a landscape set, plus a portrait crop centred around 70% across for phones (change the crop in `scripts/make-hero.mjs`). The dark gradient that keeps text readable is `.hero-shade` in `src/styles.css`.
 
 ### Dhak sound
 
@@ -142,14 +142,14 @@ To change which moments are used, edit `RHYTHM` / `SEARCH` in `scripts/dhak.html
 Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 
 1. Push this repo to GitHub (ask before creating the remote).
-2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git** and pick the repo.
+2. In the Cloudflare dashboard, go to **Workers & Pages → Create → Pages → Connect to Git** and pick the repo. Name the project `agomonir-sure`, so the site is served at `https://agomonir-sure.pages.dev` (the URL already used in `SITE_URL`, the canonical/OG tags, `robots.txt`, `sitemap.xml` and the Worker's `ALLOWED_ORIGINS`).
 3. Build settings:
    - framework preset: **None**;
    - build command: `npm run build`;
    - build output directory: `dist`;
    - environment variable `NODE_VERSION=22`.
 4. Deploy. `public/_headers` (caching and security headers) is picked up automatically.
-5. Set the final domain in `SITE_URL` (`src/config.ts`), and in the canonical/OG tags in the three `index.html` files, `public/robots.txt` and `public/sitemap.xml`. Redeploy.
+5. If the final domain is different (a custom domain, or Cloudflare gave the project another name), set it in `SITE_URL` (`src/config.ts`), and in the canonical/OG tags in the three `index.html` files, `public/robots.txt` and `public/sitemap.xml`. Redeploy.
 6. Optional:
    - **Web Analytics:** Cloudflare → Web Analytics → add site → copy the token into `ANALYTICS` → redeploy.
    - **Custom domain:** Pages → Custom domains.
