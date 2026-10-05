@@ -6,8 +6,8 @@
 import pricing from '../data/pricing.json';
 
 // ── Identity ────────────────────────────────────────────────────────────────
-export const SITE_NAME = 'Agomonir';
-export const SITE_NAME_BN = 'আগমনীর';
+export const SITE_NAME = 'Agomir Sure';
+export const SITE_NAME_BN = 'Agomir Sure';
 export const SITE_TAGLINE_BN = 'ভোরের আগমনী';
 export const SITE_TAGLINE_EN = 'The dawn’s welcome song';
 /** Absolute production URL (used in share text, .ics, OG tags, sitemap). */
@@ -22,9 +22,9 @@ export const WHATSAPP_NUMBER = '919874353532';
  * activating live payments). PLACEHOLDERS: fill in before going live.
  */
 export const OPERATOR = {
-  legalName: 'Pritam [surname]',
-  address: '[Full postal address, West Bengal, PIN]',
-  email: '[contact email]',
+  legalName: 'Pritam Chakroborty',
+  address: 'Mayapally, Ichapur, North 24 Parganas, West Bengal 743144',
+  email: 'chakrobortypritam.work@gmail.com',
   phone: '+91 98743 53532',
 };
 

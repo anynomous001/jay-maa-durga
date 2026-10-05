@@ -13,11 +13,18 @@ import type { Env } from './env';
 import { istToday } from './http';
 
 export type SlotId = keyof typeof pricing.slots;
+export interface Range {
+  start: string;
+  end: string;
+}
+/** Inclusive YYYY-MM-DD ranges overlap? (string compare is safe for ISO dates) */
+export const overlaps = (a: Range, b: Range) => a.start <= b.end && b.start <= a.end;
 export type Status = 'pending_payment' | 'paid' | 'approved' | 'rejected' | 'refunded';
 
 export interface BookingInput {
   slot: SlotId;
   start_date: string;
+  end_date: string;
   pandal_ids: string[];
   business_name: string;
   business_name_bn: string;
@@ -85,21 +92,29 @@ export class Bookings extends DurableObject<Env> {
     return this.rows("status IN ('paid','approved') OR (status = 'pending_payment' AND hold_until > ?)", now);
   }
 
-  availability(): { taken: Record<string, boolean>; pandalsTaken: string[] } {
+  /**
+   * Booked date ranges per slot and per pandal (inclusive IST dates). The site
+   * checks the advertiser's chosen dates against these, so a slot can be sold
+   * for one stretch of the season and again for another.
+   */
+  availability(): { ranges: Record<string, Range[]>; pandalRanges: Record<string, Range[]> } {
     const today = istToday();
-    const taken: Record<string, boolean> = Object.fromEntries(Object.keys(pricing.slots).map((s) => [s, false]));
-    const pandalsTaken = new Set<string>();
+    const ranges: Record<string, Range[]> = Object.fromEntries(Object.keys(pricing.slots).map((s) => [s, []]));
+    const pandalRanges: Record<string, Range[]> = {};
     // The house sponsors in data/sponsors.json count as booked too.
-    for (const s of staticSponsors.sponsors) {
+    const house = staticSponsors.sponsors as { active: boolean; endDate: string; startDate: string; slot: string; pandalIds: string[] }[];
+    for (const s of house) {
       if (!s.active || s.endDate < today) continue;
-      if (s.slot === 'pandal-nearby') s.pandalIds.forEach((p: string) => pandalsTaken.add(p));
-      else taken[s.slot] = true;
+      const r = { start: s.startDate, end: s.endDate };
+      if (s.slot === 'pandal-nearby') s.pandalIds.forEach((p: string) => (pandalRanges[p] ??= []).push(r));
+      else ranges[s.slot].push(r);
     }
     for (const b of this.occupying()) {
-      if (b.slot === 'pandal-nearby') b.pandal_ids.forEach((p) => pandalsTaken.add(p));
-      else taken[b.slot] = true;
+      const r = { start: b.start_date, end: b.end_date };
+      if (b.slot === 'pandal-nearby') b.pandal_ids.forEach((p) => (pandalRanges[p] ??= []).push(r));
+      else ranges[b.slot].push(r);
     }
-    return { taken, pandalsTaken: [...pandalsTaken] };
+    return { ranges, pandalRanges };
   }
 
   /** Reserve the slot for 15 minutes while the advertiser pays. */
@@ -107,10 +122,11 @@ export class Bookings extends DurableObject<Env> {
     const now = Date.now();
     const recent = (this.recent.get(ip) ?? []).filter((t) => now - t < 3_600_000);
     if (recent.length >= 6) return { ok: false, error: 'rate_limited' };
-    const { taken, pandalsTaken } = this.availability();
+    const { ranges, pandalRanges } = this.availability();
+    const mine = { start: input.start_date, end: input.end_date };
     if (input.slot === 'pandal-nearby') {
-      if (input.pandal_ids.some((p) => pandalsTaken.includes(p))) return { ok: false, error: 'pandal_taken' };
-    } else if (taken[input.slot]) return { ok: false, error: 'slot_taken' };
+      if (input.pandal_ids.some((p) => (pandalRanges[p] ?? []).some((r) => overlaps(r, mine)))) return { ok: false, error: 'pandal_taken' };
+    } else if (ranges[input.slot].some((r) => overlaps(r, mine))) return { ok: false, error: 'slot_taken' };
     recent.push(now);
     this.recent.set(ip, recent);
     const id = crypto.randomUUID();
@@ -121,7 +137,6 @@ export class Bookings extends DurableObject<Env> {
       created_at: now,
       updated_at: now,
       status: 'pending_payment',
-      end_date: pricing.seasonEnd,
       logo_key: '',
       amount,
       order_id: '',
@@ -157,10 +172,11 @@ export class Bookings extends DurableObject<Env> {
     if (b.status !== 'pending_payment') return b;
     // Paid after the hold lapsed and someone else took the slot? Flag it for a refund decision.
     const others = this.occupying().filter((o) => o.id !== b.id);
+    const mine = { start: b.start_date, end: b.end_date };
     const clash =
       b.slot === 'pandal-nearby'
-        ? others.some((o) => o.slot === 'pandal-nearby' && o.pandal_ids.some((p) => b.pandal_ids.includes(p)))
-        : others.some((o) => o.slot === b.slot);
+        ? others.some((o) => o.slot === 'pandal-nearby' && o.pandal_ids.some((p) => b.pandal_ids.includes(p)) && overlaps({ start: o.start_date, end: o.end_date }, mine))
+        : others.some((o) => o.slot === b.slot && overlaps({ start: o.start_date, end: o.end_date }, mine));
     this.sql.exec(
       "UPDATE bookings SET status = 'paid', payment_id = ?, conflict = ?, updated_at = ? WHERE id = ?",
       paymentId,

@@ -70,6 +70,8 @@ export function validateBooking(fd: FormData): { input?: BookingInput; errors: F
   const today = istToday();
   const start_date = str(fd, 'start_date') || today;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(start_date) || start_date < today || start_date > pricing.seasonEnd) e.start_date = 'invalid';
+  const end_date = str(fd, 'end_date') || pricing.seasonEnd;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(end_date) || end_date < start_date || end_date > pricing.seasonEnd) e.end_date = 'invalid';
 
   let pandal_ids: string[] = [];
   if (slot === 'pandal-nearby') {
@@ -84,7 +86,7 @@ export function validateBooking(fd: FormData): { input?: BookingInput; errors: F
   return {
     errors: e,
     input: {
-      slot, start_date, pandal_ids, business_name, business_name_bn, tagline, tagline_bn, description,
+      slot, start_date, end_date, pandal_ids, business_name, business_name_bn, tagline, tagline_bn, description,
       website: website ?? '', whatsapp: whatsapp ?? '', phone: phone ?? '', email, contact_name, address, maps_url: maps ?? '',
     },
   };

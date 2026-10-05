@@ -8,8 +8,8 @@ import { API_URL } from '../config';
 import type { SlotId } from '../lib/sponsors';
 
 interface Availability {
-  taken: Record<string, boolean>;
-  pandalsTaken: string[];
+  ranges: Record<string, { start: string; end: string }[]>;
+  pandalRanges: Record<string, { start: string; end: string }[]>;
   payments: boolean;
 }
 
@@ -36,11 +36,6 @@ export function initBookTriggers(): void {
     if (!booking) booking = import('./booking').then((m) => (m.initBooking(), m));
     const [mod, avail] = await Promise.all([booking, availability()]);
     btn.removeAttribute('aria-busy');
-    const taken = avail && (slot === 'pandal-nearby' ? Boolean(pandal && avail.pandalsTaken.includes(pandal)) : avail.taken[slot]);
-    mod.openBooking(slot, avail?.pandalsTaken ?? [], {
-      preselectPandal: pandal,
-      unavailable: Boolean(taken),
-      paymentsOn: Boolean(avail?.payments),
-    });
+    mod.openBooking(slot, avail, { preselectPandal: pandal, paymentsOn: Boolean(avail?.payments) });
   });
 }

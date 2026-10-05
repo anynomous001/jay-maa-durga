@@ -126,6 +126,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Booking submit, no online payments yet | Form validates, then sends every detail to WhatsApp as one message, only on submit | **Pass** |
 | Booking with online payments on | Unchanged: Razorpay flow | **Pass** (tested earlier in test mode) |
 
+## Date-range bookings (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Real Razorpay test orders | Worker created orders with the test keys (not mock): `order_…`, amount ₹149 = 14900 paise | **Pass** |
+| Overlapping dates refused | Spotlight 10–12 Oct booked; 11–13 Oct → `slot_taken`; 13–15 Oct accepted; 14–18 Oct → `slot_taken` (it overlaps 13–15) | **Pass** |
+| End before start refused | `end_date: invalid` | **Pass** |
+| Dialog | Booked dates listed; overlapping dates show "Already booked" and disable submit; a free stretch enables submit (`d-booking-dates.png`) | **Pass** |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |

@@ -57,7 +57,7 @@ function fold(line: string): string {
 
 export function buildIcs(events: CalEvent[]): string {
   const stamp = utcStamp(new Date().toISOString());
-  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Agomonir//Reminders//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
+  const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Agomir Sure//Reminders//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH'];
   for (const ev of events) {
     lines.push(
       'BEGIN:VEVENT',
