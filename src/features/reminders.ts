@@ -27,7 +27,7 @@ function events(): { mahalaya: CalEvent; shashthi: CalEvent } {
   };
 }
 
-export const whatsappShareUrl = (text: string) => `https://wa.me/?text=${encodeURIComponent(text)}`;
+export const whatsappShareUrl = (text: string) => `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
 
 export function initReminders(): void {
   const $ = (id: string) => document.getElementById(id)!;
