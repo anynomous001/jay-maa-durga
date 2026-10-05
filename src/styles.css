@@ -2733,3 +2733,13 @@ button.pm-eat.cta:hover {
     background: linear-gradient(180deg, rgba(8, 10, 28, 0.82) 0%, rgba(8, 10, 28, 0.3) 28%, rgba(8, 10, 28, 0.15) 44%, rgba(8, 10, 28, 0.55) 70%, rgba(8, 10, 28, 0.8) 100%);
   }
 }
+
+/* Phones: countdown first, right below the idol; then player, map, menu, reminders, sponsor. */
+@media (max-width: 959px) {
+  .hero .countdown { order: 2; margin-top: 14svh; }
+  .radio-card { order: 3; margin-top: 0; }
+  .mapcard { order: 3; }
+  .dock { order: 4; }
+  .reminders { order: 5; }
+  .spotlight { order: 6; }
+}
