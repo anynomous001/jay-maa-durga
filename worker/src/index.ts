@@ -15,6 +15,7 @@
  *               POST /admin/bookings/:id/reject   { note, refund }
  */
 import pricing from '../../data/pricing.json';
+import { TIERS, basePrice, SLOT_IDS } from '../../shared/pricing';
 import { Bookings, type Booking } from './bookings';
 import { Counter, VISITOR_ID_RE } from './counter';
 import type { Env } from './env';
@@ -80,7 +81,7 @@ export default {
 
       // ── Public sponsor data ──
       if (req.method === 'GET' && pathname === '/availability') {
-        return json({ ...(await bookings.availability()), prices: pricing.slots, seasonEnd: pricing.seasonEnd, payments: paymentsConfigured(env) }, cors);
+        return json({ ...(await bookings.availability()), prices: Object.fromEntries(SLOT_IDS.map((s) => [s, basePrice(s)])), tiers: TIERS, seasonEnd: pricing.seasonEnd, payments: paymentsConfigured(env) }, cors);
       }
       if (req.method === 'GET' && pathname === '/sponsors') {
         const live = (await bookings.live()) as Booking[];

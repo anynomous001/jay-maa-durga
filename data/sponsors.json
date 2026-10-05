@@ -1,20 +1,4 @@
 {
   "_readme": "One entry per booking. slot ∈ spotlight | countdown | dhak | map-partner | pandal-nearby. Dates are IST calendar days (inclusive). For pandal-nearby, list pandalIds the shop is near. link may be a URL or empty; whatsapp is digits with country code (no +). logo is a path under /public (e.g. /sponsors/tota.png) or empty for text-only.",
-  "sponsors": [
-    {
-      "id": "tota-cake-house",
-      "slot": "dhak",
-      "name": "Tota Cake House",
-      "name_bn": "টোটা কেক হাউস",
-      "tagline": "Home-baked cakes for every celebration",
-      "tagline_bn": "বাড়িতে বানানো কেক — সব উৎসবের জন্য",
-      "logo": "",
-      "link": "",
-      "whatsapp": "",
-      "startDate": "2026-10-04",
-      "endDate": "2026-10-21",
-      "active": true,
-      "pandalIds": []
-    }
-  ]
+  "sponsors": []
 }

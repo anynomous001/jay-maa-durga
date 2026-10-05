@@ -60,7 +60,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 | What | File |
 |---|---|
 | Site name, tagline, URL, WhatsApp number, operator details for `/policies/` | `src/config.ts` |
-| Slot prices by position (home ₹149, dhak/map ₹99, "Eat nearby" ₹49), season end (shared with the payments Worker) | `data/pricing.json` |
+| Base prices per spot and the date tiers (Mahalaya→Tritiya flat, then Chaturthi … Dashami), season end. Shared with the payments Worker | `data/pricing.json` |
 | Key times (transmission 03:50–05:45 IST, auto-start time, reminder time), Puja dates | `src/config.ts` (`MAHALAYA_*`, `AUTO_START_AT`, `PUJA_DAYS`) |
 | Radio stream URLs | `src/config.ts` (`RADIO_CHANNELS`) |
 | Map tile provider | `src/config.ts` (`MAP_TILE_URL`, `MAP_TILE_ATTRIBUTION`) |
@@ -171,6 +171,21 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 
 ## Sponsor bookings & payments (Razorpay)
 
+**Pricing.** Each tier has a price for the whole tier (base × multiplier, rounded to the rupee). A booking pays for the days it covers: a whole tier pays its table price, a part of a tier pays that share, and the whole puja is the sum of all tiers. Days before Mahalaya count in the first tier. The dialog shows the breakdown and the total as the dates change, and the Worker charges the same figure (`shared/pricing.ts`). Current tiers, editable in `data/pricing.json`:
+
+| Tier | Dates | ×1 base | Spotlight / countdown | Dhak / map partner | Eat nearby (per pandal) |
+|---|---|---|---|---|---|
+| Mahalaya to Tritiya (flat) | 10–13 Oct | ×1 | ₹99 | ₹49 | ₹29 |
+| Chaturthi | 14 Oct | ×1.5 | ₹149 | ₹74 | ₹44 |
+| Panchami | 15 Oct | ×2 | ₹198 | ₹98 | ₹58 |
+| Shashthi | 16 Oct | ×2.5 | ₹248 | ₹123 | ₹73 |
+| Saptami | 17–18 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Ashtami | 19 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Navami | 20 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Bijoya Dashami | 21 Oct | ×2 | ₹198 | ₹98 | ₹58 |
+
+Bookings are for the chosen dates only. The dialog refuses overlapping dates for the same slot (and for the same pandal on "Eat nearby"). Quick buttons: Whole puja, or any single tier.
+
 Flow:
 1. **Book.** An advertiser taps any **"Your brand here — ₹…"** spot (home spotlight/countdown, the dhak sheet, the map-partner banner, or "Eat nearby" on a pandal card). The booking sheet opens right there with that slot (and pandal) pre-selected. They fill in business name (EN/BN), tagline, description, logo, website, shop address + Google Maps link, nearby pandals (for "Eat nearby"), contact name/phone/WhatsApp/email, and a start date.
 2. **Hold.** The Worker validates everything and holds the slot for 15 minutes (so two people can't buy it at once). It creates a **Razorpay order for the price in `data/pricing.json`**; the browser never sets the amount.
@@ -220,7 +235,7 @@ Mock payments are impossible in production: they only work when `ALLOW_MOCK=true
 
 **Security notes:**
 - Keys and the admin token live only in Worker secrets / `.dev.vars` (git-ignored).
-- Amounts come from `data/pricing.json` on the server.
+- Amounts come from `data/pricing.json` on the server: price = base × the tier multiplier for the booking's start date (see `shared/pricing.ts`).
 - Every checkout is verified by HMAC signature.
 - Inputs are length-checked and stripped of markup.
 - Logos are type-checked by their bytes.
@@ -253,3 +268,11 @@ Shown as badges in the home hero ("N online now · N visitors so far"), "N liste
 - `ASSETS.md` — every asset, its source and licence.
 - `VERIFICATION.md` — what was tested, how, and the results (screenshots and Lighthouse reports in `docs/verification/`).
 - `docs/pandal-lookup-log.tsv` — the per-pandal Google Maps lookup record.
+
+**Testing a payment locally (Razorpay test mode):**
+1. Keep the Worker running (`cd worker && npm run dev`) and the site (`npm run dev`).
+2. Open the site, tap a "Your brand here" spot, pick dates, fill in the form, tick consent and press **Pay**.
+3. In the Razorpay test checkout, use a test method, e.g. UPI `success@razorpay` or card `4111 1111 1111 1111` (any future expiry and CVV). Test mode moves no real money.
+4. Back on the site you should see "Payment received". Open `/admin/` with the local token and press **Approve**.
+
+Real money needs live keys: after Razorpay activates your account, set `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` as Worker secrets (`wrangler secret put …`) instead of `.dev.vars`.

@@ -117,6 +117,35 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Production build | No `localhost` URL in the bundle; with `VITE_COUNTER_URL` unset, badges stay hidden and no requests are made. Lighthouse home 99/100/100/100 | **Pass** |
 | Not tested | Deployed behaviour on Cloudflare (needs your account) | — |
 
+## Header and booking click (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Brand | Header now: logo centred, "আগমনীর" below it, menu links below that, language button top-right (`d-header.png`) | **Pass** |
+| Booking click, booking server down | "Your brand here" opens the booking dialog; no WhatsApp window on click (`d-booking-opens.png`) | **Pass** |
+| Booking submit, no online payments yet | Form validates, then sends every detail to WhatsApp as one message, only on submit | **Pass** |
+| Booking with online payments on | Unchanged: Razorpay flow | **Pass** (tested earlier in test mode) |
+
+## Date-range bookings (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Real Razorpay test orders | Worker created orders with the test keys (not mock): `order_…`, amount ₹149 = 14900 paise | **Pass** |
+| Tiered prices (charged) | Real test orders: spotlight from 10 Oct ₹99, 14 Oct ₹149, 16 Oct ₹248, 17 Oct ₹297; dhak from 21 Oct ₹98; eat-nearby from 15 Oct ₹58 | **Pass** |
+| Tiered prices (dialog) | Pay button and summary change with the start date (`d-booking-tier.png`); home "from ₹99 / ₹49" | **Pass** |
+| Overlapping dates refused | Spotlight 10–12 Oct booked; 11–13 Oct → `slot_taken`; 13–15 Oct accepted; 14–18 Oct → `slot_taken` (it overlaps 13–15) | **Pass** |
+| End before start refused | `end_date: invalid` | **Pass** |
+| Dialog | Booked dates listed; overlapping dates show "Already booked" and disable submit; a free stretch enables submit (`d-booking-dates.png`) | **Pass** |
+
+## Flexible date-range price (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Whole puja | Spotlight 10–21 Oct: ₹1,783 = 99+149+198+248+297+297+297+198 (`d-booking-quote-whole.png`) | **Pass** |
+| Part of a tier | Mahalaya block 10–11 Oct = ₹50 (2/4 of ₹99); 13–16 Oct across tiers = ₹620 (flat 1/4 ₹25 + Chaturthi + Panchami + Shashthi) | **Pass** |
+| Charge = display | Server order amount equals the dialog total (₹1,783 → 178300 paise) | **Pass** |
+| Real Razorpay checkout | Checkout opened with Agomir Sure and ₹1,783 (`d-razorpay-checkout.png`). Test payment left for Pritam | **Pass (checkout)** / pending (payment) |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |
