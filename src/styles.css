@@ -2647,25 +2647,16 @@ button.pm-eat.cta:hover {
   .hero .mapcard-map { height: 150px; }
 }
 @media (min-width: 960px) {
-  /* Under the player in the left column, as a wide card: keeps the idol's face clear. */
-  .mapcard {
-    display: grid;
-    grid-template-columns: 11rem 1fr;
-  }
-  .mapcard-map {
-    height: auto;
-    min-height: 100%;
-    border-bottom: 0;
-    border-right: 1px solid rgba(244, 185, 66, 0.25);
-  }
-  .mapcard-art {
-    position: absolute;
-    inset: 0;
-  }
-  .mapcard-body { padding: 0.7rem 1rem 0.8rem; }
-  .mapcard-sub { margin-bottom: 0.6rem; font-size: 0.88rem; }
+  /* Bottom of the right column, below the idol's face: a compact card. */
+  .mapcard-map { height: 92px; }
+  .mapcard-body { padding: 0.6rem 0.9rem 0.75rem; }
+  .mapcard-title { font-size: 1.15rem; }
+  .mapcard-sub { margin: 0.2rem 0 0.55rem; font-size: 0.85rem; }
   .mapcard-feats { display: none; }
-  .mapcard-cta { min-height: 40px; }
+  .mapcard-cta { min-height: 38px; }
+  /* Spotlight sponsor now sits in the left column, under the reminders. */
+  .hero-left .spotlight .sponsor { padding: 0.6rem 1rem; }
+  .hero-left .spotlight .sponsor.cta { min-height: 0; }
 }
 
 /* Header link and dock button for the map stand out a little. */
@@ -2693,4 +2684,33 @@ button.pm-eat.cta:hover {
 }
 .dock-btn.dock-map:hover {
   background: rgba(244, 185, 66, 0.26);
+}
+
+/* ── Home on laptop screens: everything fits in one screen, no scrolling ── */
+@media (min-width: 960px) and (max-height: 950px) {
+  .page-home .site-header { padding-top: 0.6rem; padding-bottom: 0.3rem; }
+  .page-home .site-header .brand-mark { height: 64px; }
+  .page-home .site-header .brand { font-size: 1.85rem; }
+  .page-home .site-header .site-nav { margin-top: 0.15rem; }
+  .page-home .hero { padding-top: 11rem; padding-bottom: 0.9rem; }
+  .hero-inner { gap: 0.8rem 2rem; }
+  .hero-left { gap: 0.65rem; }
+  .hero h1 { font-size: clamp(2.3rem, 3.8vw, 3rem); margin: 0.1rem 0; }
+  .hero-copy .hero-sub { margin-bottom: 0; }
+  .radio-card { padding: 0.8rem 1rem; }
+  .radio-card .wake { margin-top: 0.55rem; padding-top: 0.55rem; }
+  .radio-card .fallback { margin-top: 0.45rem; }
+  .hero .countdown { padding: 0.8rem; }
+}
+@media (min-width: 960px) and (max-height: 800px) {
+  .page-home .site-header .brand-mark { height: 52px; }
+  .page-home .site-header .brand { font-size: 1.6rem; }
+  .page-home .hero { padding-top: 9.6rem; }
+  .hero .kicker { display: none; }
+  .hero h1 { font-size: clamp(2rem, 3.4vw, 2.6rem); }
+  .mapcard-sub { display: none; }
+  .mapcard-map { height: 80px; }
+}
+@media (min-width: 960px) and (max-height: 740px) {
+  .hero-copy .hero-sub { display: none; }
 }
