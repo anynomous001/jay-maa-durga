@@ -25,6 +25,7 @@ export interface Range {
 /** Inclusive YYYY-MM-DD ranges overlap? (string compare is safe for ISO dates) */
 export const overlaps = (a: Range, b: Range) => a.start <= b.end && b.start <= a.end;
 export type Status = 'pending_payment' | 'paid' | 'approved' | 'rejected' | 'refunded';
+export type Provider = 'razorpay' | 'dodo';
 
 export interface BookingInput {
   slot: SlotId;
@@ -53,6 +54,8 @@ export interface Booking extends BookingInput {
   end_date: string;
   logo_key: string;
   amount: number;
+  /** Who took the payment; order_id is a Razorpay order or a Dodo checkout session. */
+  provider: Provider;
   order_id: string;
   payment_id: string;
   hold_until: number;
@@ -65,7 +68,7 @@ const COLS = [
   'id', 'created_at', 'updated_at', 'status', 'slot', 'start_date', 'end_date', 'pandal_ids',
   'business_name', 'business_name_bn', 'tagline', 'tagline_bn', 'description', 'website', 'whatsapp',
   'phone', 'email', 'contact_name', 'address', 'maps_url', 'logo_key', 'amount', 'order_id',
-  'payment_id', 'hold_until', 'review_note', 'conflict',
+  'payment_id', 'hold_until', 'review_note', 'conflict', 'provider',
 ] as const;
 
 export class Bookings extends DurableObject<Env> {
@@ -83,6 +86,9 @@ export class Bookings extends DurableObject<Env> {
       email TEXT, contact_name TEXT, address TEXT, maps_url TEXT, logo_key TEXT, amount INTEGER,
       order_id TEXT, payment_id TEXT, hold_until INTEGER, review_note TEXT, conflict INTEGER DEFAULT 0)`);
     this.sql.exec('CREATE INDEX IF NOT EXISTS idx_order ON bookings(order_id)');
+    // Added with Dodo Payments; rows from before are Razorpay.
+    const cols = this.sql.exec('PRAGMA table_info(bookings)').toArray().map((r) => r.name);
+    if (!cols.includes('provider')) this.sql.exec("ALTER TABLE bookings ADD COLUMN provider TEXT DEFAULT 'razorpay'");
   }
 
   private rows(where = '1=1', ...binds: unknown[]): Booking[] {
@@ -124,7 +130,7 @@ export class Bookings extends DurableObject<Env> {
   }
 
   /** Reserve the slot for 15 minutes while the advertiser pays. */
-  createHold(input: BookingInput, ip: string): { ok: true; id: string; amount: number } | { ok: false; error: string } {
+  createHold(input: BookingInput, ip: string, provider: Provider = 'razorpay'): { ok: true; id: string; amount: number } | { ok: false; error: string } {
     const now = Date.now();
     const recent = (this.recent.get(ip) ?? []).filter((t) => now - t < 3_600_000);
     if (recent.length >= 6) return { ok: false, error: 'rate_limited' };
@@ -145,6 +151,7 @@ export class Bookings extends DurableObject<Env> {
       status: 'pending_payment',
       logo_key: '',
       amount,
+      provider,
       order_id: '',
       payment_id: '',
       hold_until: now + HOLD_MS,

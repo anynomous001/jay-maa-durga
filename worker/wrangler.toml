@@ -1,4 +1,4 @@
-# Mahalaya Live API: visitor counter + sponsor bookings (Razorpay) + approved sponsors.
+# Mahalaya Live API: visitor counter + sponsor bookings (Razorpay / Dodo Payments) + approved sponsors.
 name = "mahalaya-api"
 main = "src/index.ts"
 compatibility_date = "2026-09-01"
@@ -33,5 +33,9 @@ ALLOWED_ORIGINS = "https://agomonir-sure.pages.dev,https://mahalaya-live.pages.d
 #   npx wrangler secret put RAZORPAY_KEY_ID
 #   npx wrangler secret put RAZORPAY_KEY_SECRET
 #   npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
+#   npx wrangler secret put DODO_PAYMENTS_API_KEY      (optional, with the three below)
+#   npx wrangler secret put DODO_PAYMENTS_WEBHOOK_KEY
+#   npx wrangler secret put DODO_PRODUCT_ID
+#   npx wrangler secret put DODO_ENVIRONMENT           (live_mode for real money)
 #   npx wrangler secret put ADMIN_TOKEN
 # For local dev, put them in worker/.dev.vars (git-ignored); see .dev.vars.example.

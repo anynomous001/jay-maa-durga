@@ -11,6 +11,7 @@ interface Availability {
   ranges: Record<string, { start: string; end: string }[]>;
   pandalRanges: Record<string, { start: string; end: string }[]>;
   payments: boolean;
+  providers?: ('razorpay' | 'dodo')[];
 }
 
 async function availability(): Promise<Availability | null> {
@@ -36,6 +37,16 @@ export function initBookTriggers(): void {
     if (!booking) booking = import('./booking').then((m) => (m.initBooking(), m));
     const [mod, avail] = await Promise.all([booking, availability()]);
     btn.removeAttribute('aria-busy');
-    mod.openBooking(slot, avail, { preselectPandal: pandal, paymentsOn: Boolean(avail?.payments) });
+    mod.openBooking(slot, avail, { preselectPandal: pandal, paymentsOn: Boolean(avail?.payments), providers: avail?.providers });
   });
+
+  // Back from Dodo Payments' hosted checkout: show the result, then tidy the URL.
+  const params = new URLSearchParams(location.search);
+  const ret = params.get('booking');
+  if (ret && /^[0-9a-f-]{36}$/.test(ret) && API_URL) {
+    const status = params.get('status');
+    history.replaceState(null, '', location.pathname + location.hash);
+    booking = import('./booking').then((m) => (m.initBooking(), m));
+    void booking.then((m) => m.resumeDodoReturn(ret, status));
+  }
 }

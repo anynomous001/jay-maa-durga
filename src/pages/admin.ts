@@ -148,12 +148,13 @@ $('admin-list').addEventListener('click', async (e) => {
         : undefined;
     const res = (await api(`/admin/bookings/${id}/${act}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body })) as {
       error?: string;
+      booking?: { provider?: string };
       refund?: { ok: boolean; detail: string };
     };
     let message: string;
     if (res.error) message = `Error: ${res.error}`;
     else if (res.refund && !res.refund.ok && res.refund.detail !== 'not requested')
-      message = `Rejected, but the refund failed: ${res.refund.detail}. Refund it from the Razorpay dashboard.`;
+      message = `Rejected, but the refund failed: ${res.refund.detail}. Refund it from the ${res.booking?.provider === 'dodo' ? 'Dodo Payments' : 'Razorpay'} dashboard.`;
     else if (act === 'approve') message = 'Approved — the ad appears on the site within about 30 seconds.';
     else message = res.refund?.ok ? 'Rejected and refund requested.' : 'Rejected.';
     await load(message);
