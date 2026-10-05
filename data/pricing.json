@@ -1,29 +1,23 @@
 {
-  "_readme": "Single source of truth for sponsor prices, shared by the site and the payments Worker (the Worker charges exactly these amounts). price is in rupees, set by position (home page highest). exclusive: one advertiser at a time (pandal-nearby is exclusive per pandal instead). maxPandals: how many pandal cards one 'pandal-nearby' booking covers. tbd: shows a 'TBD' marker next to prices.",
+  "_readme": "Sponsor pricing. A booking's price = base × tier multiplier, where the tier is chosen by the booking's START date (IST). Rounded to the nearest rupee. Shared by the site and the payments Worker, so the Worker charges exactly what the site shows. Edit numbers here only.",
   "currency": "INR",
   "seasonEnd": "2026-10-21",
   "tbd": false,
   "slots": {
-    "spotlight": {
-      "price": 149,
-      "exclusive": true
-    },
-    "countdown": {
-      "price": 149,
-      "exclusive": true
-    },
-    "dhak": {
-      "price": 99,
-      "exclusive": true
-    },
-    "map-partner": {
-      "price": 99,
-      "exclusive": true
-    },
-    "pandal-nearby": {
-      "price": 49,
-      "exclusive": false,
-      "maxPandals": 3
-    }
-  }
+    "spotlight": { "base": 99, "exclusive": true },
+    "countdown": { "base": 99, "exclusive": true },
+    "dhak": { "base": 49, "exclusive": true },
+    "map-partner": { "base": 49, "exclusive": true },
+    "pandal-nearby": { "base": 29, "exclusive": false, "maxPandals": 3 }
+  },
+  "tiers": [
+    { "id": "mahalaya-tritiya", "label_en": "Mahalaya to Tritiya (flat)", "label_bn": "মহালয়া থেকে তৃতীয়া (একই দাম)", "from": "2026-10-10", "to": "2026-10-13", "multiplier": 1 },
+    { "id": "chaturthi", "label_en": "Chaturthi", "label_bn": "চতুর্থী", "from": "2026-10-14", "to": "2026-10-14", "multiplier": 1.5 },
+    { "id": "panchami", "label_en": "Panchami", "label_bn": "পঞ্চমী", "from": "2026-10-15", "to": "2026-10-15", "multiplier": 2 },
+    { "id": "shashthi", "label_en": "Shashthi", "label_bn": "ষষ্ঠী", "from": "2026-10-16", "to": "2026-10-16", "multiplier": 2.5 },
+    { "id": "saptami", "label_en": "Saptami", "label_bn": "সপ্তমী", "from": "2026-10-17", "to": "2026-10-18", "multiplier": 3 },
+    { "id": "ashtami", "label_en": "Ashtami", "label_bn": "অষ্টমী", "from": "2026-10-19", "to": "2026-10-19", "multiplier": 3 },
+    { "id": "navami", "label_en": "Navami", "label_bn": "নবমী", "from": "2026-10-20", "to": "2026-10-20", "multiplier": 3 },
+    { "id": "dashami", "label_en": "Bijoya Dashami", "label_bn": "বিজয়া দশমী", "from": "2026-10-21", "to": "2026-10-21", "multiplier": 2 }
+  ]
 }

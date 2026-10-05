@@ -60,7 +60,7 @@ Maa Durga's eyes are "painted in" on load (chokkhu daan), then the halo turns sl
 | What | File |
 |---|---|
 | Site name, tagline, URL, WhatsApp number, operator details for `/policies/` | `src/config.ts` |
-| Slot prices by position (home ₹149, dhak/map ₹99, "Eat nearby" ₹49), season end (shared with the payments Worker) | `data/pricing.json` |
+| Base prices per spot and the date tiers (Mahalaya→Tritiya flat, then Chaturthi … Dashami), season end. Shared with the payments Worker | `data/pricing.json` |
 | Key times (transmission 03:50–05:45 IST, auto-start time, reminder time), Puja dates | `src/config.ts` (`MAHALAYA_*`, `AUTO_START_AT`, `PUJA_DAYS`) |
 | Radio stream URLs | `src/config.ts` (`RADIO_CHANNELS`) |
 | Map tile provider | `src/config.ts` (`MAP_TILE_URL`, `MAP_TILE_ATTRIBUTION`) |
@@ -171,6 +171,21 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 
 ## Sponsor bookings & payments (Razorpay)
 
+**Pricing.** A booking's price is the spot's base price × the multiplier of the tier its start date falls in (rounded to the rupee). Current tiers, all editable in `data/pricing.json`:
+
+| Tier | Dates | ×1 base | Spotlight / countdown | Dhak / map partner | Eat nearby (per pandal) |
+|---|---|---|---|---|---|
+| Mahalaya to Tritiya (flat) | 10–13 Oct | ×1 | ₹99 | ₹49 | ₹29 |
+| Chaturthi | 14 Oct | ×1.5 | ₹149 | ₹74 | ₹44 |
+| Panchami | 15 Oct | ×2 | ₹198 | ₹98 | ₹58 |
+| Shashthi | 16 Oct | ×2.5 | ₹248 | ₹123 | ₹73 |
+| Saptami | 17–18 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Ashtami | 19 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Navami | 20 Oct | ×3 | ₹297 | ₹147 | ₹87 |
+| Bijoya Dashami | 21 Oct | ×2 | ₹198 | ₹98 | ₹58 |
+
+Bookings are for the chosen dates only. The dialog refuses overlapping dates for the same slot (and for the same pandal on "Eat nearby").
+
 Flow:
 1. **Book.** An advertiser taps any **"Your brand here — ₹…"** spot (home spotlight/countdown, the dhak sheet, the map-partner banner, or "Eat nearby" on a pandal card). The booking sheet opens right there with that slot (and pandal) pre-selected. They fill in business name (EN/BN), tagline, description, logo, website, shop address + Google Maps link, nearby pandals (for "Eat nearby"), contact name/phone/WhatsApp/email, and a start date.
 2. **Hold.** The Worker validates everything and holds the slot for 15 minutes (so two people can't buy it at once). It creates a **Razorpay order for the price in `data/pricing.json`**; the browser never sets the amount.
@@ -220,7 +235,7 @@ Mock payments are impossible in production: they only work when `ALLOW_MOCK=true
 
 **Security notes:**
 - Keys and the admin token live only in Worker secrets / `.dev.vars` (git-ignored).
-- Amounts come from `data/pricing.json` on the server.
+- Amounts come from `data/pricing.json` on the server: price = base × the tier multiplier for the booking's start date (see `shared/pricing.ts`).
 - Every checkout is verified by HMAC signature.
 - Inputs are length-checked and stripped of markup.
 - Logos are type-checked by their bytes.

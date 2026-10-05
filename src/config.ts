@@ -33,9 +33,6 @@ export const OPERATOR = {
  * the site shows. Payments go through Razorpay via the Worker in /worker.
  */
 export const PRICING = pricing;
-export const SLOT_PRICES_INR: Record<string, number> = Object.fromEntries(
-  Object.entries(pricing.slots).map(([k, v]) => [k, v.price]),
-);
 /** While true, prices show a "TBD" marker in the booking form. */
 export const PRICES_TBD = pricing.tbd;
 

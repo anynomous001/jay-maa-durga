@@ -8,6 +8,7 @@ import pandalData from '../../data/pandals.json';
 import { API_URL, PRICING, SITE_NAME, WHATSAPP_NUMBER } from '../config';
 import { getLang, num, t } from '../lib/i18n';
 import type { SlotId } from '../lib/sponsors';
+import { priceFor, tierFor } from '../../shared/pricing';
 import { istDateKey, now } from '../lib/time';
 
 type FieldErrors = Record<string, string>;
@@ -33,7 +34,14 @@ declare global {
 }
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
-const priceText = (slot: SlotId) => `₹${num(PRICING.slots[slot].price)}`;
+/** Price for this slot from the chosen start date (tiers in data/pricing.json). */
+const startValue = () => ($('bk-start') as HTMLInputElement).value || istDateKey(now());
+const priceOf = (slot: SlotId, start = startValue()) => priceFor(slot, start);
+const priceText = (slot: SlotId, start?: string) => `₹${num(priceOf(slot, start))}`;
+const tierLabel = (start = startValue()) => {
+  const tier = tierFor(start);
+  return getLang() === 'bn' ? tier.label_bn : tier.label_en;
+};
 const MAX_PANDALS = PRICING.slots['pandal-nearby'].maxPandals ?? 3;
 
 let sheet: HTMLDialogElement;
@@ -151,7 +159,7 @@ export function openBooking(
   ($('bk-slot') as HTMLInputElement).value = slot;
   $('bk-summary').innerHTML = `<strong></strong><span></span>`;
   $('bk-summary').querySelector('strong')!.textContent = t(`slot.${slot}`);
-  $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slot)} · ${t('slot.' + slot + '.where')}`;
+  $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slot)} · ${tierLabel()} · ${t('slot.' + slot + '.where')}`;
   $('bk-pandals-field').hidden = slot !== 'pandal-nearby';
   if (slot === 'pandal-nearby') {
     // Coming from a pandal card: start with that pandal ticked.
@@ -171,7 +179,6 @@ export function openBooking(
   end.min = start.value;
   end.max = PRICING.seasonEnd;
   if (!end.value || end.value < start.value) end.value = PRICING.seasonEnd;
-  ($('bk-submit') as HTMLButtonElement).textContent = paymentsOn ? t('bk.pay', { price: priceText(slot) }) : t('bk.sendWa');
   checkDates();
   sheet.showModal();
   window.dispatchEvent(new CustomEvent('sheet:open'));
@@ -184,6 +191,10 @@ export function openBooking(
 export function checkDates() {
   const submit = $('bk-submit') as HTMLButtonElement;
   const hint = $('bk-taken');
+  // Price follows the chosen start date: refresh the summary and the pay button.
+  const slotNow = openSlot;
+  $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slotNow)} · ${tierLabel()} · ${t('slot.' + slotNow + '.where')}`;
+  submit.textContent = paymentsOn ? t('bk.pay', { price: priceText(slotNow) }) : t('bk.sendWa');
   const start = $('bk-start') as HTMLInputElement;
   const end = $('bk-end') as HTMLInputElement;
   end.min = start.value;
@@ -319,7 +330,7 @@ async function submit(e: SubmitEvent) {
     const body = (await r.json()) as Created & { error?: string; errors?: Record<string, string> };
     if (!r.ok) {
       submitBtn.disabled = false;
-      submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
+      submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId, String(fd.get('start_date') ?? '')) });
       if (body.errors) {
         showFieldErrors(body.errors);
         setError(t('bk.err.form'));
@@ -331,7 +342,7 @@ async function submit(e: SubmitEvent) {
     await openCheckout();
   } catch {
     submitBtn.disabled = false;
-    submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
+    submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId, String(fd.get('start_date') ?? '')) });
     setError(t('bk.err.generic'));
   }
 }

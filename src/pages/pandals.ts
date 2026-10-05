@@ -4,7 +4,8 @@
  */
 import type * as Leaflet from 'leaflet';
 import data from '../../data/pandals.json';
-import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, PRICING, SITE_NAME, WHATSAPP_NUMBER } from '../config';
+import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, SITE_NAME, WHATSAPP_NUMBER } from '../config';
+import { basePrice } from '../../shared/pricing';
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
 import { initVisitors } from '../features/visitors';
@@ -114,7 +115,7 @@ function filtered(): Pandal[] {
 function eatNearbyHTML(p: Pandal): string {
   const s = sponsorFor('pandal-nearby', p.id);
   if (!s)
-    return `<button type="button" class="pm-eat cta" data-book-slot="pandal-nearby" data-book-pandal="${p.id}">${esc(t('pm.eatCta', { price: `₹${num(PRICING.slots['pandal-nearby'].price)}` }))}</button>`;
+    return `<button type="button" class="pm-eat cta" data-book-slot="pandal-nearby" data-book-pandal="${p.id}">${esc(t('pm.eatCta', { price: `₹${num(basePrice('pandal-nearby'))}` }))}</button>`;
   const logo = s.logo ? `<img src="${esc(s.logo)}" alt="" width="28" height="28" loading="lazy" class="pm-eat-logo" /> ` : '';
   const label = `<span class="s-label">${esc(t('sponsored'))}</span> ${logo}${esc(t('pm.eatNearby'))}: <strong>${esc((bn() && s.name_bn) || s.name)}</strong> — ${esc((bn() && s.tagline_bn) || s.tagline)}`;
   const addr = s.address

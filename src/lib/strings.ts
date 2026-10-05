@@ -8,7 +8,7 @@ export const dict: Record<string, Entry> = {
   'nav.policies': { bn: 'যোগাযোগ ও নীতি', en: 'Contact & policies' },
   'skip': { bn: 'মূল অংশে যান', en: 'Skip to content' },
   'sponsored': { bn: 'স্পনসর', en: 'Sponsored' },
-  'adhere.cta': { bn: 'এখানে আপনার বিজ্ঞাপন — {price} · বুক করুন', en: 'Your brand here — {price} · Book now' },
+  'adhere.cta': { bn: 'এখানে আপনার বিজ্ঞাপন — {price} থেকে · বুক করুন', en: 'Your brand here — from {price} · Book now' },
 
   // ── Hero / countdown ──
   'hero.kicker': { bn: 'শনিবার, ১০ অক্টোবর ২০২৬ · ভোর', en: 'Saturday, 10 October 2026 · before dawn' },

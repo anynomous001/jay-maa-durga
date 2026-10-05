@@ -4,7 +4,8 @@
  * Empty/expired slots render an "Advertise here" CTA.
  */
 import data from '../../data/sponsors.json';
-import { API_URL, PRICING } from '../config';
+import { API_URL } from '../config';
+import { basePrice } from '../../shared/pricing';
 import { getLang, num, t } from './i18n';
 import { istDateKey, now } from './time';
 
@@ -81,7 +82,7 @@ const esc = (s: string) =>
 export function sponsorHTML(slot: SlotId, opts: { byKey?: string; pandalId?: string } = {}): string {
   const s = sponsorFor(slot, opts.pandalId);
   if (!s) {
-    const price = `₹${num(PRICING.slots[slot].price)}`;
+    const price = `₹${num(basePrice(slot))}`;
     return `<button type="button" class="sponsor cta" data-book-slot="${slot}">${esc(t('adhere.cta', { price }))}</button>`;
   }
   const bn = getLang() === 'bn';

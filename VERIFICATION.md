@@ -131,6 +131,8 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Check | How | Result |
 |---|---|---|
 | Real Razorpay test orders | Worker created orders with the test keys (not mock): `order_…`, amount ₹149 = 14900 paise | **Pass** |
+| Tiered prices (charged) | Real test orders: spotlight from 10 Oct ₹99, 14 Oct ₹149, 16 Oct ₹248, 17 Oct ₹297; dhak from 21 Oct ₹98; eat-nearby from 15 Oct ₹58 | **Pass** |
+| Tiered prices (dialog) | Pay button and summary change with the start date (`d-booking-tier.png`); home "from ₹99 / ₹49" | **Pass** |
 | Overlapping dates refused | Spotlight 10–12 Oct booked; 11–13 Oct → `slot_taken`; 13–15 Oct accepted; 14–18 Oct → `slot_taken` (it overlaps 13–15) | **Pass** |
 | End before start refused | `end_date: invalid` | **Pass** |
 | Dialog | Booked dates listed; overlapping dates show "Already booked" and disable submit; a free stretch enables submit (`d-booking-dates.png`) | **Pass** |
