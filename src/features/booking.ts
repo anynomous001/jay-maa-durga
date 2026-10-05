@@ -53,6 +53,8 @@ let currentBusiness = '';
 interface Range {
   start: string;
   end: string;
+  held?: boolean;
+  until?: number;
 }
 interface Availability {
   ranges: Record<string, Range[]>;
@@ -262,14 +264,20 @@ export function checkDates() {
   if (blocked) {
     const list = openSlot === 'pandal-nearby' ? [] : slotBusy;
     hint.hidden = false;
-    hint.textContent = list.length ? `${t('bk.takenDates')}: ${list.map(fmtRange).join(', ')}` : t('bk.pandalTakenDates');
+    const onlyHeld = list.length > 0 && list.every((r) => r.held);
+    const mins = list.reduce((m, r) => (r.until ? Math.max(m, Math.ceil((r.until - Date.now()) / 60000)) : m), 0);
+    hint.textContent = list.length
+      ? onlyHeld
+        ? `${t('bk.reservedDates')} ${fmtRange(list[0])} — ${t('bk.tryAgain', { n: mins })}`
+        : `${t('bk.takenDates')}: ${list.map(fmtRange).join(', ')}`
+      : t('bk.pandalTakenDates');
   } else {
     hint.hidden = true;
     hint.textContent = '';
   }
   // Show the already-booked dates so advertisers can pick around them.
   const booked = (openSlot === 'pandal-nearby' ? [] : [...(avail?.ranges[openSlot] ?? [])].sort((x, y) => x.start.localeCompare(y.start)));
-  $('bk-booked').textContent = booked.length ? `${t('bk.bookedDates')}: ${booked.map(fmtRange).join(', ')}` : '';
+  $('bk-booked').textContent = booked.length ? `${t('bk.bookedDates')}: ${booked.map((r) => fmtRange(r) + (r.held ? ` (${t('bk.reserved')})` : '')).join(', ')}` : '';
 }
 
 async function verify(resp: RazorpayResponse) {

@@ -17,6 +17,10 @@ export type SlotId = keyof typeof pricing.slots;
 export interface Range {
   start: string;
   end: string;
+  /** Only reserved (checkout in progress), not paid yet. */
+  held?: boolean;
+  /** Reservation ends (epoch ms) when held. */
+  until?: number;
 }
 /** Inclusive YYYY-MM-DD ranges overlap? (string compare is safe for ISO dates) */
 export const overlaps = (a: Range, b: Range) => a.start <= b.end && b.start <= a.end;
@@ -111,7 +115,8 @@ export class Bookings extends DurableObject<Env> {
       else ranges[s.slot].push(r);
     }
     for (const b of this.occupying()) {
-      const r = { start: b.start_date, end: b.end_date };
+      const held = b.status === 'pending_payment';
+      const r: Range = { start: b.start_date, end: b.end_date, held, until: held ? b.hold_until : undefined };
       if (b.slot === 'pandal-nearby') b.pandal_ids.forEach((p) => (pandalRanges[p] ??= []).push(r));
       else ranges[b.slot].push(r);
     }
