@@ -2491,3 +2491,42 @@ button.pm-eat.cta:hover {
   border: 1px solid rgba(239, 106, 79, 0.45);
   font-size: 0.88rem;
 }
+
+/* ── Booking: price breakdown and quick date picks ── */
+.bk-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0 0.6rem;
+}
+.bk-quick .chip-btn {
+  min-height: 36px;
+  font-size: 0.82rem;
+  padding: 0.25rem 0.75rem;
+}
+.bk-quote {
+  margin: 0.6rem 0 0;
+}
+.bk-quote table.quote {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.bk-quote td {
+  padding: 0.35rem 0.3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.bk-quote td:nth-child(2) {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+.bk-quote td:last-child {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.bk-quote tr.q-total td {
+  border-bottom: 0;
+  padding-top: 0.6rem;
+  font-weight: 700;
+  color: var(--accent);
+}

@@ -8,7 +8,7 @@ import pandalData from '../../data/pandals.json';
 import { API_URL, PRICING, SITE_NAME, WHATSAPP_NUMBER } from '../config';
 import { getLang, num, t } from '../lib/i18n';
 import type { SlotId } from '../lib/sponsors';
-import { priceFor, tierFor } from '../../shared/pricing';
+import { quote, TIERS } from '../../shared/pricing';
 import { istDateKey, now } from '../lib/time';
 
 type FieldErrors = Record<string, string>;
@@ -35,13 +35,14 @@ declare global {
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 /** Price for this slot from the chosen start date (tiers in data/pricing.json). */
-const startValue = () => ($('bk-start') as HTMLInputElement).value || istDateKey(now());
-const priceOf = (slot: SlotId, start = startValue()) => priceFor(slot, start);
-const priceText = (slot: SlotId, start?: string) => `₹${num(priceOf(slot, start))}`;
-const tierLabel = (start = startValue()) => {
-  const tier = tierFor(start);
-  return getLang() === 'bn' ? tier.label_bn : tier.label_en;
-};
+const dateRange = () => ({
+  start: ($('bk-start') as HTMLInputElement).value || istDateKey(now()),
+  end: ($('bk-end') as HTMLInputElement).value || PRICING.seasonEnd,
+});
+/** Full quote for the chosen slot and dates (same rules the Worker charges). */
+const quoteFor = (slot: SlotId, r = dateRange()) => quote(slot, r.start, r.end);
+const priceText = (slot: SlotId, r?: { start: string; end: string }) => `₹${num(quoteFor(slot, r).total)}`;
+
 const MAX_PANDALS = PRICING.slots['pandal-nearby'].maxPandals ?? 3;
 
 let sheet: HTMLDialogElement;
@@ -159,7 +160,7 @@ export function openBooking(
   ($('bk-slot') as HTMLInputElement).value = slot;
   $('bk-summary').innerHTML = `<strong></strong><span></span>`;
   $('bk-summary').querySelector('strong')!.textContent = t(`slot.${slot}`);
-  $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slot)} · ${tierLabel()} · ${t('slot.' + slot + '.where')}`;
+  renderQuote(slot);
   $('bk-pandals-field').hidden = slot !== 'pandal-nearby';
   if (slot === 'pandal-nearby') {
     // Coming from a pandal card: start with that pandal ticked.
@@ -179,9 +180,63 @@ export function openBooking(
   end.min = start.value;
   end.max = PRICING.seasonEnd;
   if (!end.value || end.value < start.value) end.value = PRICING.seasonEnd;
+  renderQuick();
   checkDates();
   sheet.showModal();
   window.dispatchEvent(new CustomEvent('sheet:open'));
+}
+
+const tierName = (tier: { label_en: string; label_bn: string }) => (getLang() === 'bn' ? tier.label_bn : tier.label_en);
+/** Plain-text breakdown lines (also used in the WhatsApp request). */
+function quoteLines(slot: SlotId): string[] {
+  const q = quoteFor(slot);
+  return [...q.lines.map((l) => `${tierName(l.tier)}: ${l.days}/${l.tierDays} ${t('bk.days')} = ₹${num(l.amount)}`), `${t('bk.total')}: ₹${num(q.total)} (${q.days} ${t('bk.days')})`];
+}
+
+/** Breakdown in the sheet: one row per tier the dates touch, then the total. */
+function renderQuote(slot: SlotId) {
+  const q = quoteFor(slot);
+  const box = $('bk-quote');
+  box.innerHTML = '';
+  if (!q.lines.length) {
+    box.textContent = t('bk.pickDates');
+    return;
+  }
+  const table = document.createElement('table');
+  table.className = 'quote';
+  const row = (cells: string[], cls = '') => {
+    const tr = document.createElement('tr');
+    if (cls) tr.className = cls;
+    for (const c of cells) {
+      const td = document.createElement('td');
+      td.textContent = c;
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  };
+  for (const l of q.lines) row([tierName(l.tier), `${l.days}/${l.tierDays} ${t('bk.days')}`, `₹${num(l.amount)}`]);
+  row([t('bk.total'), `${q.days} ${t('bk.days')}`, `₹${num(q.total)}`], 'q-total');
+  box.appendChild(table);
+}
+
+/** One-tap date choices: whole puja, or any single tier. */
+function renderQuick() {
+  const box = $('bk-quick');
+  box.innerHTML = '';
+  const add = (label: string, start: string, end: string) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chip-btn';
+    b.textContent = label;
+    b.addEventListener('click', () => {
+      ($('bk-start') as HTMLInputElement).value = start;
+      ($('bk-end') as HTMLInputElement).value = end;
+      checkDates();
+    });
+    box.appendChild(b);
+  };
+  add(t('bk.wholePuja'), TIERS[0].from, PRICING.seasonEnd);
+  for (const tier of TIERS) add(tierName(tier), tier.from, tier.to);
 }
 
 /**
@@ -193,7 +248,7 @@ export function checkDates() {
   const hint = $('bk-taken');
   // Price follows the chosen start date: refresh the summary and the pay button.
   const slotNow = openSlot;
-  $('bk-summary').querySelector('span')!.textContent = ` · ${priceText(slotNow)} · ${tierLabel()} · ${t('slot.' + slotNow + '.where')}`;
+  renderQuote(slotNow);
   submit.textContent = paymentsOn ? t('bk.pay', { price: priceText(slotNow) }) : t('bk.sendWa');
   const start = $('bk-start') as HTMLInputElement;
   const end = $('bk-end') as HTMLInputElement;
@@ -292,6 +347,7 @@ function sendRequestOnWhatsApp(fd: FormData) {
   const slot = String(fd.get('slot') ?? '') as SlotId;
   const lines = [
     `${t('bk.waHead', { site: SITE_NAME })} — ${t(`slot.${slot}`)} (${priceText(slot)})`,
+    ...quoteLines(slot),
     `Business: ${fd.get('business_name')}${fd.get('business_name_bn') ? ` / ${fd.get('business_name_bn')}` : ''}`,
     `Tagline: ${fd.get('tagline')}${fd.get('tagline_bn') ? ` / ${fd.get('tagline_bn')}` : ''}`,
     fd.get('description') && `About: ${fd.get('description')}`,
@@ -330,7 +386,7 @@ async function submit(e: SubmitEvent) {
     const body = (await r.json()) as Created & { error?: string; errors?: Record<string, string> };
     if (!r.ok) {
       submitBtn.disabled = false;
-      submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId, String(fd.get('start_date') ?? '')) });
+      submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
       if (body.errors) {
         showFieldErrors(body.errors);
         setError(t('bk.err.form'));
@@ -340,9 +396,12 @@ async function submit(e: SubmitEvent) {
     }
     current = body;
     await openCheckout();
+    // Checkout is open: let the advertiser press Pay again if they close it.
+    submitBtn.disabled = false;
+    submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
   } catch {
     submitBtn.disabled = false;
-    submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId, String(fd.get('start_date') ?? '')) });
+    submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
     setError(t('bk.err.generic'));
   }
 }

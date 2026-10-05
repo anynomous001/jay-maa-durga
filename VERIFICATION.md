@@ -137,6 +137,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | End before start refused | `end_date: invalid` | **Pass** |
 | Dialog | Booked dates listed; overlapping dates show "Already booked" and disable submit; a free stretch enables submit (`d-booking-dates.png`) | **Pass** |
 
+## Flexible date-range price (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Whole puja | Spotlight 10–21 Oct: ₹1,783 = 99+149+198+248+297+297+297+198 (`d-booking-quote-whole.png`) | **Pass** |
+| Part of a tier | Mahalaya block 10–11 Oct = ₹50 (2/4 of ₹99); 13–16 Oct across tiers = ₹620 (flat 1/4 ₹25 + Chaturthi + Panchami + Shashthi) | **Pass** |
+| Charge = display | Server order amount equals the dialog total (₹1,783 → 178300 paise) | **Pass** |
+| Real Razorpay checkout | Checkout opened with Agomir Sure and ₹1,783 (`d-razorpay-checkout.png`). Test payment left for Pritam | **Pass (checkout)** / pending (payment) |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |

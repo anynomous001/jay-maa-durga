@@ -8,7 +8,7 @@
  */
 import { DurableObject } from 'cloudflare:workers';
 import pricing from '../../data/pricing.json';
-import { priceFor } from '../../shared/pricing';
+import { quote } from '../../shared/pricing';
 import staticSponsors from '../../data/sponsors.json';
 import type { Env } from './env';
 import { istToday } from './http';
@@ -131,7 +131,7 @@ export class Bookings extends DurableObject<Env> {
     recent.push(now);
     this.recent.set(ip, recent);
     const id = crypto.randomUUID();
-    const amount = priceFor(input.slot, input.start_date) * 100; // paise, tier by start date
+    const amount = quote(input.slot, input.start_date, input.end_date).total * 100; // paise, priced day by day across the tiers
     const row: Booking = {
       ...input,
       id,
