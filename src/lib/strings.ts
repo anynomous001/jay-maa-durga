@@ -263,6 +263,12 @@ export const dict: Record<string, Entry> = {
   },
   'ad.taken': { bn: 'বুকড', en: 'Booked' },
   'bk.title': { bn: 'স্লট বুক করুন', en: 'Book a slot' },
+  'bk.sendWa': { bn: 'হোয়াটসঅ্যাপে পাঠান', en: 'Send request on WhatsApp' },
+  'bk.waHead': { bn: 'বিজ্ঞাপনের অনুরোধ — {site}', en: 'Ad booking request — {site}' },
+  'bk.waSent': {
+    bn: 'আপনার তথ্য হোয়াটসঅ্যাপে পাঠানো হয়েছে। আমরা নিশ্চিত করে পেমেন্টের লিংক পাঠাব।',
+    en: 'Your details were sent on WhatsApp. We’ll confirm and send you the payment link.',
+  },
   'bk.step1': { bn: 'তথ্য দিন', en: 'Add your details' },
   'bk.step2': { bn: 'Razorpay-তে পেমেন্ট', en: 'Pay with Razorpay' },
   'bk.step3': { bn: '২৪ ঘণ্টায় যাচাই করে চালু · না চালালে পুরো টাকা ফেরত', en: 'Live within 24 h after review · full refund if not run' },

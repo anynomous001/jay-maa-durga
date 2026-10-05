@@ -1,11 +1,10 @@
 /**
  * Any "Your brand here" spot ([data-book-slot]) opens the booking sheet right
- * there. The booking code + pandal list load only on the first tap, and the
- * API is asked which slots are free at that moment. Without the API/payments,
- * it falls back to booking over WhatsApp.
+ * there. The form always opens. The booking code loads on the first tap and
+ * the API is asked which slots are free; if it can't be reached, the form still
+ * opens and submitting sends the details to WhatsApp instead of paying online.
  */
-import { API_URL, SITE_NAME, WHATSAPP_NUMBER } from '../config';
-import { t } from '../lib/i18n';
+import { API_URL } from '../config';
 import type { SlotId } from '../lib/sponsors';
 
 interface Availability {
@@ -24,11 +23,6 @@ async function availability(): Promise<Availability | null> {
   }
 }
 
-function whatsappFallback(slot: SlotId) {
-  const text = t('ad.waText', { site: SITE_NAME }) + t(`slot.${slot}`);
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
-}
-
 export function initBookTriggers(): void {
   if (!document.getElementById('booking-sheet')) return;
   let booking: Promise<typeof import('./booking')> | null = null;
@@ -42,8 +36,11 @@ export function initBookTriggers(): void {
     if (!booking) booking = import('./booking').then((m) => (m.initBooking(), m));
     const [mod, avail] = await Promise.all([booking, availability()]);
     btn.removeAttribute('aria-busy');
-    if (!avail?.payments) return whatsappFallback(slot);
-    const taken = slot === 'pandal-nearby' ? Boolean(pandal && avail.pandalsTaken.includes(pandal)) : avail.taken[slot];
-    mod.openBooking(slot, avail.pandalsTaken, { preselectPandal: pandal, unavailable: taken });
+    const taken = avail && (slot === 'pandal-nearby' ? Boolean(pandal && avail.pandalsTaken.includes(pandal)) : avail.taken[slot]);
+    mod.openBooking(slot, avail?.pandalsTaken ?? [], {
+      preselectPandal: pandal,
+      unavailable: Boolean(taken),
+      paymentsOn: Boolean(avail?.payments),
+    });
   });
 }

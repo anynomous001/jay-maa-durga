@@ -6,8 +6,8 @@
 import pricing from '../data/pricing.json';
 
 // ── Identity ────────────────────────────────────────────────────────────────
-export const SITE_NAME = 'Mahalaya Live';
-export const SITE_NAME_BN = 'মহালয়া লাইভ';
+export const SITE_NAME = 'Agomonir';
+export const SITE_NAME_BN = 'আগমনীর';
 export const SITE_TAGLINE_BN = 'ভোরের আগমনী';
 export const SITE_TAGLINE_EN = 'The dawn’s welcome song';
 /** Absolute production URL (used in share text, .ics, OG tags, sitemap). */

@@ -117,6 +117,15 @@ Screenshots and Lighthouse reports are in `docs/verification/`.
 | Production build | No `localhost` URL in the bundle; with `VITE_COUNTER_URL` unset, badges stay hidden and no requests are made. Lighthouse home 99/100/100/100 | **Pass** |
 | Not tested | Deployed behaviour on Cloudflare (needs your account) | — |
 
+## Header and booking click (latest)
+
+| Check | How | Result |
+|---|---|---|
+| Brand | Header now: logo centred, "আগমনীর" below it, menu links below that, language button top-right (`d-header.png`) | **Pass** |
+| Booking click, booking server down | "Your brand here" opens the booking dialog; no WhatsApp window on click (`d-booking-opens.png`) | **Pass** |
+| Booking submit, no online payments yet | Form validates, then sends every detail to WhatsApp as one message, only on submit | **Pass** |
+| Booking with online payments on | Unchanged: Razorpay flow | **Pass** (tested earlier in test mode) |
+
 ## Phase 2 — Pandal map
 
 | # | Feature | How it was tested | Desktop | Mobile | Result |

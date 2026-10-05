@@ -10,6 +10,8 @@ import { getLang, num, t } from '../lib/i18n';
 import type { SlotId } from '../lib/sponsors';
 import { istDateKey, now } from '../lib/time';
 
+type FieldErrors = Record<string, string>;
+
 interface Created {
   id: string;
   orderId: string;
@@ -112,11 +114,15 @@ function enforcePandalLimit() {
   });
 }
 
+/** Online payment is on only when the server reports Razorpay is configured. */
+let paymentsOn = false;
+
 export function openBooking(
   slot: SlotId,
   takenPandals: string[] = [],
-  opts: { preselectPandal?: string; unavailable?: boolean } = {},
+  opts: { preselectPandal?: string; unavailable?: boolean; paymentsOn?: boolean } = {},
 ) {
+  paymentsOn = Boolean(opts.paymentsOn);
   pandalsTaken = new Set(takenPandals);
   current = null;
   showView('form');
@@ -143,7 +149,7 @@ export function openBooking(
   if (!start.value || start.value < start.min) start.value = start.min;
   const submit = $('bk-submit') as HTMLButtonElement;
   submit.disabled = Boolean(opts.unavailable);
-  submit.textContent = t('bk.pay', { price: priceText(slot) });
+  submit.textContent = paymentsOn ? t('bk.pay', { price: priceText(slot) }) : t('bk.sendWa');
   if (opts.unavailable) setError(t('bk.unavailable'));
   sheet.showModal();
   window.dispatchEvent(new CustomEvent('sheet:open'));
@@ -208,6 +214,41 @@ async function openCheckout() {
   rzp.open();
 }
 
+/**
+ * Online payment isn't switched on yet: validate the form the same way, then
+ * send every detail to WhatsApp as one message so nothing is lost.
+ */
+function sendRequestOnWhatsApp(fd: FormData) {
+  const e: FieldErrors = {};
+  for (const k of ['business_name', 'tagline', 'contact_name', 'phone']) if (!String(fd.get(k) ?? '').trim()) e[k] = 'required';
+  if (String(fd.get('consent') ?? '') !== 'yes') e.consent = 'required';
+  if (Object.keys(e).length) {
+    showFieldErrors(e);
+    setError(t('bk.err.form'));
+    return;
+  }
+  const slot = String(fd.get('slot') ?? '') as SlotId;
+  const lines = [
+    `${t('bk.waHead', { site: SITE_NAME })} — ${t(`slot.${slot}`)} (${priceText(slot)})`,
+    `Business: ${fd.get('business_name')}${fd.get('business_name_bn') ? ` / ${fd.get('business_name_bn')}` : ''}`,
+    `Tagline: ${fd.get('tagline')}${fd.get('tagline_bn') ? ` / ${fd.get('tagline_bn')}` : ''}`,
+    fd.get('description') && `About: ${fd.get('description')}`,
+    fd.get('website') && `Web: ${fd.get('website')}`,
+    fd.get('address') && `Address: ${fd.get('address')}`,
+    fd.get('maps_url') && `Map: ${fd.get('maps_url')}`,
+    fd.getAll('pandal_ids').length && `Pandals: ${fd.getAll('pandal_ids').join(', ')}`,
+    `Contact: ${fd.get('contact_name')} · ${fd.get('phone')}${fd.get('whatsapp') ? ` · WA ${fd.get('whatsapp')}` : ''}`,
+    fd.get('email') && `Email: ${fd.get('email')}`,
+    `Start: ${fd.get('start_date') ?? ''}`,
+    fd.get('logo') instanceof File && (fd.get('logo') as File).size ? '(logo: I will send it here)' : '',
+  ].filter(Boolean) as string[];
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+  setError('');
+  $('bk-error').hidden = false;
+  $('bk-error').textContent = t('bk.waSent');
+  ($('bk-error') as HTMLElement).style.borderColor = 'rgba(127, 209, 168, 0.6)';
+}
+
 async function submit(e: SubmitEvent) {
   e.preventDefault();
   setError('');
@@ -219,6 +260,7 @@ async function submit(e: SubmitEvent) {
   const logo = fd.get('logo') as File | null;
   if (logo && logo.size === 0) fd.delete('logo');
   currentBusiness = String(fd.get('business_name') ?? '');
+  if (!paymentsOn || !API_URL) return sendRequestOnWhatsApp(fd);
   submitBtn.disabled = true;
   submitBtn.textContent = t('bk.paying');
   try {
