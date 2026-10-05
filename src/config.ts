@@ -6,8 +6,8 @@
 import pricing from '../data/pricing.json';
 
 // ── Identity ────────────────────────────────────────────────────────────────
-export const SITE_NAME = 'Agomir Sure';
-export const SITE_NAME_BN = 'Agomir Sure';
+export const SITE_NAME = 'Ma Aschen';
+export const SITE_NAME_BN = 'মা আসছেন';
 export const SITE_TAGLINE_BN = 'ভোরের আগমনী';
 export const SITE_TAGLINE_EN = 'The dawn’s welcome song';
 /** Absolute production URL (used in share text, .ics, OG tags, sitemap). */
