@@ -174,6 +174,42 @@ async function playRhythm(onBeat: (delayMs: number) => void, onEnd: () => void) 
   beatTimers = s.meta.rhythmBeats.map((b) => window.setTimeout(() => onBeat(0), b * 1000));
 }
 
+/**
+ * Welcome dhak: a few seconds of the real rhythm, soft and fading out.
+ * Must be called from inside a user gesture (it unlocks audio). Returns a
+ * function that fades it out early.
+ */
+export function playWelcome(seconds = 7): () => void {
+  const c = audio(); // synchronous, inside the gesture
+  const g = c.createGain();
+  g.gain.value = 0;
+  g.connect(master!);
+  let src: AudioBufferSourceNode | null = null;
+  let stopped = false;
+  void loadSamples().then((s) => {
+    if (!s || stopped) return;
+    const t0 = c.currentTime + 0.02;
+    src = c.createBufferSource();
+    src.buffer = s.rhythm;
+    src.connect(g);
+    g.gain.setValueAtTime(0, t0);
+    g.gain.linearRampToValueAtTime(0.5, t0 + 0.4);
+    g.gain.setValueAtTime(0.5, t0 + seconds - 1.5);
+    g.gain.linearRampToValueAtTime(0, t0 + seconds);
+    src.start(t0);
+    src.stop(t0 + seconds + 0.05);
+  });
+  return () => {
+    stopped = true;
+    if (!src) return;
+    const t = c.currentTime;
+    g.gain.cancelScheduledValues(t);
+    g.gain.setValueAtTime(g.gain.value, t);
+    g.gain.linearRampToValueAtTime(0, t + 0.3);
+    src.stop(t + 0.35);
+  };
+}
+
 export function initDhak(): void {
   const btn = document.getElementById('dhak-btn')!;
   const rhythmBtn = document.getElementById('dhak-rhythm')!;

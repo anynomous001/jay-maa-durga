@@ -52,6 +52,7 @@ export const dict: Record<string, Entry> = {
   'mc.f2': { bn: '🚇 কাছের মেট্রো', en: '🚇 Nearest metro' },
   'mc.f3': { bn: '🧭 গুগল ম্যাপস ডিরেকশন', en: '🧭 Google Maps directions' },
   'mc.cta': { bn: 'ম্যাপ খুলুন', en: 'Open the map' },
+  'welcome.mute': { bn: 'ঢাক বন্ধ করুন', en: 'Turn off dhak' },
   'dock.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
   'rem.gcalShort': { bn: 'গুগল ক্যালেন্ডার', en: 'Google Calendar' },
   'rem.icsShort': { bn: '.ics রিমাইন্ডার', en: '.ics reminder' },

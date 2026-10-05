@@ -2743,3 +2743,29 @@ button.pm-eat.cta:hover {
   .reminders { order: 5; }
   .spotlight { order: 6; }
 }
+
+/* Welcome dhak: a small button to turn it off while it plays. */
+.welcome-mute {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1rem + env(safe-area-inset-bottom));
+  z-index: 60;
+  transform: translate(-50%, 1rem);
+  opacity: 0;
+  padding: 0.55rem 1.1rem;
+  min-height: 44px;
+  border: 1px solid rgba(244, 185, 66, 0.6);
+  border-radius: 999px;
+  background: rgba(10, 12, 32, 0.88);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.welcome-mute.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
