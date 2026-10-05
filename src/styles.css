@@ -2643,15 +2643,29 @@ button.pm-eat.cta:hover {
   border-radius: 999px;
 }
 @media (max-width: 959px) {
-  .mapcard { order: 3; }
+  .mapcard { order: 2; }
   .hero .mapcard-map { height: 150px; }
 }
 @media (min-width: 960px) {
-  /* Keep the dock on screen: a slimmer card beside the countdown. */
-  .mapcard-map { height: 104px; }
-  .mapcard-body { padding: 0.65rem 0.9rem 0.8rem; }
-  .mapcard-sub { margin-bottom: 0.6rem; }
+  /* Under the player in the left column, as a wide card: keeps the idol's face clear. */
+  .mapcard {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+  }
+  .mapcard-map {
+    height: auto;
+    min-height: 100%;
+    border-bottom: 0;
+    border-right: 1px solid rgba(244, 185, 66, 0.25);
+  }
+  .mapcard-art {
+    position: absolute;
+    inset: 0;
+  }
+  .mapcard-body { padding: 0.7rem 1rem 0.8rem; }
+  .mapcard-sub { margin-bottom: 0.6rem; font-size: 0.88rem; }
   .mapcard-feats { display: none; }
+  .mapcard-cta { min-height: 40px; }
 }
 
 /* Header link and dock button for the map stand out a little. */
