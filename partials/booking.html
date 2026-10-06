@@ -8,7 +8,7 @@
           <div class="bk-summary" id="bk-summary"></div>
           <ol class="bk-steps">
             <li data-i18n="bk.step1">তথ্য দিন</li>
-            <li data-i18n="bk.step2">Razorpay-তে পেমেন্ট</li>
+            <li id="bk-step2" data-i18n="bk.step2">Razorpay-তে পেমেন্ট</li>
             <li data-i18n="bk.step3">২৪ ঘণ্টায় যাচাই করে চালু · না চালালে পুরো টাকা ফেরত</li>
           </ol>
           <p class="bk-audience" data-visitors-wrap hidden>
@@ -58,16 +58,28 @@
             <p class="bk-taken-msg" id="bk-taken" role="alert" hidden></p>
           </fieldset>
 
+          <fieldset class="bk-group bk-provider" id="bk-provider-field" hidden>
+            <legend data-i18n="bk.provider">কীভাবে পেমেন্ট করবেন</legend>
+            <label class="pick"><input type="radio" name="provider" value="razorpay" checked /> <span data-i18n="bk.provider.razorpay">Razorpay — UPI, কার্ড, নেটব্যাংকিং, ওয়ালেট</span></label>
+            <label class="pick"><input type="radio" name="provider" value="dodo" /> <span data-i18n="bk.provider.dodo">Dodo Payments — দেশি ও বিদেশি কার্ড</span></label>
+          </fieldset>
+
           <label class="consent"><input type="checkbox" name="consent" value="yes" required /> <span data-i18n-html="bk.consent">আমি নিশ্চিত করছি যে এই ব্যবসা ও লোগো আমার/আমাদের। বিজ্ঞাপনে "স্পনসর" লেখা থাকবে, চালুর আগে যাচাই করা হবে, না চালালে পুরো টাকা ফেরত। <a href="/policies/" target="_blank">শর্তাবলি</a> মেনে নিচ্ছি।</span></label>
           <p class="form-error" id="bk-error" role="alert" hidden></p>
           <button type="submit" class="btn bk-pay" id="bk-submit"></button>
-          <p class="muted small bk-secure" data-i18n="bk.secure">পেমেন্ট হয় Razorpay-তে (UPI, কার্ড, নেটব্যাংকিং, ওয়ালেট)। আপনার কার্ড বা UPI তথ্য আমরা কখনো দেখি না।</p>
+          <p class="muted small bk-secure" id="bk-secure" data-i18n="bk.secure">পেমেন্ট হয় Razorpay-তে (UPI, কার্ড, নেটব্যাংকিং, ওয়ালেট)। আপনার কার্ড বা UPI তথ্য আমরা কখনো দেখি না।</p>
         </form>
 
         <div class="bk-mock" id="bk-mock" hidden>
           <p class="bk-mock-tag">TEST MODE</p>
           <p data-i18n="bk.mockText">Razorpay কী এখনো যোগ করা হয়নি — এটা পরীক্ষার পেমেন্ট, আসল টাকা কাটবে না।</p>
           <div class="btn-row"><button type="button" class="btn" id="bk-mock-pay"></button><button type="button" class="btn btn-ghost" id="bk-mock-cancel" data-i18n="bk.cancel">বাতিল</button></div>
+        </div>
+
+        <div class="bk-done bk-wait" id="bk-wait" hidden aria-live="polite">
+          <p class="bk-done-icon" aria-hidden="true">⏳</p>
+          <p id="bk-wait-text"></p>
+          <p class="muted small"><span data-i18n="bk.ref">বুকিং নম্বর</span>: <code id="bk-wait-ref"></code></p>
         </div>
 
         <div class="bk-done" id="bk-done" hidden>

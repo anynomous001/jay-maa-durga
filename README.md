@@ -169,7 +169,7 @@ Vercel's free plan forbids commercial use, so target Cloudflare Pages.
 - **Spotify embeds** play 30-second previews unless the listener is logged in.
 - **Dates:** Puja dates follow the Bisuddha Siddhanta panjika (Saptami spans 17–18 Oct). Gupta Press / Benimadhab Sheel panjika runs one day earlier from Ashtami. The WB holiday list puts Shashthi on 17 Oct.
 
-## Sponsor bookings & payments (Razorpay)
+## Sponsor bookings & payments (Razorpay + Dodo Payments)
 
 **Pricing.** Each tier has a price for the whole tier (base × multiplier, rounded to the rupee). A booking pays for the days it covers: a whole tier pays its table price, a part of a tier pays that share, and the whole puja is the sum of all tiers. Days before Mahalaya count in the first tier. The dialog shows the breakdown and the total as the dates change, and the Worker charges the same figure (`shared/pricing.ts`). Current tiers, editable in `data/pricing.json`:
 
@@ -233,10 +233,32 @@ Mock payments are impossible in production: they only work when `ALLOW_MOCK=true
 
 **Fees:** Razorpay's standard fee is about 2% per transaction (+GST), deducted before settlement. Check your plan.
 
+### Dodo Payments (optional second provider)
+
+Turn it on by setting the Dodo secrets below; the booking sheet then shows a "How would you like to pay?" choice (Razorpay or Dodo). With only one provider configured, there is no choice and that one is used.
+
+How it differs from Razorpay: the advertiser is **redirected** to Dodo's hosted checkout, then back to the page they booked from (`?booking=<id>`). That page waits while the **`payment.succeeded` webhook** marks the booking paid, so the webhook is required for Dodo (the redirect proves nothing). Refunds from `/admin/` go through Dodo for Dodo bookings.
+
+Setup:
+1. In the Dodo dashboard (test mode first), create a **one-time product** priced in **INR** with **"Pay what you want"** on and a low minimum (e.g. ₹1). Each checkout sets the real amount from `data/pricing.json`. Copy its id (`pdt_…`).
+2. Developer → API keys: create a key (`dodo_test_…`).
+3. Developer → Webhooks: add `https://<your-worker>/webhooks/dodo`, event `payment.succeeded`; copy the signing secret (`whsec_…`).
+4. Secrets:
+   ```
+   cd worker
+   npx wrangler secret put DODO_PAYMENTS_API_KEY
+   npx wrangler secret put DODO_PAYMENTS_WEBHOOK_KEY
+   npx wrangler secret put DODO_PRODUCT_ID
+   npx wrangler secret put DODO_ENVIRONMENT        # live_mode for real money; leave unset for test mode
+   npx wrangler deploy
+   ```
+   For local dev put the same names in `worker/.dev.vars`. Dodo can't reach `localhost`, so test the webhook against the deployed Worker (or a tunnel).
+
 **Security notes:**
 - Keys and the admin token live only in Worker secrets / `.dev.vars` (git-ignored).
 - Amounts come from `data/pricing.json` on the server: price = base × the tier multiplier for the booking's start date (see `shared/pricing.ts`).
-- Every checkout is verified by HMAC signature.
+- Every checkout is verified by HMAC signature (Razorpay checkout/webhook; Dodo webhooks via Standard Webhooks, with a 5-minute timestamp window).
+- Dodo only returns to pages on `ALLOWED_ORIGINS`.
 - Inputs are length-checked and stripped of markup.
 - Logos are type-checked by their bytes.
 - The admin API needs the token.

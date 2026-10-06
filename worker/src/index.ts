@@ -5,10 +5,11 @@
  * Sponsors      GET  /availability            which slots / pandals are free
  *               GET  /sponsors                approved, live sponsors (for the site)
  *               GET  /logos/:key              sponsor logos (from R2)
- * Booking       POST /bookings                multipart form → hold + Razorpay order
- *               POST /bookings/:id/verify     checkout signature → paid
+ * Booking       POST /bookings                multipart form → hold + Razorpay order or Dodo checkout session
+ *               POST /bookings/:id/verify     Razorpay checkout signature → paid
  *               GET  /bookings/:id            status for the advertiser
  *               POST /webhooks/razorpay       payment.captured / order.paid backup
+ *               POST /webhooks/dodo           payment.succeeded → paid (Dodo's only confirmation)
  * Admin (Bearer ADMIN_TOKEN)
  *               GET  /admin/bookings
  *               POST /admin/bookings/:id/approve
@@ -16,11 +17,12 @@
  */
 import pricing from '../../data/pricing.json';
 import { TIERS, basePrice, SLOT_IDS } from '../../shared/pricing';
-import { Bookings, type Booking } from './bookings';
+import { Bookings, type Booking, type Provider } from './bookings';
 import { Counter, VISITOR_ID_RE } from './counter';
 import type { Env } from './env';
 import { corsHeaders, json, safeEqual } from './http';
-import { createOrder, isMock, paymentsConfigured, refund, verifyCheckout, verifyWebhook } from './razorpay';
+import { createCheckout, dodoConfigured, dodoRefund, verifyDodoWebhook } from './dodo';
+import { createOrder, isMock, paymentsConfigured as razorpayConfigured, refund, verifyCheckout, verifyWebhook } from './razorpay';
 import { checkLogo, validateBooking } from './validate';
 
 export { Bookings, Counter };
@@ -50,6 +52,23 @@ function publicSponsor(b: Booking, origin: string) {
 
 /** What the admin page sees (everything) — never exposed publicly. */
 const adminView = (b: Booking, origin: string) => ({ ...b, logo_url: b.logo_key ? `${origin}/logos/${b.logo_key}` : '' });
+
+/** Payment providers that are switched on, Razorpay first (the default). */
+const providers = (env: Env): Provider[] => [...(razorpayConfigured(env) ? (['razorpay'] as const) : []), ...(dodoConfigured(env) ? (['dodo'] as const) : [])];
+
+/** Where Dodo sends the advertiser back: the page they booked from, if it's on an allowed origin. */
+function returnUrl(raw: string, env: Env, bookingId: string): string | null {
+  try {
+    const u = new URL(raw);
+    if (!env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()).includes(u.origin)) return null;
+    u.search = '';
+    u.hash = '';
+    u.searchParams.set('booking', bookingId);
+    return u.toString();
+  } catch {
+    return null;
+  }
+}
 
 function isAdmin(req: Request, env: Env): boolean {
   if (!env.ADMIN_TOKEN) return false;
@@ -84,7 +103,7 @@ export default {
 
       // ── Public sponsor data ──
       if (req.method === 'GET' && pathname === '/availability') {
-        return json({ ...(await bookings.availability()), prices: Object.fromEntries(SLOT_IDS.map((s) => [s, basePrice(s)])), tiers: TIERS, seasonEnd: pricing.seasonEnd, payments: paymentsConfigured(env) }, cors);
+        return json({ ...(await bookings.availability()), prices: Object.fromEntries(SLOT_IDS.map((s) => [s, basePrice(s)])), tiers: TIERS, seasonEnd: pricing.seasonEnd, payments: providers(env).length > 0, providers: providers(env) }, cors);
       }
       if (req.method === 'GET' && pathname === '/sponsors') {
         const live = (await bookings.live()) as Booking[];
@@ -108,7 +127,8 @@ export default {
 
       // ── Booking + payment ──
       if (req.method === 'POST' && pathname === '/bookings') {
-        if (!paymentsConfigured(env)) return json({ error: 'payments_not_configured' }, cors, 503);
+        const enabled = providers(env);
+        if (!enabled.length) return json({ error: 'payments_not_configured' }, cors, 503);
         const len = Number(req.headers.get('Content-Length') ?? 0);
         if (len > 600 * 1024) return json({ error: 'too_large' }, cors, 413);
         const fd = await req.formData();
@@ -116,9 +136,11 @@ export default {
         const logo = await checkLogo(fd.get('logo') as File | null);
         if (!logo.ok) errors.logo = logo.error;
         if (!input || Object.keys(errors).length) return json({ error: 'invalid', errors }, cors, 400);
+        const provider = (fd.get('provider') || enabled[0]) as Provider;
+        if (!enabled.includes(provider)) return json({ error: 'payments_not_configured' }, cors, 400);
 
         const ip = req.headers.get('CF-Connecting-IP') ?? 'local';
-        const hold = await bookings.createHold(input, ip);
+        const hold = await bookings.createHold(input, ip, provider);
         if (!hold.ok) return json({ error: hold.error }, cors, hold.error === 'rate_limited' ? 429 : 409);
 
         let logoKey = '';
@@ -126,6 +148,13 @@ export default {
           if (logo.ok && logo.bytes) {
             logoKey = `${hold.id}.${logo.ext}`;
             await env.LOGOS.put(logoKey, logo.bytes, { httpMetadata: { contentType: logo.type } });
+          }
+          if (provider === 'dodo') {
+            const back = returnUrl(String(fd.get('return_url') ?? ''), env, hold.id);
+            if (!back) throw new Error('bad return_url');
+            const session = await createCheckout(env, hold.amount, hold.id, { name: input.contact_name, email: input.email, phone: input.phone ? `+${input.phone}` : '' }, back);
+            await bookings.setOrder(hold.id, session.id, logoKey);
+            return json({ id: hold.id, provider, amount: hold.amount, currency: 'INR', checkoutUrl: session.url }, cors);
           }
           const order = await createOrder(env, hold.amount, hold.id.slice(0, 36), {
             booking: hold.id,
@@ -136,6 +165,7 @@ export default {
           return json(
             {
               id: hold.id,
+              provider,
               orderId: order.id,
               amount: hold.amount,
               currency: 'INR',
@@ -181,6 +211,21 @@ export default {
         return json({ ok: true });
       }
 
+      if (req.method === 'POST' && pathname === '/webhooks/dodo') {
+        const raw = await req.text();
+        if (!(await verifyDodoWebhook(env, raw, req.headers))) return json({ error: 'bad_signature' }, {}, 401);
+        const evt = JSON.parse(raw) as { type: string; data: { payment_id?: string; checkout_session_id?: string | null; metadata?: Record<string, string> } };
+        if (evt.type === 'payment.succeeded' && evt.data.payment_id) {
+          // Match on the checkout session; fall back to the booking id we put in metadata.
+          let sessionId = evt.data.checkout_session_id ?? '';
+          if (!sessionId && evt.data.metadata?.booking && UUID_RE.test(evt.data.metadata.booking)) {
+            sessionId = ((await bookings.get(evt.data.metadata.booking)) as Booking | null)?.order_id ?? '';
+          }
+          if (sessionId) await bookings.markPaid(sessionId, evt.data.payment_id);
+        }
+        return json({ ok: true });
+      }
+
       // ── Admin ──
       if (pathname.startsWith('/admin/')) {
         if (!isAdmin(req, env)) return json({ error: 'unauthorised' }, cors, 401);
@@ -200,7 +245,7 @@ export default {
           const note = String(body.note ?? '').slice(0, 300);
           if (!['paid', 'approved'].includes(b.status)) return json({ error: `cannot reject a ${b.status} booking` }, cors, 409);
           let refundResult = { ok: false, detail: 'not requested' };
-          if (body.refund && b.payment_id) refundResult = await refund(env, b.payment_id);
+          if (body.refund && b.payment_id) refundResult = b.provider === 'dodo' ? await dodoRefund(env, b.payment_id) : await refund(env, b.payment_id);
           const updated = (await bookings.setStatus(b.id, refundResult.ok ? 'refunded' : 'rejected', note)) as Booking;
           return json({ booking: adminView(updated, origin), refund: refundResult }, cors);
         }

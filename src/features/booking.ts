@@ -1,8 +1,12 @@
 /**
- * Sponsor booking: form sheet → API creates a 15-minute hold + Razorpay order →
- * Razorpay Checkout (UPI / cards / netbanking / wallets) → API verifies the
- * signature → "paid, waiting for review". Prices are charged by the server from
- * data/pricing.json; the browser never decides the amount.
+ * Sponsor booking: form sheet → API creates a 15-minute hold + a payment with
+ * the chosen provider →
+ *   Razorpay: Checkout popup (UPI / cards / netbanking / wallets) → API verifies
+ *             the signature → "paid, waiting for review".
+ *   Dodo:     redirect to Dodo's hosted checkout → back to this page with
+ *             ?booking=<id> → poll until Dodo's webhook has marked it paid.
+ * Prices are charged by the server from data/pricing.json; the browser never
+ * decides the amount.
  */
 import pandalData from '../../data/pandals.json';
 import { API_URL, PRICING, SITE_NAME, WHATSAPP_NUMBER } from '../config';
@@ -13,8 +17,12 @@ import { istDateKey, now } from '../lib/time';
 
 type FieldErrors = Record<string, string>;
 
+type Provider = 'razorpay' | 'dodo';
 interface Created {
   id: string;
+  provider?: Provider;
+  /** Dodo hosted checkout (provider 'dodo' only). */
+  checkoutUrl?: string;
   orderId: string;
   amount: number;
   currency: string;
@@ -83,9 +91,10 @@ function loadCheckout(): Promise<void> {
   });
 }
 
-function showView(view: 'form' | 'mock' | 'done') {
+function showView(view: 'form' | 'mock' | 'wait' | 'done') {
   form.hidden = view !== 'form';
   $('bk-mock').hidden = view !== 'mock';
+  $('bk-wait').hidden = view !== 'wait';
   $('bk-done').hidden = view !== 'done';
 }
 
@@ -144,15 +153,40 @@ function enforcePandalLimit() {
   });
 }
 
-/** Online payment is on only when the server reports Razorpay is configured. */
+/** Online payment is on only when the server reports a provider is configured. */
 let paymentsOn = false;
+
+const chosenProvider = (): Provider => (form.querySelector<HTMLInputElement>('input[name="provider"]:checked')?.value as Provider) ?? 'razorpay';
+
+/** Show the provider choice only when both are on; copy follows the choice. */
+function renderProviders(list: Provider[]) {
+  const field = $('bk-provider-field');
+  field.hidden = list.length < 2;
+  for (const r of form.querySelectorAll<HTMLInputElement>('input[name="provider"]')) {
+    r.disabled = !list.includes(r.value as Provider);
+    r.closest('label')!.hidden = r.disabled;
+  }
+  const first = form.querySelector<HTMLInputElement>('input[name="provider"]:not(:disabled)');
+  if (first && !form.querySelector<HTMLInputElement>('input[name="provider"]:checked:not(:disabled)')) first.checked = true;
+  renderProviderCopy();
+}
+
+function renderProviderCopy() {
+  const dodo = chosenProvider() === 'dodo';
+  // Swap the i18n key too, so a language switch keeps the right copy.
+  for (const [id, key] of [['bk-step2', dodo ? 'bk.step2.dodo' : 'bk.step2'], ['bk-secure', dodo ? 'bk.secure.dodo' : 'bk.secure']]) {
+    $(id).dataset.i18n = key;
+    $(id).textContent = t(key);
+  }
+}
 
 export function openBooking(
   slot: SlotId,
   data: Availability | null,
-  opts: { preselectPandal?: string; paymentsOn?: boolean } = {},
+  opts: { preselectPandal?: string; paymentsOn?: boolean; providers?: Provider[] } = {},
 ) {
   paymentsOn = Boolean(opts.paymentsOn);
+  renderProviders(opts.providers ?? (paymentsOn ? ['razorpay'] : []));
   avail = data;
   openSlot = slot;
   current = null;
@@ -296,11 +330,11 @@ async function verify(resp: RazorpayResponse) {
   }
 }
 
-function showDone() {
-  if (!current) return;
-  $('bk-ref').textContent = current.id;
+function showDone(id = current?.id) {
+  if (!id) return;
+  $('bk-ref').textContent = id;
   ($('bk-done-wa') as HTMLAnchorElement).href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    t('bk.doneWaText', { site: SITE_NAME, ref: current.id, business: currentBusiness }),
+    t('bk.doneWaText', { site: SITE_NAME, ref: id, business: currentBusiness }),
   )}`;
   showView('done');
   window.dispatchEvent(new CustomEvent('booking:paid'));
@@ -308,6 +342,16 @@ function showDone() {
 
 async function openCheckout() {
   if (!current) return;
+  if (current.provider === 'dodo' && current.checkoutUrl) {
+    // Remember the business name for the "done" screen after Dodo sends them back.
+    try {
+      sessionStorage.setItem(`bk:${current.id}`, currentBusiness);
+    } catch {
+      /* private mode: the done screen just omits the name */
+    }
+    window.location.assign(current.checkoutUrl);
+    return;
+  }
   if (current.mock) {
     ($('bk-mock-pay') as HTMLButtonElement).textContent = t('bk.mockPay', { price: `₹${num(current.amount / 100)}` });
     showView('mock');
@@ -387,6 +431,7 @@ async function submit(e: SubmitEvent) {
   if (logo && logo.size === 0) fd.delete('logo');
   currentBusiness = String(fd.get('business_name') ?? '');
   if (!paymentsOn || !API_URL) return sendRequestOnWhatsApp(fd);
+  fd.set('return_url', `${location.origin}${location.pathname}`);
   submitBtn.disabled = true;
   submitBtn.textContent = t('bk.paying');
   try {
@@ -404,6 +449,7 @@ async function submit(e: SubmitEvent) {
     }
     current = body;
     await openCheckout();
+    if (body.provider === 'dodo') return; // leaving the page
     // Checkout is open: let the advertiser press Pay again if they close it.
     submitBtn.disabled = false;
     submitBtn.textContent = t('bk.pay', { price: priceText(fd.get('slot') as SlotId) });
@@ -437,6 +483,7 @@ export function initBooking() {
   form.addEventListener('input', (e) => {
     const el = e.target as HTMLInputElement;
     if (el.name === 'start_date' || el.name === 'end_date' || el.name === 'pandal_ids') checkDates();
+    if (el.name === 'provider') renderProviderCopy();
     if (el.id !== 'bk-pandal-search') current = null;
     // Clear this field's error as soon as it's edited.
     const name = el.name === 'pandal_ids' ? 'pandal_ids' : el.name;
@@ -466,4 +513,39 @@ export function initBooking() {
     showView('form');
     setError(t('bk.dismissed'));
   });
+}
+
+/**
+ * Back from Dodo's hosted checkout (?booking=<id>): open the sheet and wait for
+ * Dodo's webhook to mark the booking paid. The redirect itself proves nothing.
+ */
+export async function resumeDodoReturn(id: string, status: string | null) {
+  try {
+    currentBusiness = sessionStorage.getItem(`bk:${id}`) ?? '';
+  } catch {
+    currentBusiness = '';
+  }
+  current = null;
+  setError('');
+  $('bk-wait-text').textContent = t('bk.confirming');
+  $('bk-wait-ref').textContent = id;
+  showView('wait');
+  sheet.showModal();
+  window.dispatchEvent(new CustomEvent('sheet:open'));
+  if (status === 'failed' || status === 'cancelled') {
+    $('bk-wait-text').textContent = t('bk.dodoFailed');
+    return;
+  }
+  for (let i = 0; i < 30; i++) {
+    try {
+      const r = await fetch(`${API_URL}/bookings/${id}`, { cache: 'no-store' });
+      if (r.status === 404) break; // unknown or stale booking id: no point waiting
+      const b = (await r.json()) as { status?: string };
+      if (b.status === 'paid' || b.status === 'approved') return showDone(id);
+    } catch {
+      /* keep trying */
+    }
+    await new Promise((res) => setTimeout(res, 2000));
+  }
+  $('bk-wait-text').textContent = t('bk.err.verify');
 }
