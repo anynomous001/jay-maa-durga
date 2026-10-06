@@ -9,6 +9,7 @@ import { initDhak } from '../features/dhak';
 import { closeMiniPlayer, initPlaylists } from '../features/playlists';
 import { initSheets } from '../features/sheets';
 import { initVisitors } from '../features/visitors';
+import { initWelcome } from '../features/welcome';
 
 initCommon();
 initCountdown();
@@ -20,6 +21,7 @@ initDhak();
 initPlaylists();
 initSheets();
 const visitors = initVisitors(() => radio.isActive());
+initWelcome(() => radio.isActive());
 // One sound at a time: a song pauses the radio; the radio closes the song mini player.
 addEventListener('media:start', () => radio.isActive() && radio.pause());
 radio.onState((s) => s === 'loading' && closeMiniPlayer());

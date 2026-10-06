@@ -11,7 +11,7 @@ export const SITE_NAME_BN = 'মা আসছেন';
 export const SITE_TAGLINE_BN = 'ভোরের আগমনী';
 export const SITE_TAGLINE_EN = 'The dawn’s welcome song';
 /** Absolute production URL (used in share text, .ics, OG tags, sitemap). */
-export const SITE_URL = 'https://agomonir-sure.pages.dev';
+export const SITE_URL = 'https://maa-aschen-nine.vercel.app';
 
 // ── Contact & payments ──────────────────────────────────────────────────────
 /** WhatsApp number in international format without "+" or spaces. */

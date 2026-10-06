@@ -1,8 +1,8 @@
 /**
  * Live visitor counts from the Cloudflare Worker (see /worker).
  * Each browser gets a random id in localStorage (no cookies, nothing personal).
- * We send one /visit on load, then a /ping every 60 s while the tab is visible,
- * flagging whether the radio is playing. Elements opt in with:
+ * We send one /visit on load, then a /ping every 60 s while the tab is visible
+ * or the radio is playing, flagging whether it is playing. Elements opt in with:
  *   [data-visitors="total|online|listening"]  → formatted number
  *   [data-visitors-wrap]                      → un-hidden once numbers arrive
  */
@@ -16,6 +16,19 @@ interface Stats {
 }
 
 const ID_KEY = 'visitor-id';
+
+/**
+ * Channel tag from links like ?ref=wa. Read once, then removed from the
+ * address bar so a copied link doesn't carry someone else's tag.
+ */
+function takeRef(): string {
+  const url = new URL(location.href);
+  const ref = (url.searchParams.get('ref') ?? '').toLowerCase();
+  if (!url.searchParams.has('ref')) return '';
+  url.searchParams.delete('ref');
+  history.replaceState(history.state, '', url.pathname + url.search + url.hash);
+  return /^[a-z0-9-]{1,24}$/.test(ref) ? ref : '';
+}
 const PING_MS = 60_000; // keep well inside the Workers free tier (see README)
 
 function visitorId(): string {
@@ -53,13 +66,15 @@ export function initVisitors(isListening: () => boolean = () => false): { ping: 
   if (!API_URL) return { ping: () => {} };
   const base = API_URL;
   const id = visitorId();
+  const ref = takeRef();
+  const page = location.pathname.startsWith('/pandals') ? 'pandals' : '';
 
   const send = async (path: '/visit' | '/ping') => {
     try {
       const r = await fetch(base + path, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, listening: isListening() }),
+        body: JSON.stringify(path === '/visit' ? { id, listening: isListening(), ref, page } : { id, listening: isListening() }),
         keepalive: true,
       });
       if (r.ok) {
@@ -71,13 +86,16 @@ export function initVisitors(isListening: () => boolean = () => false): { ping: 
     }
   };
 
+  // Ping while the page is on screen, or while the radio plays in the
+  // background (screen locked, another tab) so listeners stay "online".
+  const tick = () => (document.visibilityState === 'visible' || isListening()) && void send('/ping');
   void send('/visit');
-  let timer = window.setInterval(() => document.visibilityState === 'visible' && void send('/ping'), PING_MS);
+  let timer = window.setInterval(tick, PING_MS);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       void send('/ping');
       clearInterval(timer);
-      timer = window.setInterval(() => document.visibilityState === 'visible' && void send('/ping'), PING_MS);
+      timer = window.setInterval(tick, PING_MS);
     }
   });
   onLangChange(render);

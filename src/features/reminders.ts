@@ -27,7 +27,7 @@ function events(): { mahalaya: CalEvent; shashthi: CalEvent } {
   };
 }
 
-export const whatsappShareUrl = (text: string) => `https://wa.me/?text=${encodeURIComponent(text)}`;
+export const whatsappShareUrl = (text: string) => `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
 
 export function initReminders(): void {
   const $ = (id: string) => document.getElementById(id)!;
@@ -35,7 +35,7 @@ export function initReminders(): void {
     const ev = events();
     ($('gcal-mahalaya') as HTMLAnchorElement).href = googleCalendarUrl(ev.mahalaya);
     ($('gcal-shashthi') as HTMLAnchorElement).href = googleCalendarUrl(ev.shashthi);
-    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/' }));
+    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/?ref=share' }));
   };
   render();
   onLangChange(render);
