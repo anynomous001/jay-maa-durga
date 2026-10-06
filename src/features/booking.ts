@@ -539,8 +539,9 @@ export async function resumeDodoReturn(id: string, status: string | null) {
   for (let i = 0; i < 30; i++) {
     try {
       const r = await fetch(`${API_URL}/bookings/${id}`, { cache: 'no-store' });
+      if (r.status === 404) break; // unknown or stale booking id: no point waiting
       const b = (await r.json()) as { status?: string };
-      if (b.status && b.status !== 'pending_payment') return showDone(id);
+      if (b.status === 'paid' || b.status === 'approved') return showDone(id);
     } catch {
       /* keep trying */
     }

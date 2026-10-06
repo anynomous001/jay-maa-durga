@@ -11,7 +11,8 @@ import { safeEqual } from './http';
 
 const api = (env: Env) => (env.DODO_ENVIRONMENT === 'live_mode' ? 'https://live.dodopayments.com' : 'https://test.dodopayments.com');
 
-export const dodoConfigured = (env: Env) => Boolean(env.DODO_PAYMENTS_API_KEY && env.DODO_PRODUCT_ID);
+/** On only when checkout AND its confirmation webhook can work (the webhook is the only way a Dodo booking becomes paid). */
+export const dodoConfigured = (env: Env) => Boolean(env.DODO_PAYMENTS_API_KEY && env.DODO_PRODUCT_ID && env.DODO_PAYMENTS_WEBHOOK_KEY);
 
 async function call<T>(env: Env, path: string, body: unknown): Promise<T> {
   const r = await fetch(`${api(env)}${path}`, {
