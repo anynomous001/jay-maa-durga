@@ -30,6 +30,11 @@ function setMeta(html, attr, key, value) {
   return re.test(html) ? html.replace(re, tag) : html.replace('</head>', `    ${tag}\n  </head>`);
 }
 
+/** First candidate that fits `max` characters (search engines truncate or flag longer titles and descriptions). */
+function fitTo(max, options) {
+  return options.find((o) => [...o].length <= max) ?? options[options.length - 1];
+}
+
 function page(shell, { site, path, title, description, image, imageAlt, main, ld }) {
   const url = site + path;
   let h = shell.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`);
@@ -195,8 +200,12 @@ export default function staticPages() {
           page(shell, {
             site,
             path,
-            title: `${p.name_en} Durga Puja 2026: Location, Metro & Directions | Ma Aschen`,
-            description: `${p.name_en} (${p.name_bn}) Durga Puja 2026 in ${p.area}, ${p.zone}.${metro} Map location, directions and nearby pandals.`,
+            title: fitTo(60, [`${p.name_en} Durga Puja 2026 | Ma Aschen`, `${p.name_en} Durga Puja 2026`, p.name_en]),
+            description: fitTo(155, [
+              `${p.name_en} (${p.name_bn}) Durga Puja 2026 in ${p.area}, ${p.zone}.${metro} Map location, directions and nearby pandals.`,
+              `${p.name_en} Durga Puja 2026 in ${p.area}, ${p.zone}.${metro} Map location, directions and nearby pandals.`,
+              `${p.name_en} Durga Puja 2026 in ${p.area}. Map location, directions and nearby pandals.`,
+            ]),
             image: '/og-pandals.jpg',
             imageAlt: 'A lit Durga Puja pandal in Kolkata at night',
             main,
@@ -238,8 +247,8 @@ export default function staticPages() {
         page(shell, {
           site,
           path: datesPath,
-          title: 'Durga Puja 2026 Dates: Shashthi to Bijoya Dashami & Mahalaya | Ma Aschen',
-          description: `${puja} Mahalaya is on ${fmtShort(first)}. Full calendar: Shashthi, Saptami, Ashtami, Nabami, Dashami.`,
+          title: 'Durga Puja 2026 Dates: Shashthi to Dashami | Ma Aschen',
+          description: `${puja} Mahalaya is on ${fmtShort(first)}. Full day-by-day calendar.`,
           image: '/og.jpg',
           imageAlt: 'Durga Puja pandal at dusk',
           main,
@@ -258,8 +267,8 @@ export default function staticPages() {
       write(
         '/en/',
         englishHome(home, dict, site, {
-          title: 'Mahalaya 2026 Live Radio — Mahishasuramardini on Akashvani | Ma Aschen',
-          description: 'Mahalaya 2026 live: listen to Akashvani’s Mahishasuramardini from 3:50 AM IST on 10 October. Countdown in your time zone, Durga Puja 2026 dates, songs and a Kolkata pandal map.',
+          title: 'Mahalaya 2026 Live Radio: Mahishasuramardini | Ma Aschen',
+          description: 'Listen to Akashvani’s Mahishasuramardini live from 3:50 AM IST on 10 Oct 2026. Countdown in your time zone, Puja dates and a Kolkata pandal map.',
           ogTitle: 'Shubho Mahalaya 2026 — Mahishasuramardini live | Mahalaya live radio',
           ogDescription: '3:50 AM IST, 10 October: listen to Akashvani’s Mahishasuramardini live, set a reminder and find Kolkata pandals on the map.',
         }),
