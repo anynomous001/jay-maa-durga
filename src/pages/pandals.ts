@@ -140,7 +140,7 @@ function cardHTML(p: Pandal): string {
     <h3><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></h3>
     <p class="pm-meta"><span>${esc(p.area)}</span><span>${esc(t('pm.zone.' + p.zone))}</span>${metro}${dist}</p>
     ${approx}
-    <div class="pm-actions"><span class="pm-dir-label">${esc(t('pm.directions'))}:</span>${dirs}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button></div>
+    <div class="pm-actions"><span class="pm-dir-label">${esc(t('pm.directions'))}:</span>${dirs}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button><a class="btn btn-ghost btn-sm" href="/pandals/${p.id}/">${esc(t('pm.details'))}</a></div>
     ${eatNearbyHTML(p)}
   </article>`;
 }

@@ -1,6 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { relative, resolve } from 'node:path';
+import staticPages from './scripts/static-pages.mjs';
 
 /** Inlines <!--@partial name--> with partials/name.html (shared head/header). */
 function partials(): Plugin {
@@ -42,7 +43,7 @@ function saveAsset(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [partials(), saveAsset()],
+  plugins: [partials(), saveAsset(), staticPages()],
   build: {
     target: 'es2020',
     rollupOptions: {

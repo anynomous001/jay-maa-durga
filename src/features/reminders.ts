@@ -35,10 +35,41 @@ export function initReminders(): void {
     const ev = events();
     ($('gcal-mahalaya') as HTMLAnchorElement).href = googleCalendarUrl(ev.mahalaya);
     ($('gcal-shashthi') as HTMLAnchorElement).href = googleCalendarUrl(ev.shashthi);
-    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/?ref=share' }));
+    ($('wa-share') as HTMLAnchorElement).href = whatsappShareUrl(t('rem.waText', { url: SITE_URL + '/?ref=s-wa' }));
+    ($('fb-share') as HTMLAnchorElement).href =
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(SITE_URL + '/?ref=s-fb');
   };
   render();
   onLangChange(render);
   $('ics-mahalaya').addEventListener('click', () => downloadIcs('mahalaya-2026.ics', [events().mahalaya]));
   $('ics-shashthi').addEventListener('click', () => downloadIcs('durga-puja-shashthi-2026.ics', [events().shashthi]));
+}
+
+/** Native share sheet (phones), copy-link fallback. Each channel gets its own ?ref= tag. */
+export function initShare(): void {
+  const native = document.getElementById('native-share') as HTMLButtonElement;
+  const copy = document.getElementById('copy-link') as HTMLButtonElement;
+  if (typeof navigator.share === 'function') {
+    native.hidden = false;
+    native.addEventListener('click', () => {
+      navigator
+        .share({ title: t('share.title'), text: t('share.text'), url: SITE_URL + '/?ref=s-native' })
+        .catch(() => {}); // user dismissed the sheet
+    });
+  }
+  const label = copy.querySelector('span')!;
+  copy.addEventListener('click', async () => {
+    const url = SITE_URL + '/?ref=s-copy';
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const ta = Object.assign(document.createElement('textarea'), { value: url });
+      document.body.append(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+    }
+    label.textContent = t('share.copied');
+    setTimeout(() => (label.textContent = t('share.copy')), 2000);
+  });
 }

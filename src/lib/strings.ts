@@ -56,7 +56,16 @@ export const dict: Record<string, Entry> = {
   'dock.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
   'rem.gcalShort': { bn: 'গুগল ক্যালেন্ডার', en: 'Google Calendar' },
   'rem.icsShort': { bn: '.ics রিমাইন্ডার', en: '.ics reminder' },
-  'rem.waShort': { bn: 'শেয়ার', en: 'Share' },
+  'rem.waShort': { bn: 'হোয়াটসঅ্যাপ', en: 'WhatsApp' },
+  'share.native': { bn: 'শেয়ার', en: 'Share' },
+  'share.title': { bn: 'শুভ মহালয়া ২০২৬ — মা আসছেন', en: 'Shubho Mahalaya 2026 — Ma Aschen' },
+  'share.text': {
+    bn: 'শুভ মহালয়া 🙏 ১০ অক্টোবর ভোর ৩:৫০ থেকে আকাশবাণীতে মহিষাসুরমর্দিনী — সরাসরি শুনুন।',
+    en: 'Shubho Mahalaya 🙏 Mahishasuramardini live on Akashvani from 3:50 AM IST, 10 Oct.',
+  },
+  'share.fb': { bn: 'ফেসবুক', en: 'Facebook' },
+  'share.copy': { bn: 'লিংক কপি', en: 'Copy link' },
+  'share.copied': { bn: 'কপি হয়েছে ✓', en: 'Copied ✓' },
   'radio.noteShort': {
     bn: '১০ অক্টোবর ভোর ৩:৫০–৫:৪৫ (ভারতীয় সময়) · সম্প্রচার ও স্বত্ব: প্রসার ভারতী / আকাশবাণী',
     en: '10 Oct, 3:50–5:45 AM IST · Broadcast © Prasar Bharati / Akashvani',
@@ -205,6 +214,47 @@ export const dict: Record<string, Entry> = {
     en: 'The countdown above also shows your local time. For example: London 11:20 PM on 9 Oct, New York 6:20 PM on 9 Oct, Dubai 2:20 AM on 10 Oct.',
   },
 
+  // ── Visible SEO facts (home page) ──
+  'seo.title': { bn: 'মহালয়া ২০২৬: তারিখ, সময় ও কীভাবে শুনবেন', en: 'Mahalaya 2026: date, time and how to listen' },
+  'seo.when.h': { bn: 'মহালয়া ২০২৬ কবে?', en: 'When is Mahalaya 2026?' },
+  'seo.when.p': {
+    bn: 'মহালয়া ২০২৬ পড়েছে শনিবার, ১০ অক্টোবর। আকাশবাণী কলকাতায় মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)। এর ছয় দিন পর, ১৬ অক্টোবর মহাষষ্ঠীতে দুর্গাপুজো শুরু।',
+    en: 'Mahalaya 2026 falls on Saturday, 10 October. Akashvani Kolkata broadcasts Mahishasuramardini from 3:50 to 5:45 AM IST. Durga Puja begins six days later, on Shashthi, 16 October.',
+  },
+  'seo.how.h': { bn: 'অনলাইনে মহালয়া লাইভ রেডিও কীভাবে শুনবেন', en: 'How to listen to Mahalaya live radio online' },
+  'seo.how.p': {
+    bn: 'এই পাতার "শুনুন" বোতামে চাপুন — আকাশবাণী কলকাতার সরকারি স্ট্রিম চলবে, অ্যাপ ছাড়াই। ফোনের রিমাইন্ডার রাখতে পারেন, আর ভোরে ঘুম ভাঙাতে "ওয়েক মি" দিয়ে রাখুন। রেডিও থাকলে MW ৬৫৭ kHz-এও শোনা যায়।',
+    en: 'Press Play on this page to hear Akashvani Kolkata’s official stream, with no app needed. Set a calendar reminder so you do not miss it. You can also tune a radio to 657 kHz MW.',
+  },
+  'seo.tz.h': { bn: 'বিদেশে মহালয়ার সময় (মহিষাসুরমর্দিনী)', en: 'Mahalaya time around the world' },
+  'seo.tz.lead': { bn: '১০ অক্টোবর ভোর ৩:৫০ (IST) বিশ্বের অন্যত্র:', en: 'Mahishasuramardini starts at 3:50 AM IST on 10 October, which is:' },
+  'seo.tz.london': { bn: 'লন্ডন (BST): ৯ অক্টোবর রাত ১১:২০', en: 'London (BST): 11:20 PM, 9 October' },
+  'seo.tz.ny': { bn: 'নিউ ইয়র্ক (EDT): ৯ অক্টোবর সন্ধ্যা ৬:২০', en: 'New York (EDT): 6:20 PM, 9 October' },
+  'seo.tz.sf': { bn: 'সান ফ্রান্সিসকো (PDT): ৯ অক্টোবর দুপুর ৩:২০', en: 'San Francisco (PDT): 3:20 PM, 9 October' },
+  'seo.tz.dubai': { bn: 'দুবাই (GST): ১০ অক্টোবর রাত ২:২০', en: 'Dubai (GST): 2:20 AM, 10 October' },
+  'seo.tz.dhaka': { bn: 'ঢাকা (BST): ১০ অক্টোবর ভোর ৪:২০', en: 'Dhaka (BST): 4:20 AM, 10 October' },
+  'seo.tz.sg': { bn: 'সিঙ্গাপুর (SGT): ১০ অক্টোবর ভোর ৬:২০', en: 'Singapore (SGT): 6:20 AM, 10 October' },
+  'seo.tz.sydney': { bn: 'সিডনি (AEDT): ১০ অক্টোবর সকাল ৯:২০', en: 'Sydney (AEDT): 9:20 AM, 10 October' },
+  'seo.more.h': { bn: 'পুজো ২০২৬ ও প্যান্ডেল', en: 'Durga Puja 2026 and pandals' },
+  'seo.more.p': {
+    bn: 'ষষ্ঠী ১৬, সপ্তমী ১৭–১৮, অষ্টমী ১৯, নবমী ২০ ও বিজয়া দশমী ২১ অক্টোবর। কলকাতার উত্তর ও দক্ষিণের প্যান্ডেল ম্যাপে খুঁজে নিন আপনার কাছের পুজো।',
+    en: 'Shashthi 16, Saptami 17–18, Ashtami 19, Nabami 20 and Bijoya Dashami 21 October. Find the nearest Kolkata pandal on the map.',
+  },
+  'seo.more.link': { bn: 'প্যান্ডেল ম্যাপ দেখুন →', en: 'Open the pandal map →' },
+
+  // ── Mahalaya card ──
+  'card.open': { bn: 'শুভেচ্ছা কার্ড বানান', en: 'Make a greeting card' },
+  'card.title': { bn: 'মহালয়ার শুভেচ্ছা কার্ড', en: 'Mahalaya greeting card' },
+  'card.name': { bn: 'আপনার নাম (ইচ্ছে হলে)', en: 'Your name (optional)' },
+  'card.greet': { bn: 'শুভ মহালয়া', en: 'Shubho Mahalaya' },
+  'card.from': { bn: '{name}-এর পক্ষ থেকে', en: 'from {name}' },
+  'card.date': { bn: '১০ অক্টোবর ২০২৬ · ভোর ৩:৫০', en: '10 October 2026 · 3:50 AM IST' },
+  'card.listen': { bn: 'মহিষাসুরমর্দিনী লাইভ শুনুন', en: 'Listen to Mahishasuramardini live' },
+  'card.download': { bn: 'ছবি নামান', en: 'Download image' },
+  'card.share': { bn: 'শেয়ার করুন', en: 'Share' },
+  'card.hint': { bn: 'স্টোরি বা হোয়াটসঅ্যাপ স্ট্যাটাসে দিন। নামটি আপনার ফোনেই থাকে, কোথাও পাঠানো হয় না।', en: 'Post it to Stories or WhatsApp status. Your name stays on your device and is never sent anywhere.' },
+  'card.shareText': { bn: 'শুভ মহালয়া 🙏 লাইভ শুনুন: {url}', en: 'Shubho Mahalaya 🙏 Listen live: {url}' },
+
   // ── Pandal map ──
   'pm.title': { bn: 'প্যান্ডেল ম্যাপ ২০২৬', en: 'Pandal map 2026' },
   'pm.intro': {
@@ -236,6 +286,7 @@ export const dict: Record<string, Entry> = {
   'pm.drive': { bn: 'গাড়িতে', en: 'Drive' },
   'pm.transit': { bn: 'বাস/মেট্রো', en: 'Transit' },
   'pm.onMap': { bn: 'ম্যাপে দেখুন', en: 'Show on map' },
+  'pm.details': { bn: 'বিস্তারিত', en: 'Details' },
   'pm.metro': { bn: 'কাছের মেট্রো', en: 'Nearest metro' },
   'pm.approx': { bn: 'অবস্থান আনুমানিক', en: 'Approximate location' },
   'pm.approxHelp': {

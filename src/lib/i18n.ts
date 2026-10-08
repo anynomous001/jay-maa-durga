@@ -12,6 +12,7 @@ const listeners = new Set<(l: Lang) => void>();
 let current: Lang = (() => {
   const q = new URLSearchParams(location.search).get('lang');
   if (q === 'en' || q === 'bn') return q;
+  if (location.pathname.startsWith('/en/')) return 'en'; // the English copy of the home page
   const saved = localStorage.getItem(KEY);
   return saved === 'en' ? 'en' : 'bn';
 })();
