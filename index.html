@@ -138,6 +138,7 @@
               <button type="button" class="icon-btn" id="native-share" hidden><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="share.native">শেয়ার</span></button>
               <a class="icon-btn" id="fb-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5V7c0-.8.3-1.2 1.3-1.2H17V3h-2.6C11.8 3 10.5 4.5 10.5 6.8v1.7H8V11.5h2.5V21H14v-9.5h2.6l.4-3z" fill="currentColor"/></svg><span data-i18n="share.fb">ফেসবুক</span></a>
               <button type="button" class="icon-btn" id="copy-link"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="share.copy">লিংক কপি</span></button>
+              <button type="button" class="icon-btn" data-open="sheet-card"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 15.5l2.6-3 2 2.2 1.4-1.6 2 2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="8.6" r="1.3" fill="currentColor"/></svg><span data-i18n="card.open">শুভেচ্ছা কার্ড বানান</span></button>
             </div>
             <div class="sponsor-slot spotlight" data-slot="spotlight"></div>
 
@@ -277,6 +278,23 @@
         <details><summary data-i18n="faq.q4">বিদেশ থেকে কখন শুনব?</summary><p data-i18n="faq.a4">উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।</p></details>
         </div>
       </dialog>
+      <dialog class="sheet" id="sheet-card" aria-labelledby="sheet-card-title">
+        <div class="sheet-head">
+          <h2 id="sheet-card-title" data-i18n="card.title">মহালয়ার শুভেচ্ছা কার্ড</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sheet-body card-panel" data-lenis-prevent>
+          <label class="sr-only" for="card-name" data-i18n="card.name">আপনার নাম (ইচ্ছে হলে)</label>
+          <input id="card-name" class="input" type="text" maxlength="30" autocomplete="off" data-i18n-attr="placeholder:card.name" placeholder="আপনার নাম (ইচ্ছে হলে)" />
+          <canvas id="card-canvas" class="card-canvas" width="1080" height="1920" role="img" aria-label="Mahalaya greeting card preview"></canvas>
+          <div class="btn-row">
+            <button type="button" class="btn" id="card-download" data-i18n="card.download">ছবি নামান</button>
+            <button type="button" class="btn btn-ghost" id="card-share" hidden data-i18n="card.share">শেয়ার করুন</button>
+          </div>
+          <p class="muted small" data-i18n="card.hint">স্টোরি বা হোয়াটসঅ্যাপ স্ট্যাটাসে দিন। নামটি আপনার ফোনেই থাকে, কোথাও পাঠানো হয় না।</p>
+        </div>
+      </dialog>
+
     </main>
     <aside class="mini-player glass-card" id="mini-player" hidden data-i18n-attr="aria-label:pl.nowPlaying" aria-label="এখন বাজছে">
       <div class="mini-frame"></div>

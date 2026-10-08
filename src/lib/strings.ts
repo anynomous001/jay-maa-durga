@@ -242,6 +242,19 @@ export const dict: Record<string, Entry> = {
   },
   'seo.more.link': { bn: 'প্যান্ডেল ম্যাপ দেখুন →', en: 'Open the pandal map →' },
 
+  // ── Mahalaya card ──
+  'card.open': { bn: 'শুভেচ্ছা কার্ড বানান', en: 'Make a greeting card' },
+  'card.title': { bn: 'মহালয়ার শুভেচ্ছা কার্ড', en: 'Mahalaya greeting card' },
+  'card.name': { bn: 'আপনার নাম (ইচ্ছে হলে)', en: 'Your name (optional)' },
+  'card.greet': { bn: 'শুভ মহালয়া', en: 'Shubho Mahalaya' },
+  'card.from': { bn: '{name}-এর পক্ষ থেকে', en: 'from {name}' },
+  'card.date': { bn: '১০ অক্টোবর ২০২৬ · ভোর ৩:৫০', en: '10 October 2026 · 3:50 AM IST' },
+  'card.listen': { bn: 'মহিষাসুরমর্দিনী লাইভ শুনুন', en: 'Listen to Mahishasuramardini live' },
+  'card.download': { bn: 'ছবি নামান', en: 'Download image' },
+  'card.share': { bn: 'শেয়ার করুন', en: 'Share' },
+  'card.hint': { bn: 'স্টোরি বা হোয়াটসঅ্যাপ স্ট্যাটাসে দিন। নামটি আপনার ফোনেই থাকে, কোথাও পাঠানো হয় না।', en: 'Post it to Stories or WhatsApp status. Your name stays on your device and is never sent anywhere.' },
+  'card.shareText': { bn: 'শুভ মহালয়া 🙏 লাইভ শুনুন: {url}', en: 'Shubho Mahalaya 🙏 Listen live: {url}' },
+
   // ── Pandal map ──
   'pm.title': { bn: 'প্যান্ডেল ম্যাপ ২০২৬', en: 'Pandal map 2026' },
   'pm.intro': {

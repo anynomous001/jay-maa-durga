@@ -2805,3 +2805,21 @@ button.pm-eat.cta:hover {
     margin: 0 0.75rem 2rem;
   }
 }
+
+/* Greeting card sheet */
+.card-panel {
+  display: grid;
+  gap: 0.8rem;
+  justify-items: center;
+}
+.card-panel .input {
+  width: 100%;
+}
+.card-canvas {
+  width: min(100%, 15.5rem);
+  aspect-ratio: 9 / 16;
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: #0c0f1f;
+}
