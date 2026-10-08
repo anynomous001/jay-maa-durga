@@ -3,6 +3,7 @@
  * shell (header, background, shared CSS/JS) and writes:
  *   /pandals/<id>/                one page per pandal in data/pandals.json
  *   /durga-puja-2026-dates/       Puja calendar with FAQ markup
+ *   /en/                          English copy of the home page (strings from src/lib/strings.ts), with hreflang
  * plus a sitemap.xml that lists every page. Not available under `vite dev`: use
  * `npm run build && npm run preview`.
  */
@@ -46,6 +47,48 @@ function page(shell, { site, path, title, description, image, imageAlt, main, ld
   h = h.replace(/<main[\s\S]*<\/main>/, () => main);
   const scripts = ld.map((o) => `    <script type="application/ld+json">${json(o)}</script>\n`).join('');
   return h.replace('</head>', () => scripts + '  </head>');
+}
+
+
+/** English copy of the built Bengali home page: swaps every data-i18n* element for its English string. */
+function englishHome(html, dict, site, meta) {
+  const en = (k) => dict[k]?.en;
+  const setAttrs = (tag, pairs) => {
+    for (const pair of pairs.split(';')) {
+      const [attr, key] = pair.split(':');
+      const v = attr && key && en(key);
+      if (!v) continue;
+      const re = new RegExp(`(\\s${attr}=")[^"]*(")`);
+      tag = re.test(tag) ? tag.replace(re, (_, a, b) => a + esc(v) + b) : tag.replace(/^<(\w+)/, (_, n) => `<${n} ${attr}="${esc(v)}"`);
+    }
+    return tag;
+  };
+  let h = html.replace(/<(\w+)\b[^>]*\sdata-i18n="([^"]+)"[^>]*>[\s\S]*?<\/\1>/g, (m, tagName, key) => {
+    const v = en(key);
+    if (v == null) return m;
+    const open = m.match(/^<[^>]*>/)[0];
+    return open + esc(v) + `</${tagName}>`;
+  });
+  h = h.replace(/<(\w+)\b[^>]*\sdata-i18n-html="([^"]+)"[^>]*>[\s\S]*?<\/\1>/g, (m, tagName, key) => {
+    const v = en(key);
+    return v == null ? m : m.match(/^<[^>]*>/)[0] + v + `</${tagName}>`;
+  });
+  h = h.replace(/<\w+\b[^>]*\sdata-i18n-attr="([^"]+)"[^>]*>/g, (tag, pairs) => setAttrs(tag, pairs));
+  h = h.replace('<html lang="bn"', '<html lang="en"');
+  h = h.replace(/(<dd id="cd-ist">)[^<]*/, '$1Sat, 10 Oct · 3:50 am'); // JS rewrites it; this is the no-JS text
+  h = h.replace(/(id="lang-toggle" class="lang-toggle" )lang="en">English/, '$1lang="bn">বাংলা');
+  h = h.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
+  h = setMeta(h, 'name', 'description', meta.description);
+  h = h.replace(/<link rel="canonical" href="[^"]*" ?\/?>/, `<link rel="canonical" href="${site}/en/" />`);
+  for (const [attr, key, v] of [['property', 'og:title', meta.ogTitle], ['property', 'og:description', meta.ogDescription], ['property', 'og:url', `${site}/en/`], ['property', 'og:locale', 'en_IN'], ['name', 'twitter:title', meta.ogTitle], ['name', 'twitter:description', meta.ogDescription]]) {
+    h = setMeta(h, attr, key, v);
+  }
+  // FAQ structured data in English
+  h = h.replace(/<script type="application\/ld\+json">\s*\{\s*"@context": "https:\/\/schema.org",\s*"@type": "FAQPage"[\s\S]*?<\/script>/, () => {
+    const q = [1, 2, 3, 4].map((i) => ({ '@type': 'Question', name: en(`faq.q${i}`), acceptedAnswer: { '@type': 'Answer', text: en(`faq.a${i}`) } }));
+    return `<script type="application/ld+json">${json({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: q })}</script>`;
+  });
+  return h;
 }
 
 export default function staticPages() {
@@ -207,9 +250,25 @@ export default function staticPages() {
         }),
       );
 
+
+      // ── English home page (/en/) + hreflang ─────────────────────────────
+      const stringsSrc = readFileSync(resolve(root, 'src/lib/strings.ts'), 'utf8');
+      const dict = new Function('return ' + stringsSrc.slice(stringsSrc.indexOf('= {', stringsSrc.indexOf('export const dict')) + 2, stringsSrc.lastIndexOf('};') + 1))();
+      const home = readFileSync(resolve(outDir, 'index.html'), 'utf8');
+      write(
+        '/en/',
+        englishHome(home, dict, site, {
+          title: 'Mahalaya 2026 Live Radio — Mahishasuramardini on Akashvani | Ma Aschen',
+          description: 'Mahalaya 2026 live: listen to Akashvani’s Mahishasuramardini from 3:50 AM IST on 10 October. Countdown in your time zone, Durga Puja 2026 dates, songs and a Kolkata pandal map.',
+          ogTitle: 'Shubho Mahalaya 2026 — Mahishasuramardini live | Mahalaya live radio',
+          ogDescription: '3:50 AM IST, 10 October: listen to Akashvani’s Mahishasuramardini live, set a reminder and find Kolkata pandals on the map.',
+        }),
+      );
+
       // ── Sitemap ─────────────────────────────────────────────────────────
       const urls = [
-        ['/', 'daily', '1.0'],
+        ['/', 'daily', '1.0', true],
+        ['/en/', 'daily', '1.0', true],
         ['/pandals/', 'daily', '0.9'],
         [datesPath, 'weekly', '0.9'],
         ...pandals.map((p) => [`/pandals/${p.id}/`, 'weekly', '0.6']),
@@ -217,8 +276,13 @@ export default function staticPages() {
       ];
       writeFileSync(
         resolve(outDir, 'sitemap.xml'),
-        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
-          .map(([u, f, pr]) => `  <url><loc>${site}${u}</loc><lastmod>${today}</lastmod><changefreq>${f}</changefreq><priority>${pr}</priority></url>`)
+        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls
+          .map(([u, f, pr, alt]) => {
+            const links = alt
+              ? `<xhtml:link rel="alternate" hreflang="bn" href="${site}/" /><xhtml:link rel="alternate" hreflang="en" href="${site}/en/" /><xhtml:link rel="alternate" hreflang="x-default" href="${site}/" />`
+              : '';
+            return `  <url><loc>${site}${u}</loc>${links}<lastmod>${today}</lastmod><changefreq>${f}</changefreq><priority>${pr}</priority></url>`;
+          })
           .join('\n')}\n</urlset>\n`,
       );
     },

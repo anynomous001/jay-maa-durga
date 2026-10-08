@@ -285,6 +285,17 @@ Shown as badges in the home hero ("N online now · N visitors so far"), "N liste
   - For a big Mahalaya audience, switch the account to **Workers Paid (US$5/month, 10M requests included)** for that week.
 - **Honesty note:** counts are approximate. Anyone could inflate them with scripts, and a visitor who clears their storage or switches device counts twice. Don't sell ads on these numbers alone; Cloudflare Web Analytics (`ANALYTICS` in config) gives an independent figure.
 
+## Generated SEO pages
+
+`npm run build` also runs `scripts/static-pages.mjs` (a Vite plugin, build only), which writes:
+
+- `/pandals/<id>/` for every pandal in `data/pandals.json`;
+- `/durga-puja-2026-dates/` from `PUJA_DAYS` in `src/config.ts`;
+- `/en/`, an English copy of the home page made from the strings in `src/lib/strings.ts`, with `hreflang` links back to `/`;
+- `sitemap.xml` listing all of them (this overwrites `public/sitemap.xml` in `dist/`).
+
+They are not served by `npm run dev`; use `npm run build && npm run preview`. When the domain changes, only `SITE_URL` in `src/config.ts` needs editing for these pages.
+
 ## Channel tracking (`?ref=`)
 
 Add `?ref=<channel>` to every link you post, one tag per place. The counter credits each new visitor to the tag they **first** arrived with, and keeps counting their return visits, pandal-map visits and radio plays under it.
