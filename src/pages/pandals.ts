@@ -56,8 +56,13 @@ let map: Leaflet.Map | null = null;
 const markers = new Map<string, Leaflet.CircleMarker>();
 let meMarker: Leaflet.CircleMarker | null = null;
 
-async function ensureMap(): Promise<void> {
-  if (map) return;
+let mapSetup: Promise<void> | null = null;
+/** Builds the map once, however many callers ask while Leaflet is still loading. */
+function ensureMap(): Promise<void> {
+  return (mapSetup ??= setupMap());
+}
+
+async function setupMap(): Promise<void> {
   const [mod] = await Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')]);
   L = (mod as unknown as { default: typeof Leaflet }).default ?? (mod as unknown as typeof Leaflet);
   const el = $('pm-map');
@@ -137,10 +142,10 @@ function cardHTML(p: Pandal): string {
     .map(([m, k]) => `<a class="btn ${m === 'walking' ? '' : 'btn-ghost'} btn-sm" href="${directionsUrl(p, m)}" target="_blank" rel="noopener" aria-label="${esc(`${t('pm.directions')} (${t(k)}): ${name(p)}`)}">${esc(t(k))}</a>`)
     .join('');
   return `<article class="pm-card" id="p-${p.id}">
-    <h3><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></h3>
+    <h3><a class="pm-link" href="/pandals/${p.id}/"><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></a></h3>
     <p class="pm-meta"><span>${esc(p.area)}</span><span>${esc(t('pm.zone.' + p.zone))}</span>${metro}${dist}</p>
     ${approx}
-    <div class="pm-actions"><span class="pm-dir-label">${esc(t('pm.directions'))}:</span>${dirs}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button><a class="btn btn-ghost btn-sm" href="/pandals/${p.id}/">${esc(t('pm.details'))}</a></div>
+    <div class="pm-actions"><span class="pm-dir-label">${esc(t('pm.directions'))}:</span>${dirs}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button></div>
     ${eatNearbyHTML(p)}
   </article>`;
 }

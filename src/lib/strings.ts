@@ -286,7 +286,6 @@ export const dict: Record<string, Entry> = {
   'pm.drive': { bn: 'গাড়িতে', en: 'Drive' },
   'pm.transit': { bn: 'বাস/মেট্রো', en: 'Transit' },
   'pm.onMap': { bn: 'ম্যাপে দেখুন', en: 'Show on map' },
-  'pm.details': { bn: 'বিস্তারিত', en: 'Details' },
   'pm.metro': { bn: 'কাছের মেট্রো', en: 'Nearest metro' },
   'pm.approx': { bn: 'অবস্থান আনুমানিক', en: 'Approximate location' },
   'pm.approxHelp': {
