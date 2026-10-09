@@ -8,6 +8,7 @@ import { initSchedule } from '../features/schedule';
 import { initDhak } from '../features/dhak';
 import { closeMiniPlayer, initPlaylists } from '../features/playlists';
 import { initCard } from '../features/card';
+import { initPolls } from '../features/polls';
 import { initSheets } from '../features/sheets';
 import { initVisitors } from '../features/visitors';
 import { initWelcome } from '../features/welcome';
@@ -23,6 +24,7 @@ initDhak();
 initPlaylists();
 initSheets();
 initCard();
+initPolls();
 const visitors = initVisitors(() => radio.isActive());
 initWelcome(() => radio.isActive());
 // One sound at a time: a song pauses the radio; the radio closes the song mini player.

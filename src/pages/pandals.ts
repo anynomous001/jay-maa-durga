@@ -8,6 +8,7 @@ import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, SITE_NAME, WHATS
 import { basePrice } from '../../shared/pricing';
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
+import { initPolls } from '../features/polls';
 import { initVisitors } from '../features/visitors';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { type LatLng, type TravelMode, directionsUrl, distanceKm, routeLegs, routeUrl } from '../lib/maps';
@@ -15,6 +16,7 @@ import { sponsorFor, sponsorHref } from '../lib/sponsors';
 
 initCommon();
 initVisitors();
+initPolls();
 
 interface Pandal extends LatLng {
   id: string;

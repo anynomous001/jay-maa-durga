@@ -2853,3 +2853,68 @@ button.pm-eat.cta:hover {
   border: 1px solid rgba(255, 255, 255, 0.16);
   background: #0c0f1f;
 }
+
+/* Polls (home + pandal map) */
+.polls {
+  position: relative;
+  z-index: 1;
+  max-width: 46rem;
+  margin: 0 auto 1.5rem;
+  background: rgba(10, 12, 32, 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.polls h2 {
+  font-size: 1.3rem;
+  margin: 0 0 0.75rem;
+}
+.poll {
+  border: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.poll legend {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  padding: 0;
+}
+.poll-choice {
+  --share: 0%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(90deg, rgba(244, 185, 66, 0.28) var(--share), rgba(10, 12, 32, 0.6) var(--share));
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.poll-choice:hover {
+  border-color: var(--accent);
+}
+.poll-choice[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.poll-choice:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.poll-pct {
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+}
+.poll-note {
+  margin: 0;
+}
+@media (max-width: 520px) {
+  .polls {
+    margin: 0 0.75rem 1.5rem;
+  }
+}

@@ -5,6 +5,8 @@
  *   POST /ping   { id, listening }  → heartbeat (every ~60 s while the page is visible)
  *   GET  /stats                     → { total, online, listening }
  *   GET  /stats/refs                → per-channel counts (see ChannelStats)
+ *   GET  /polls?id=…                → poll totals, plus this visitor's own votes
+ *   POST /polls/vote { id, poll, choice } → one vote per visitor per poll (changeable)
  *
  * `id` is a random string the browser keeps in localStorage — no cookies, no IPs,
  * nothing personal is stored. "Online" = pinged within the last 150 seconds.
@@ -26,6 +28,19 @@ export const VISITOR_ID_RE = /^[a-z0-9-]{16,40}$/;
 export const REF_RE = /^[a-z0-9-]{1,24}$/;
 const MAX_REFS = 40; // further new tags are pooled as "other" (keeps junk links from bloating storage)
 
+/** Site polls and their allowed answers. The site shows the same ids (src/features/polls.ts). */
+export const POLLS: Record<string, readonly string[]> = {
+  'use-for-hopping': ['yes', 'maybe', 'no'],
+  'more-pandals': ['yes', 'no'],
+};
+/** poll id → answer → number of votes */
+export type PollCounts = Record<string, Record<string, number>>;
+export interface PollResults {
+  counts: PollCounts;
+  /** This visitor's answer per poll, if they voted. */
+  mine: Record<string, string>;
+}
+
 /** Per channel, credited to the tag a visitor FIRST arrived with. */
 export interface ChannelStats {
   visitors: number; // unique visitors
@@ -38,6 +53,7 @@ export class Counter extends DurableObject<Env> {
   private total = 0;
   private refs: Record<string, ChannelStats> = {};
   private listened = new Set<string>();
+  private polls: PollCounts = {};
   /** Live presence lives in memory; it naturally empties if nobody is around. */
   private seen = new Map<string, { at: number; listening: boolean }>();
 
@@ -46,6 +62,7 @@ export class Counter extends DurableObject<Env> {
     ctx.blockConcurrencyWhile(async () => {
       this.total = (await ctx.storage.get<number>('total')) ?? 0;
       this.refs = (await ctx.storage.get<Record<string, ChannelStats>>('refs')) ?? {};
+      this.polls = (await ctx.storage.get<PollCounts>('polls')) ?? {};
     });
   }
 
@@ -99,6 +116,33 @@ export class Counter extends DurableObject<Env> {
     const mine = (await this.refOf(id)) ?? 'direct';
     this.channel(mine).listeners++;
     await this.ctx.storage.put({ [lkey]: 1, refs: this.refs });
+  }
+
+  /** Totals for every poll, and which answers this visitor picked (if `id` is given). */
+  async pollResults(id = ''): Promise<PollResults> {
+    const mine: Record<string, string> = {};
+    if (id) {
+      const keys = Object.keys(POLLS).map((p) => `p:${p}:${id}`);
+      for (const [key, choice] of await this.ctx.storage.get<string>(keys)) mine[key.split(':')[1]] = choice;
+    }
+    return { counts: this.polls, mine };
+  }
+
+  /**
+   * Records a vote. Only visitors the counter has seen (POST /visit) can vote; voting again moves the vote.
+   * Returns null for an unknown visitor. Not tamper-proof: someone scripting fresh ids can still vote twice.
+   */
+  async vote(id: string, poll: string, choice: string): Promise<PollResults | null> {
+    if ((await this.refOf(id)) === null) return null;
+    const key = `p:${poll}:${id}`;
+    const prev = await this.ctx.storage.get<string>(key);
+    if (prev !== choice) {
+      const counts = (this.polls[poll] ??= {});
+      if (prev) counts[prev] = Math.max(0, (counts[prev] ?? 0) - 1);
+      counts[choice] = (counts[choice] ?? 0) + 1;
+      await this.ctx.storage.put({ [key]: choice, polls: this.polls });
+    }
+    return this.pollResults(id);
   }
 
   channels(): { channels: Record<string, ChannelStats>; total: number } {

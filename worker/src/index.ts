@@ -2,6 +2,8 @@
  * Mahalaya Live API (Cloudflare Worker).
  *
  * Visitors      POST /visit, POST /ping, GET /stats
+ * Polls         GET  /polls?id=…              totals + this visitor's votes
+ *               POST /polls/vote              { id, poll, choice }
  * Sponsors      GET  /availability            which slots / pandals are free
  *               GET  /sponsors                approved, live sponsors (for the site)
  *               GET  /logos/:key              sponsor logos (from R2)
@@ -18,7 +20,7 @@
 import pricing from '../../data/pricing.json';
 import { TIERS, basePrice, SLOT_IDS } from '../../shared/pricing';
 import { Bookings, type Booking, type Provider } from './bookings';
-import { Counter, VISITOR_ID_RE } from './counter';
+import { Counter, POLLS, VISITOR_ID_RE } from './counter';
 import type { Env } from './env';
 import { corsHeaders, json, safeEqual } from './http';
 import { createCheckout, dodoConfigured, dodoRefund, verifyDodoWebhook } from './dodo';
@@ -99,6 +101,23 @@ export default {
         const ref = typeof body.ref === 'string' ? body.ref.toLowerCase() : '';
         const page = body.page === 'pandals' ? 'pandals' : '';
         return json(pathname === '/visit' ? await counter.visit(id, listening, ref, page) : await counter.ping(id, listening), cors);
+      }
+
+      // ── Polls ──
+      if (req.method === 'GET' && pathname === '/polls') {
+        const id = url.searchParams.get('id') ?? '';
+        return json(await counter.pollResults(VISITOR_ID_RE.test(id) ? id : ''), cors);
+      }
+      if (req.method === 'POST' && pathname === '/polls/vote') {
+        if (Number(req.headers.get('Content-Length') ?? 0) > 200) return json({ error: 'too large' }, cors, 413);
+        const body = (await req.json().catch(() => ({}))) as { id?: unknown; poll?: unknown; choice?: unknown };
+        const id = typeof body.id === 'string' ? body.id : '';
+        const poll = typeof body.poll === 'string' ? body.poll : '';
+        const choice = typeof body.choice === 'string' ? body.choice : '';
+        if (!VISITOR_ID_RE.test(id)) return json({ error: 'bad id' }, cors, 400);
+        if (!Object.hasOwn(POLLS, poll) || !POLLS[poll].includes(choice)) return json({ error: 'bad poll or choice' }, cors, 400);
+        const results = await counter.vote(id, poll, choice);
+        return results ? json(results, cors) : json({ error: 'unknown visitor' }, cors, 403);
       }
 
       // ── Public sponsor data ──

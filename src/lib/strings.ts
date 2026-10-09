@@ -255,6 +255,18 @@ export const dict: Record<string, Entry> = {
   'card.hint': { bn: 'স্টোরি বা হোয়াটসঅ্যাপ স্ট্যাটাসে দিন। নামটি আপনার ফোনেই থাকে, কোথাও পাঠানো হয় না।', en: 'Post it to Stories or WhatsApp status. Your name stays on your device and is never sent anywhere.' },
   'card.shareText': { bn: 'শুভ মহালয়া 🙏 লাইভ শুনুন: {url}', en: 'Shubho Mahalaya 🙏 Listen live: {url}' },
 
+  // ── Polls ──
+  'poll.title': { bn: 'আপনার মত দিন', en: 'Tell us what you think' },
+  'poll.use-for-hopping.q': { bn: 'এবার পুজোয় প্যান্ডেল ঘুরতে এই সাইট ব্যবহার করবেন?', en: 'Will you use this site for pandal hopping this Puja?' },
+  'poll.use-for-hopping.yes': { bn: 'হ্যাঁ', en: 'Yes' },
+  'poll.use-for-hopping.maybe': { bn: 'হয়তো', en: 'Maybe' },
+  'poll.use-for-hopping.no': { bn: 'না', en: 'No' },
+  'poll.more-pandals.q': { bn: 'ম্যাপে আরও প্যান্ডেল যোগ করব?', en: 'Should we add more pandals to the map?' },
+  'poll.more-pandals.yes': { bn: 'হ্যাঁ, আরও চাই', en: 'Yes, add more' },
+  'poll.more-pandals.no': { bn: 'না, এতেই হবে', en: 'No, this is enough' },
+  'poll.tap': { bn: 'একটি উত্তরে চাপুন। ফলাফল ভোটের পরে দেখা যাবে।', en: 'Tap an answer. Results show after you vote.' },
+  'poll.votes': { bn: 'মোট {n}টি ভোট · মত বদলাতে অন্য উত্তরে চাপুন', en: 'Total votes: {n} · tap another answer to change yours' },
+
   // ── Pandal map ──
   'pm.title': { bn: 'প্যান্ডেল ম্যাপ ২০২৬', en: 'Pandal map 2026' },
   'pm.intro': {
