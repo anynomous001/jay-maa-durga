@@ -38,7 +38,7 @@ for (const list of load('playlists.json').lists) {
 
 // Pandals (Phase 2)
 if (existsSync(resolve(root, 'data/pandals.json'))) {
-  const ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas'];
+  const ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas', 'South 24 Parganas'];
   const { pandals, routes = [] } = load('pandals.json');
   const pids = new Set();
   for (const p of pandals) {
@@ -48,8 +48,8 @@ if (existsSync(resolve(root, 'data/pandals.json'))) {
     for (const k of ['name_bn', 'name_en', 'area', 'source']) if (!p[k]) err(`${at}: ${k} required`);
     if (!ZONES.includes(p.zone)) err(`${at}: zone must be one of ${ZONES.join(' | ')}`);
     if (typeof p.lat !== 'number' || typeof p.lng !== 'number') err(`${at}: lat/lng must be numbers`);
-    // Rough bounding box for Kolkata + North 24 Parganas.
-    else if (p.lat < 22.3 || p.lat > 23.1 || p.lng < 88.1 || p.lng > 88.9) err(`${at}: coordinates outside Kolkata region`);
+    // Rough bounding box for Kolkata and the 24 Parganas districts.
+    else if (p.lat < 22.0 || p.lat > 23.3 || p.lng < 88.0 || p.lng > 89.1) err(`${at}: coordinates outside the Kolkata / 24 Parganas region`);
     if (typeof p.verified !== 'boolean') err(`${at}: verified must be true/false`);
   }
   for (const r of routes) {

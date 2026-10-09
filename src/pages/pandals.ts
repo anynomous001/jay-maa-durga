@@ -97,9 +97,25 @@ function syncMarkers() {
     else m.remove();
     m.setTooltipContent(name(byId.get(id)!));
   }
-  const pts = visible.map((p) => [p.lat, p.lng] as [number, number]);
+  const pts = focusPoints(visible).map((p) => [p.lat, p.lng] as [number, number]);
   if (state.me) pts.push([state.me.lat, state.me.lng]);
   if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: 15 });
+}
+
+/** Pins farther than this from the middle of the list are left out of the auto-zoom (they stay on the map). */
+const FOCUS_RADIUS_KM = 15;
+
+/**
+ * Pandals to frame when the map zooms. A few pins in far-off towns (Basirhat, Baruipur) would otherwise
+ * zoom the whole map out until Kolkata is tiny. Picking a zone or searching for one of them still frames it,
+ * because the middle of that smaller list is then right next to it.
+ */
+function focusPoints(list: Pandal[]): Pandal[] {
+  if (list.length < 3) return list;
+  const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+  const mid: LatLng = { lat: median(list.map((p) => p.lat)), lng: median(list.map((p) => p.lng)) };
+  const near = list.filter((p) => distanceKm(mid, p) <= FOCUS_RADIUS_KM);
+  return near.length ? near : list;
 }
 
 // ── List ──

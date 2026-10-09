@@ -1,5 +1,5 @@
 {
- "_readme": "Coordinates were looked up one by one on Google Maps (see docs/pandal-lookup-log.tsv). verified=false means the pin may not be the exact pandal spot. zone: North Kolkata | South Kolkata (Central | Salt Lake–New Town | North 24 Parganas also allowed). theme2026: leave empty unless confirmed. Routes: ordered stop ids; travelmode walking|driving|transit.",
+ "_readme": "Coordinates were looked up one by one on Google Maps (see docs/pandal-lookup-log.tsv). verified=false means the pin may not be the exact pandal spot. zone: North Kolkata | South Kolkata (Central | Salt Lake–New Town | North 24 Parganas | South 24 Parganas also allowed). theme2026: leave empty unless confirmed. Routes: ordered stop ids; travelmode walking|driving|transit.",
  "pandals": [
   {
    "id": "bagbazar",
@@ -695,6 +695,76 @@
    "verified": true,
    "source": "Google Maps place \"Rajdanga Naba Uday Sangha Durga Puja Ground\" (search: Rajdanga Naba Uday Sangha Durga Puja), looked up 2026-10-04",
    "notes": "puja ground listing"
+  },
+  {
+   "id": "beleghata-33-pally",
+   "name_bn": "বেলেঘাটা ৩৩ পল্লী",
+   "name_en": "Beleghata 33 Pally",
+   "area": "Phoolbagan, Beleghata (P-225/1 CIT Road)",
+   "zone": "Central",
+   "lat": 22.5685686,
+   "lng": 88.3911284,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Google Maps place \"Beliaghata 33 Pally\" (P-225/1, CIT Rd, Subhas Sarobar Park, Phoolbagan, Beleghata), looked up 2026-10-09. Named in https://curlytales.com/india/experiences/durga-puja-unique-pandals-in-kolkata-with-themes-that-will-make-you-think/amp/",
+   "notes": "named place, address matches"
+  },
+  {
+   "id": "salt-lake-fd-block",
+   "name_bn": "সল্টলেক এফডি ব্লক সার্বজনীন",
+   "name_en": "Salt Lake FD Block Sarbojanin",
+   "area": "Salt Lake (FD Block, Sector 3)",
+   "zone": "Salt Lake–New Town",
+   "lat": 22.5834541,
+   "lng": 88.4122701,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Google Maps place \"Salt Lake FD Block Durga Puja Pandal\" (FD Block, Sector 3, Bidhannagar), looked up 2026-10-09. Named in https://hindupad.com/salt-lake-fd-block-durga-puja-2011-52-feet-durga-idol-in-kolkata/",
+   "notes": "named pandal place; FD Park is next to it"
+  },
+  {
+   "id": "prantik-square-basirhat",
+   "name_bn": "প্রান্তিক স্কোয়ার সার্বজনীন",
+   "name_en": "Prantik Square Sarbojanin",
+   "area": "Basirhat",
+   "zone": "North 24 Parganas",
+   "lat": 22.6707065,
+   "lng": 88.8485729,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Google Maps place \"Prantik Square Sarbojonin Durga Puja\" (Basirhat), looked up 2026-10-09; matches the Wikipedia coordinates for Prantik Square. https://en.wikipedia.org/wiki/Prantik_Square,_Basirhat",
+   "notes": "named place"
+  },
+  {
+   "id": "roychowdhury-bari-baruipur",
+   "name_bn": "বারুইপুর রায়চৌধুরী বাড়ি",
+   "name_en": "Roychowdhury Bari, Baruipur",
+   "area": "Phooltala, Baruipur",
+   "zone": "South 24 Parganas",
+   "lat": 22.3425668,
+   "lng": 88.4541343,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Google Maps place \"Roy Chowdhury Durga Bari\" (place of worship, Phooltala, Baruipur), looked up 2026-10-09. Puja described in https://kinjalbose.com/2022/10/09/durga-puja-of-roychowdhury-bari-baruipur/",
+   "notes": "named place; another listing, \"Baruipur Choudhury Bari\" (historical landmark, Subuddhipur), is a different house"
+  },
+  {
+   "id": "bandhu-mahal-baguiati",
+   "name_bn": "অশ্বিনীনগর বন্ধুমহল ক্লাব",
+   "name_en": "Aswininagar Bandhu Mahal Club",
+   "area": "Ashwini Nagar, Baguiati",
+   "zone": "North 24 Parganas",
+   "lat": 22.6100164,
+   "lng": 88.4329278,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Google Maps place \"Aswininagar Bandhumahal Club, Baguiati\" (social club, Ashwini Nagar, Baguiati), looked up 2026-10-09. Named as a Baguiati pandal-hopping stop in a 2022 Kolkata pandal guide found by web search.",
+   "notes": "named place"
   }
  ],
  "routes": [

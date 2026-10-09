@@ -268,6 +268,7 @@ export const dict: Record<string, Entry> = {
   'pm.zone.Central': { bn: 'মধ্য কলকাতা', en: 'Central' },
   'pm.zone.Salt Lake–New Town': { bn: 'সল্টলেক–নিউ টাউন', en: 'Salt Lake–New Town' },
   'pm.zone.North 24 Parganas': { bn: 'উত্তর ২৪ পরগনা', en: 'North 24 Parganas' },
+  'pm.zone.South 24 Parganas': { bn: 'দক্ষিণ ২৪ পরগনা', en: 'South 24 Parganas' },
   'pm.search': { bn: 'প্যান্ডেল বা এলাকা খুঁজুন', en: 'Search pandal or area' },
   'pm.nearMe': { bn: 'আমার কাছে', en: 'Near me' },
   'pm.locating': { bn: 'আপনার অবস্থান খোঁজা হচ্ছে…', en: 'Finding your location…' },
