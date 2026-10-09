@@ -25,5 +25,7 @@ Updated: 2026-10-08. Mahalaya is **Sat 10 Oct 2026, 3:50 AM IST**.
 - [ ] Look at the `?ref=` visitor counts to see which channel works, then post more there
 
 ## Decisions I need from you
+- [ ] Refine the 5 approximate pins added from the web (Beleghata 33 Pally, Salt Lake FD Block, Prantik Square Basirhat, Bandhu Mahal Baguiati, Roychowdhury Bari Baruipur): open each in Google Maps, send me the full link, and I set exact coordinates and remove the "approximate" warning
+- [ ] Want more districts (Siliguri, Howrah, Hooghly, Nadia...)? Same process: names are findable online, exact pins need a Google Maps link each
 - [ ] Is the pandal list complete? Two pins are marked approximate (nalin-sarkar-street, bosepukur-sitala-mandir); add more pandals to `data/pandals.json` and each gets its own page
 - [ ] Tell me if you want a /bn/ URL too (the home page `/` is the Bengali version today)
