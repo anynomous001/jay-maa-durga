@@ -700,15 +700,15 @@
    "id": "beleghata-33-pally",
    "name_bn": "বেলেঘাটা ৩৩ পল্লী",
    "name_en": "Beleghata 33 Pally",
-   "area": "Beleghata",
+   "area": "Phoolbagan, Beleghata (P-225/1 CIT Road)",
    "zone": "Central",
    "lat": 22.564,
    "lng": 88.395,
    "nearestMetro": "",
    "theme2026": "",
    "verified": false,
-   "source": "Area-level pin placed from general knowledge of the locality; not looked up on a map. Name and place from: https://curlytales.com/india/experiences/durga-puja-unique-pandals-in-kolkata-with-themes-that-will-make-you-think/amp/",
-   "notes": "approximate: pin is at the area centre, not the exact pandal"
+   "source": "Area-level pin placed from general knowledge of the locality; not looked up on a map. Name and place from: https://curlytales.com/india/experiences/durga-puja-unique-pandals-in-kolkata-with-themes-that-will-make-you-think/amp/ ; address P-225/1, CIT Road, near Subhas Sarobar Park, Phoolbagan, Beleghata from a 2025 pandal guide (web search). Pin placed near Subhas Sarobar, not looked up on a map.",
+   "notes": "approximate: pin is near Subhas Sarobar, not the exact pandal"
   },
   {
    "id": "salt-lake-fd-block",
@@ -730,27 +730,13 @@
    "name_en": "Prantik Square Sarbojanin",
    "area": "Basirhat",
    "zone": "North 24 Parganas",
-   "lat": 22.657,
-   "lng": 88.894,
+   "lat": 22.670813,
+   "lng": 88.848692,
    "nearestMetro": "",
    "theme2026": "",
-   "verified": false,
-   "source": "Area-level pin placed from general knowledge of the locality; not looked up on a map. Name and place from: https://en.wikipedia.org/wiki/Prantik_Square,_Basirhat",
-   "notes": "approximate: pin is at the area centre, not the exact pandal"
-  },
-  {
-   "id": "bandhu-mahal-baguiati",
-   "name_bn": "বন্ধু মহল ক্লাব",
-   "name_en": "Bandhu Mahal Club",
-   "area": "Baguiati",
-   "zone": "North 24 Parganas",
-   "lat": 22.611,
-   "lng": 88.434,
-   "nearestMetro": "",
-   "theme2026": "",
-   "verified": false,
-   "source": "Area-level pin placed from general knowledge of the locality; not looked up on a map. Named as a Baguiati pandal-hopping stop in a 2022 Kolkata pandal guide found by web search (page not saved).",
-   "notes": "approximate: pin is at the area centre, not the exact pandal"
+   "verified": true,
+   "source": "Coordinates of Prantik Square from its Wikipedia article (22°40′15″N 88°50′55″E), https://en.wikipedia.org/wiki/Prantik_Square,_Basirhat ; the Sarbojanin puja is held at the square. Found by web search 2026-10-09, not looked up on Google Maps.",
+   "notes": "pin is the square, from Wikipedia"
   },
   {
    "id": "roychowdhury-bari-baruipur",
@@ -758,13 +744,13 @@
    "name_en": "Roychowdhury Bari, Baruipur",
    "area": "Baruipur",
    "zone": "South 24 Parganas",
-   "lat": 22.359,
-   "lng": 88.432,
+   "lat": 22.353901,
+   "lng": 88.434611,
    "nearestMetro": "",
    "theme2026": "",
    "verified": false,
-   "source": "Area-level pin placed from general knowledge of the locality; not looked up on a map. Name and place from: https://kinjalbose.com/2022/10/09/durga-puja-of-roychowdhury-bari-baruipur/ (household puja, 300+ years old per that post)",
-   "notes": "approximate: pin is at the area centre, not the exact pandal"
+   "source": "Pin from Wikivoyage's Baruipur listing for the palace of the Roy Chowdhury zamindar family (Baruipur Rajbari), https://en.wikivoyage.org/wiki/Baruipur ; likely the same house as the puja in https://kinjalbose.com/2022/10/09/durga-puja-of-roychowdhury-bari-baruipur/ but not confirmed.",
+   "notes": "approximate: pin is the Roy Chowdhury family palace per Wikivoyage, not confirmed as the puja house"
   }
  ],
  "routes": [
