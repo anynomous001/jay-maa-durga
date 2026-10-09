@@ -37,7 +37,7 @@ export const dict: Record<string, Entry> = {
   'cd.seconds': { bn: 'সেকেন্ড', en: 'sec' },
   'cd.ist': { bn: 'ভারতীয় সময়', en: 'India time (IST)' },
   'cd.local': { bn: 'আপনার সময়', en: 'Your time' },
-  'cd.by': { bn: 'কাউন্টডাউন সৌজন্যে', en: 'Countdown by' },
+  'cd.by': { bn: 'মতামত সৌজন্যে', en: 'Poll by' },
 
   'ui.close': { bn: 'বন্ধ করুন', en: 'Close' },
   'dock.label': { bn: 'আরও', en: 'More' },
@@ -210,8 +210,8 @@ export const dict: Record<string, Entry> = {
   },
   'faq.q4': { bn: 'বিদেশ থেকে কখন শুনব?', en: 'What time is it outside India?' },
   'faq.a4': {
-    bn: 'উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।',
-    en: 'The countdown above also shows your local time. For example: London 11:20 PM on 9 Oct, New York 6:20 PM on 9 Oct, Dubai 2:20 AM on 10 Oct.',
+    bn: 'এই পাতার "বিদেশে মহালয়ার সময়" অংশে দেখুন। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।',
+    en: 'See “Mahalaya time around the world” on this page. For example: London 11:20 PM on 9 Oct, New York 6:20 PM on 9 Oct, Dubai 2:20 AM on 10 Oct.',
   },
 
   // ── Visible SEO facts (home page) ──
@@ -440,8 +440,8 @@ export const dict: Record<string, Entry> = {
   },
   'slot.dhak': { bn: '"ঢাক সৌজন্যে …"', en: '“Dhak presented by …”' },
   'slot.dhak.where': { bn: 'হোম পেজে ঢাক বাজানোর অংশে', en: 'Under the dhak on the home page' },
-  'slot.countdown': { bn: '"কাউন্টডাউন সৌজন্যে …"', en: '“Countdown by …”' },
-  'slot.countdown.where': { bn: 'হোম পেজের কাউন্টডাউনের নিচে', en: 'Below the home-page countdown' },
+  'slot.countdown': { bn: '"মতামত সৌজন্যে …"', en: '“Poll by …”' },
+  'slot.countdown.where': { bn: 'হোম পেজের মতামত কার্ডের নিচে', en: 'Below the home-page poll' },
   'slot.map-partner': { bn: 'প্যান্ডেল ম্যাপ পার্টনার', en: 'Pandal map partner' },
   'slot.map-partner.where': { bn: 'প্যান্ডেল ম্যাপের মাথায়', en: 'Top of the pandal map page' },
   'slot.pandal-nearby': { bn: '"কাছেই খাবার" — প্যান্ডেল কার্ডে', en: '“Eat nearby” on pandal cards' },

@@ -3,7 +3,7 @@
   <head>
     <!--@partial head-->
     <title>মহালয়া ২০২৬ লাইভ — মহিষাসুরমর্দিনী | Mahalaya 2026 Live</title>
-    <meta name="description" content="মহালয়া ২০২৬ লাইভ: ১০ অক্টোবর ভোর ৩:৫০-এ আকাশবাণীর মহিষাসুরমর্দিনী সরাসরি শুনুন। Mahalaya 2026 live radio with a countdown in your time zone." />
+    <meta name="description" content="মহালয়া ২০২৬ লাইভ: ১০ অক্টোবর ভোর ৩:৫০-এ আকাশবাণীর মহিষাসুরমর্দিনী সরাসরি শুনুন। Mahalaya 2026 live radio, Puja dates and a pandal map." />
     <link rel="canonical" href="https://maa-aschen-nine.vercel.app/" />
     <link rel="alternate" hreflang="bn" href="https://maa-aschen-nine.vercel.app/" />
     <link rel="alternate" hreflang="en" href="https://maa-aschen-nine.vercel.app/en/" />
@@ -58,7 +58,7 @@
           { "@type": "Question", "name": "২০২৬ সালে মহালয়া কবে?", "acceptedAnswer": { "@type": "Answer", "text": "শনিবার, ১০ অক্টোবর ২০২৬। আকাশবাণীতে মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)।" } },
           { "@type": "Question", "name": "মহালয়া লাইভ রেডিও অনলাইনে কীভাবে শুনব?", "acceptedAnswer": { "@type": "Answer", "text": "এই পাতার প্লেয়ারে \"শুনুন\" চাপুন — এটি আকাশবাণী কলকাতার সরকারি স্ট্রিম চালায়। না চললে আকাশবাণীর ওয়েবসাইট বা NewsOnAir অ্যাপ ব্যবহার করুন, অথবা MW ৬৫৭ kHz-এ রেডিও ধরুন।" } },
           { "@type": "Question", "name": "দুর্গাপুজো ২০২৬-এর তারিখ কী?", "acceptedAnswer": { "@type": "Answer", "text": "ষষ্ঠী ১৬ অক্টোবর, সপ্তমী ১৭–১৮ অক্টোবর, অষ্টমী ১৯ অক্টোবর, নবমী ২০ অক্টোবর, বিজয়া দশমী ২১ অক্টোবর (বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা)।" } },
-          { "@type": "Question", "name": "বিদেশ থেকে কখন শুনব?", "acceptedAnswer": { "@type": "Answer", "text": "উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।" } }
+          { "@type": "Question", "name": "বিদেশ থেকে কখন শুনব?", "acceptedAnswer": { "@type": "Answer", "text": "এই পাতার "বিদেশে মহালয়ার সময়" অংশে দেখুন। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।" } }
         ]
       }
     </script>
@@ -148,22 +148,12 @@
           </div>
 
           <div class="hero-right">
-            <div class="countdown" id="countdown" role="timer" aria-live="off">
-              <p class="cd-label" id="cd-label" data-i18n="cd.toMahalaya">মহিষাসুরমর্দিনী শুরু হতে বাকি</p>
-              <div class="cd-grid" id="cd-grid">
-                <div><span class="cd-num" data-unit="days">–</span><span class="cd-unit" data-i18n="cd.days">দিন</span></div>
-                <div><span class="cd-num" data-unit="hours">–</span><span class="cd-unit" data-i18n="cd.hours">ঘণ্টা</span></div>
-                <div><span class="cd-num" data-unit="minutes">–</span><span class="cd-unit" data-i18n="cd.minutes">মিনিট</span></div>
-                <div><span class="cd-num" data-unit="seconds">–</span><span class="cd-unit" data-i18n="cd.seconds">সেকেন্ড</span></div>
-              </div>
-              <p class="cd-message" id="cd-message" hidden></p>
-              <dl class="cd-times" id="cd-times">
-                <div><dt data-i18n="cd.ist">ভারতীয় সময়</dt><dd id="cd-ist">শনি, ১০ অক্টো · ভোর ৩:৫০</dd></div>
-                <div id="cd-local-row"><dt data-i18n="cd.local">আপনার সময়</dt><dd id="cd-local"></dd></div>
-              </dl>
-              <p class="sr-only" id="cd-sr" aria-live="polite"></p>
+            <!-- Poll card (replaces the old countdown). Shown once the API answers /polls. The sponsor slot keeps its id "countdown". -->
+            <section class="polls hero-poll" id="polls" aria-labelledby="polls-title" hidden>
+              <h2 id="polls-title" data-i18n="poll.title">আপনার মত দিন</h2>
+              <div class="poll-list"></div>
               <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
-            </div>
+            </section>
             <!-- Featured: the pandal map. Art is drawn from the real pandal coordinates in data/pandals.json. -->
             <a class="mapcard" href="/pandals/" aria-labelledby="mapcard-title" aria-describedby="mapcard-sub">
               <div class="mapcard-map">
@@ -194,10 +184,6 @@
         </div>
       </section>
 
-      <section class="polls panel" id="polls" aria-labelledby="polls-title" hidden>
-        <h2 id="polls-title" data-i18n="poll.title">আপনার মত দিন</h2>
-        <div class="poll-list"></div>
-      </section>
       <section class="seo" aria-labelledby="seo-title">
         <h2 id="seo-title" data-i18n="seo.title">মহালয়া ২০২৬: তারিখ, সময় ও কীভাবে শুনবেন</h2>
         <h3 data-i18n="seo.when.h">মহালয়া ২০২৬ কবে?</h3>
@@ -282,7 +268,7 @@
           <details><summary data-i18n="faq.q1">২০২৬ সালে মহালয়া কবে?</summary><p data-i18n="faq.a1">শনিবার, ১০ অক্টোবর ২০২৬। আকাশবাণীতে মহিষাসুরমর্দিনীর সম্প্রচার ভোর ৩:৫০ থেকে ৫:৪৫ (ভারতীয় সময়)।</p></details>
         <details><summary data-i18n="faq.q2">মহালয়া লাইভ রেডিও অনলাইনে কীভাবে শুনব?</summary><p data-i18n="faq.a2">এই পাতার প্লেয়ারে "শুনুন" চাপুন — এটি আকাশবাণী কলকাতার সরকারি স্ট্রিম চালায়। না চললে আকাশবাণীর ওয়েবসাইট বা NewsOnAir অ্যাপ ব্যবহার করুন, অথবা MW ৬৫৭ kHz-এ রেডিও ধরুন।</p></details>
         <details><summary data-i18n="faq.q3">দুর্গাপুজো ২০২৬-এর তারিখ কী?</summary><p data-i18n="faq.a3">ষষ্ঠী ১৬ অক্টোবর, সপ্তমী ১৭–১৮ অক্টোবর, অষ্টমী ১৯ অক্টোবর, নবমী ২০ অক্টোবর, বিজয়া দশমী ২১ অক্টোবর (বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা)।</p></details>
-        <details><summary data-i18n="faq.q4">বিদেশ থেকে কখন শুনব?</summary><p data-i18n="faq.a4">উপরের কাউন্টডাউন আপনার নিজের সময়েও দেখায়। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।</p></details>
+        <details><summary data-i18n="faq.q4">বিদেশ থেকে কখন শুনব?</summary><p data-i18n="faq.a4">এই পাতার "বিদেশে মহালয়ার সময়" অংশে দেখুন। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।</p></details>
         </div>
       </dialog>
       <dialog class="sheet" id="sheet-card" aria-labelledby="sheet-card-title">

@@ -268,7 +268,7 @@ export default function staticPages() {
         '/en/',
         englishHome(home, dict, site, {
           title: 'Mahalaya 2026 Live Radio: Mahishasuramardini | Ma Aschen',
-          description: 'Listen to Akashvani’s Mahishasuramardini live from 3:50 AM IST on 10 Oct 2026. Countdown in your time zone, Puja dates and a Kolkata pandal map.',
+          description: 'Listen to Akashvani’s Mahishasuramardini live from 3:50 AM IST on 10 Oct 2026, plus Durga Puja dates and a pandal map for Kolkata and beyond.',
           ogTitle: 'Shubho Mahalaya 2026 — Mahishasuramardini live | Mahalaya live radio',
           ogDescription: '3:50 AM IST, 10 October: listen to Akashvani’s Mahishasuramardini live, set a reminder and find Kolkata pandals on the map.',
         }),
