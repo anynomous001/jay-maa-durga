@@ -31,7 +31,8 @@ function takeRef(): string {
 }
 const PING_MS = 60_000; // keep well inside the Workers free tier (see README)
 
-function visitorId(): string {
+/** This browser's anonymous id (also used to keep one vote per poll). */
+export function visitorId(): string {
   let id = localStorage.getItem(ID_KEY);
   if (!id || !/^[a-z0-9-]{16,40}$/.test(id)) {
     id = crypto.randomUUID?.() ?? Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, '0')).join('');

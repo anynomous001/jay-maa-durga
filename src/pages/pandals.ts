@@ -8,6 +8,7 @@ import { MAP_TILE_ATTRIBUTION, MAP_TILE_MAX_ZOOM, MAP_TILE_URL, SITE_NAME, WHATS
 import { basePrice } from '../../shared/pricing';
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
+import { initPolls } from '../features/polls';
 import { initVisitors } from '../features/visitors';
 import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { type LatLng, type TravelMode, directionsUrl, distanceKm, routeLegs, routeUrl } from '../lib/maps';
@@ -15,6 +16,7 @@ import { sponsorFor, sponsorHref } from '../lib/sponsors';
 
 initCommon();
 initVisitors();
+initPolls();
 
 interface Pandal extends LatLng {
   id: string;
@@ -40,7 +42,25 @@ interface Route {
 const pandals = data.pandals as Pandal[];
 const routes = data.routes as Route[];
 const byId = new Map(pandals.map((p) => [p.id, p]));
-const zones = [...new Set(pandals.map((p) => p.zone))];
+/** Kolkata and the 24 Parganas get a filter button each; every other district shares one "Other districts" button. */
+const NEAR_ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas', 'South 24 Parganas'];
+const OTHER = 'other';
+const zones = [
+  ...NEAR_ZONES.filter((z) => pandals.some((p) => p.zone === z)),
+  ...(pandals.some((p) => !NEAR_ZONES.includes(p.zone)) ? [OTHER] : []),
+];
+/**
+ * The unfiltered map frames Kolkata itself; pins in far-off towns (Basirhat, Siliguri…) stay on the map but would
+ * otherwise zoom it out until Kolkata is tiny. A zone filter or a search frames every matching pin.
+ */
+const KOLKATA_ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town'];
+function framed(visible: Pandal[]): Pandal[] {
+  if (state.zone !== 'all' || state.query.trim()) return visible;
+  const city = visible.filter((p) => KOLKATA_ZONES.includes(p.zone));
+  return city.length ? city : visible;
+}
+const inZone = (zone: string) =>
+  state.zone === 'all' || zone === state.zone || (state.zone === OTHER && !NEAR_ZONES.includes(zone));
 
 const state = { zone: 'all', query: '', me: null as LatLng | null };
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -97,34 +117,19 @@ function syncMarkers() {
     else m.remove();
     m.setTooltipContent(name(byId.get(id)!));
   }
-  const pts = focusPoints(visible).map((p) => [p.lat, p.lng] as [number, number]);
+  const pts = framed(visible).map((p) => [p.lat, p.lng] as [number, number]);
   if (state.me) pts.push([state.me.lat, state.me.lng]);
   if (pts.length) map.fitBounds(L.latLngBounds(pts), { padding: [24, 24], maxZoom: 15 });
 }
 
-/** Pins farther than this from the middle of the list are left out of the auto-zoom (they stay on the map). */
-const FOCUS_RADIUS_KM = 15;
-
-/**
- * Pandals to frame when the map zooms. A few pins in far-off towns (Basirhat, Baruipur) would otherwise
- * zoom the whole map out until Kolkata is tiny. Picking a zone or searching for one of them still frames it,
- * because the middle of that smaller list is then right next to it.
- */
-function focusPoints(list: Pandal[]): Pandal[] {
-  if (list.length < 3) return list;
-  const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
-  const mid: LatLng = { lat: median(list.map((p) => p.lat)), lng: median(list.map((p) => p.lng)) };
-  const near = list.filter((p) => distanceKm(mid, p) <= FOCUS_RADIUS_KM);
-  return near.length ? near : list;
-}
 
 // ── List ──
 function filtered(): Pandal[] {
   const q = state.query.trim().toLowerCase();
   let out = pandals.filter(
     (p) =>
-      (state.zone === 'all' || p.zone === state.zone) &&
-      (!q || [p.name_bn, p.name_en, p.area, p.nearestMetro ?? ''].some((s) => s.toLowerCase().includes(q))),
+      inZone(p.zone) &&
+      (!q || [p.name_bn, p.name_en, p.area, p.zone, p.nearestMetro ?? ''].some((s) => s.toLowerCase().includes(q))),
   );
   if (state.me) {
     const me = state.me;
@@ -197,7 +202,7 @@ function renderZones() {
 function renderRoutes() {
   const box = $('pm-routes');
   box.innerHTML = '';
-  for (const r of routes.filter((r) => state.zone === 'all' || r.zone === state.zone)) {
+  for (const r of routes.filter((r) => inZone(r.zone))) {
     const stops = r.stops.map((id) => byId.get(id)!);
     const legs = routeLegs(stops);
     const div = document.createElement('article');
