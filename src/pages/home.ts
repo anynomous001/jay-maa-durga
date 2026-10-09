@@ -1,6 +1,6 @@
 import { initCommon } from '../lib/common';
 import { initMotion } from '../features/motion';
-import { initCountdown } from '../features/countdown';
+import { initHeroSeason } from '../features/countdown';
 import { initRadio } from '../features/radio';
 import { initWake } from '../features/wake';
 import { initReminders, initShare } from '../features/reminders';
@@ -14,7 +14,7 @@ import { initVisitors } from '../features/visitors';
 import { initWelcome } from '../features/welcome';
 
 initCommon();
-initCountdown();
+initHeroSeason();
 const radio = initRadio();
 initWake(radio);
 initReminders();
