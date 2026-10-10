@@ -1609,7 +1609,7 @@ html.sheet-open {
     display: contents;
   }
   .hero-copy { order: 1; }
-  .radio-card { order: 2; }
+  .radio-card, .hop-card { order: 2; }
   .dock { order: 3; }
   .reminders { order: 4; }
   .hero .countdown, .hero .hero-poll { order: 5; }
@@ -2769,6 +2769,7 @@ button.pm-eat.cta:hover {
 @media (max-width: 959px) {
   .hero .countdown, .hero .hero-poll { order: 2; margin-top: 14svh; }
   .radio-card { order: 3; margin-top: 0; }
+  .hop-card { order: 4; }
   .mapcard { order: 3; }
   .dock { order: 4; }
   .reminders { order: 5; }
@@ -2948,5 +2949,60 @@ button.pm-eat.cta:hover {
 @media (prefers-reduced-motion: reduce) {
   #hero-title .ht {
     transition: none;
+  }
+}
+
+/* Pandal-hopping routes card (home hero, where the radio player was) */
+.hop-card {
+  padding: 1rem;
+  background: rgba(10, 12, 32, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+}
+.hop-card h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.25rem;
+}
+.hop-lead {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin: 0 0 0.6rem;
+}
+.hop-list {
+  list-style: none;
+  margin: 0 0 0.6rem;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+.hop-list a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  text-decoration: none;
+}
+.hop-list a:hover,
+.hop-list a:focus-visible {
+  border-color: var(--accent);
+}
+.hop-name {
+  font-weight: 600;
+}
+.hop-meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.hop-all {
+  color: var(--accent);
+  font-weight: 600;
+}
+@media (min-width: 720px) {
+  .hop-list {
+    grid-template-columns: 1fr 1fr;
   }
 }

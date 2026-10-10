@@ -80,7 +80,6 @@ function englishHome(html, dict, site, meta) {
   });
   h = h.replace(/<\w+\b[^>]*\sdata-i18n-attr="([^"]+)"[^>]*>/g, (tag, pairs) => setAttrs(tag, pairs));
   h = h.replace('<html lang="bn"', '<html lang="en"');
-  h = h.replace(/(<dd id="cd-ist">)[^<]*/, '$1Sat, 10 Oct · 3:50 am'); // JS rewrites it; this is the no-JS text
   h = h.replace(/(id="lang-toggle" class="lang-toggle" )lang="en">English/, '$1lang="bn">বাংলা');
   h = h.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
   h = setMeta(h, 'name', 'description', meta.description);
@@ -124,7 +123,6 @@ export default function staticPages() {
         '@type': 'BreadcrumbList',
         itemListElement: items.map(([name, path], i) => ({ '@type': 'ListItem', position: i + 1, name, item: site + path })),
       });
-      const first = days[0].dates[0];
       const shashthi = days.find((d) => d.id === 'shashthi').dates[0];
       const dashami = days.find((d) => d.id === 'dashami').dates[0];
       const fmt = (iso, f = WEEKDAY) => f.format(new Date(iso + 'T12:00:00Z'));
@@ -183,7 +181,7 @@ export default function staticPages() {
       <section class="panel">
         <h2>Puja dates 2026 <span lang="bn">· পুজোর তারিখ</span></h2>
         <p>${esc(puja)} <a href="/durga-puja-2026-dates/">Full Durga Puja 2026 calendar →</a></p>
-        <p>Mahalaya is on ${esc(fmtShort(first))}: <a href="/">listen to Mahishasuramardini live →</a></p>
+        <p><a href="/">Pandal-hopping routes, Puja songs and greetings →</a></p>
       </section>
     </main>`;
         const place = {
@@ -217,15 +215,14 @@ export default function staticPages() {
       // ── Puja dates page ──────────────────────────────────────────────────
       const datesPath = '/durga-puja-2026-dates/';
       const faq = [
-        ['When is Durga Puja 2026?', `${puja} Mahalaya, which marks the start of Devi Paksha, is on ${fmt(first)}.`],
-        ['When is Mahalaya 2026?', `Mahalaya 2026 is on ${fmt(first)}. Akashvani Kolkata broadcasts Mahishasuramardini from 3:50 to 5:45 AM IST.`],
+        ['When is Durga Puja 2026?', puja],
         ['Why does Saptami span two days in 2026?', 'By the Bisuddha Siddhanta panjika, Saptami falls across two calendar days this year. The Gupta Press panjika runs one day earlier from Ashtami, so check which panjika your local committee follows.'],
       ];
       const main = `<main id="main" class="policies static-page">
       <section class="page-head">
         <h1>Durga Puja 2026 dates <span lang="bn">দুর্গাপুজো ২০২৬ তারিখ</span></h1>
-        <p class="lead">${esc(puja)} Mahalaya, the start of Devi Paksha, is on ${esc(fmt(first))}.</p>
-        <p class="lead" lang="bn">${esc(pujaBn)} মহালয়া ${esc(fmtShortBn(first))}।</p>
+        <p class="lead">${esc(puja)}</p>
+        <p class="lead" lang="bn">${esc(pujaBn)}</p>
       </section>
       <section class="panel">
         <h2>Calendar <span lang="bn">· নির্ঘণ্ট</span></h2>
@@ -239,7 +236,7 @@ export default function staticPages() {
         ${faq.map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join('\n        ')}
       </section>
       <section class="panel">
-        <p><a href="/">Listen to Mahalaya live →</a> · <a href="/pandals/">Kolkata pandal map →</a></p>
+        <p><a href="/pandals/">Pandal map and hopping routes →</a> · <a href="/">Ma Aschen home →</a></p>
       </section>
     </main>`;
       write(
@@ -248,9 +245,9 @@ export default function staticPages() {
           site,
           path: datesPath,
           title: 'Durga Puja 2026 Dates: Shashthi to Dashami | Ma Aschen',
-          description: `${puja} Mahalaya is on ${fmtShort(first)}. Full day-by-day calendar.`,
-          image: '/og.jpg',
-          imageAlt: 'Durga Puja pandal at dusk',
+          description: `${puja} Day-by-day calendar from Shashthi to Bijoya Dashami.`,
+          image: '/og-pandals.jpg',
+          imageAlt: 'A lit Durga Puja pandal in Kolkata at night',
           main,
           ld: [
             { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
@@ -267,10 +264,10 @@ export default function staticPages() {
       write(
         '/en/',
         englishHome(home, dict, site, {
-          title: 'Mahalaya 2026 Live Radio: Mahishasuramardini | Ma Aschen',
-          description: 'Listen to Akashvani’s Mahishasuramardini live from 3:50 AM IST on 10 Oct 2026, plus Durga Puja dates and a pandal map for Kolkata and beyond.',
-          ogTitle: 'Shubho Mahalaya 2026 — Mahishasuramardini live | Mahalaya live radio',
-          ogDescription: '3:50 AM IST, 10 October: listen to Akashvani’s Mahishasuramardini live, set a reminder and find Kolkata pandals on the map.',
+          title: 'Durga Puja 2026 Pandal Map & Hopping Routes | Ma Aschen',
+          description: 'Durga Puja 2026: 60+ pujas in Kolkata and West Bengal on one map, with the nearest metro, directions and ready-made pandal-hopping routes.',
+          ogTitle: 'Happy Durga Puja 2026 — pandal map and hopping routes',
+          ogDescription: '60+ pujas in Kolkata and beyond on one map: find pandals near you, the nearest metro and ready-made hopping routes.',
         }),
       );
 

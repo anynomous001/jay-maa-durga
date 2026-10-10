@@ -1,5 +1,5 @@
 /**
- * "Make a Mahalaya card": draws a 1080×1920 greeting (Stories / WhatsApp status size)
+ * "Make a greeting card": draws a 1080×1920 greeting (Stories / WhatsApp status size)
  * on a canvas with the visitor's name, then lets them download or share the PNG.
  * Everything happens in the browser; the name is never sent anywhere.
  */
@@ -90,7 +90,7 @@ export function initCard(): void {
     });
   };
   const toBlob = () => new Promise<Blob | null>((res) => canvas.toBlob(res, 'image/png'));
-  const fileName = () => `mahalaya-2026${input.value.trim() ? '-' + input.value.trim().replace(/[^\p{L}\p{M}\p{N}]+/gu, '-').slice(0, 20) : ''}.png`;
+  const fileName = () => `durga-puja-2026${input.value.trim() ? '-' + input.value.trim().replace(/[^\p{L}\p{M}\p{N}]+/gu, '-').slice(0, 20) : ''}.png`;
 
   input.addEventListener('input', render);
   document.querySelector('[data-open="sheet-card"]')?.addEventListener('click', render);
