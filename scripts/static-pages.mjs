@@ -1,7 +1,7 @@
 /**
  * Build-time static pages for SEO. After `vite build`, uses dist/policies/index.html as the
  * shell (header, background, shared CSS/JS) and writes:
- *   /pandals/<id>/                one page per pandal in data/pandals.json
+ *   /pandals/<id>/                one page per pandal in data/pandals.json (/pandals/ itself redirects to /#pandals)
  *   /durga-puja-2026-dates/       Puja calendar with FAQ markup
  *   /en/                          English copy of the home page (strings from src/lib/strings.ts), with hreflang
  * plus a sitemap.xml that lists every page. Not available under `vite dev`: use
@@ -110,7 +110,7 @@ export default function staticPages() {
       const cfg = readFileSync(resolve(root, 'src/config.ts'), 'utf8');
       const site = cfg.match(/export const SITE_URL = '([^']+)'/)[1];
       const days = new Function('return ' + cfg.match(/export const PUJA_DAYS: PujaDay\[\] = (\[[\s\S]*?\n\]);/)[1])();
-      const { pandals, routes } = JSON.parse(readFileSync(resolve(root, 'data/pandals.json'), 'utf8'));
+      const { pandals } = JSON.parse(readFileSync(resolve(root, 'data/pandals.json'), 'utf8'));
       const shell = readFileSync(resolve(outDir, 'policies/index.html'), 'utf8');
       const today = new Date().toISOString().slice(0, 10);
       const write = (path, html) => {
@@ -140,7 +140,6 @@ export default function staticPages() {
           .map((q) => ({ q, d: distanceKm(p, q) }))
           .sort((a, b) => a.d - b.d)
           .slice(0, 5);
-        const inRoutes = routes.filter((r) => r.stops.includes(p.id));
         const metro = p.nearestMetro ? ` The nearest metro station is ${p.nearestMetro}.` : '';
         const metroBn = p.nearestMetro ? ` কাছের মেট্রো স্টেশন: ${p.nearestMetro}।` : '';
         const approx = p.verified
@@ -148,7 +147,7 @@ export default function staticPages() {
           : `<p class="muted small">⚠ The map pin for this pandal is approximate; confirm the exact spot locally before you set out. <span lang="bn">(অবস্থান আনুমানিক)</span></p>`;
         const main = `<main id="main" class="policies static-page">
       <section class="page-head">
-        <p class="muted small"><a href="/pandals/">Pandal map 2026</a> › ${esc(p.zone)}</p>
+        <p class="muted small"><a href="/#pandals">Pandal map 2026</a> › ${esc(p.zone)}</p>
         <h1>${esc(p.name_en)} Durga Puja 2026 <span lang="bn">${esc(p.name_bn)}</span></h1>
         <p class="lead">${esc(p.name_en)} is a Durga Puja in ${esc(p.area)}, ${esc(p.zone)}.${esc(metro)} Below: the location, walking, driving and public-transport directions, and other pandals nearby. ${esc(puja)}</p>
         <p class="lead" lang="bn">${esc(p.name_bn)} — ${esc(zoneBn)}র ${esc(p.area)} এলাকার দুর্গাপুজো।${esc(metroBn)} ${esc(pujaBn)}</p>
@@ -166,7 +165,7 @@ export default function staticPages() {
           <a class="btn btn-sm" href="${dir(p, 'walking')}" target="_blank" rel="noopener">Walk <span lang="bn">· হেঁটে</span></a>
           <a class="btn btn-ghost btn-sm" href="${dir(p, 'driving')}" target="_blank" rel="noopener">Drive <span lang="bn">· গাড়িতে</span></a>
           <a class="btn btn-ghost btn-sm" href="${dir(p, 'transit')}" target="_blank" rel="noopener">Public transport <span lang="bn">· ট্রানজিট</span></a>
-          <a class="btn btn-ghost btn-sm" href="/pandals/#p-${esc(p.id)}">Show on the map <span lang="bn">· ম্যাপে দেখুন</span></a>
+          <a class="btn btn-ghost btn-sm" href="/#p-${esc(p.id)}">Show on the map <span lang="bn">· ম্যাপে দেখুন</span></a>
         </p>
       </section>
 
@@ -175,13 +174,13 @@ export default function staticPages() {
         <ul>
           ${near.map(({ q, d }) => `<li><a href="/pandals/${esc(q.id)}/">${esc(q.name_en)}</a> <span lang="bn">${esc(q.name_bn)}</span> · ${d.toFixed(1)} km</li>`).join('\n          ')}
         </ul>
-        ${inRoutes.length ? `<h3>Part of a suggested pandal-hopping route</h3><ul>${inRoutes.map((r) => `<li>${esc(r.name_en)} <span lang="bn">${esc(r.name_bn)}</span></li>`).join('')}</ul><p><a href="/pandals/">See the route on the map →</a></p>` : ''}
+        <p><a href="/#pandals">Pandals near you and a walking route →</a></p>
       </section>
 
       <section class="panel">
         <h2>Puja dates 2026 <span lang="bn">· পুজোর তারিখ</span></h2>
         <p>${esc(puja)} <a href="/durga-puja-2026-dates/">Full Durga Puja 2026 calendar →</a></p>
-        <p><a href="/">Pandal-hopping routes, Puja songs and greetings →</a></p>
+        <p><a href="/">Pandal map, walking routes and greeting cards →</a></p>
       </section>
     </main>`;
         const place = {
@@ -207,7 +206,7 @@ export default function staticPages() {
             image: '/og-pandals.jpg',
             imageAlt: 'A lit Durga Puja pandal in Kolkata at night',
             main,
-            ld: [place, crumbs([['Ma Aschen', '/'], ['Pandal map 2026', '/pandals/'], [p.name_en, path]])],
+            ld: [place, crumbs([['Ma Aschen', '/'], [p.name_en, path]])],
           }),
         );
       }
@@ -236,7 +235,7 @@ export default function staticPages() {
         ${faq.map(([q, a]) => `<h3>${esc(q)}</h3><p>${esc(a)}</p>`).join('\n        ')}
       </section>
       <section class="panel">
-        <p><a href="/pandals/">Pandal map and hopping routes →</a> · <a href="/">Ma Aschen home →</a></p>
+        <p><a href="/#pandals">Pandal map: pandals near you →</a> · <a href="/">Ma Aschen home →</a></p>
       </section>
     </main>`;
       write(
@@ -264,10 +263,10 @@ export default function staticPages() {
       write(
         '/en/',
         englishHome(home, dict, site, {
-          title: 'Durga Puja 2026 Pandal Map & Hopping Routes | Ma Aschen',
-          description: 'Durga Puja 2026: 60+ pujas in Kolkata and West Bengal on one map, with the nearest metro, directions and ready-made pandal-hopping routes.',
-          ogTitle: 'Happy Durga Puja 2026 — pandal map and hopping routes',
-          ogDescription: '60+ pujas in Kolkata and beyond on one map: find pandals near you, the nearest metro and ready-made hopping routes.',
+          title: 'Durga Puja 2026 Pandal Map: Pandals Near Me | Ma Aschen',
+          description: 'Durga Puja 2026: 60+ pujas in Kolkata and West Bengal on one map. Find pandals near you, the nearest metro, directions and a walking route.',
+          ogTitle: 'Happy Durga Puja 2026 — pandal map: pandals near you',
+          ogDescription: '60+ pujas in Kolkata and beyond on one map: find pandals near you, the nearest metro and a walking route.',
         }),
       );
 
@@ -294,7 +293,6 @@ export default function staticPages() {
       const urls = [
         ['/', 'daily', '1.0', true],
         ['/en/', 'daily', '1.0', true],
-        ['/pandals/', 'daily', '0.9'],
         [datesPath, 'weekly', '0.9'],
         ...pandals.map((p) => [`/pandals/${p.id}/`, 'weekly', '0.6']),
         ['/policies/', 'monthly', '0.3'],
