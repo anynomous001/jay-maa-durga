@@ -7,7 +7,7 @@
  * plus a sitemap.xml that lists every page. Not available under `vite dev`: use
  * `npm run build && npm run preview`.
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -273,6 +273,25 @@ export default function staticPages() {
           ogDescription: '3:50 AM IST, 10 October: listen to Akashvani’s Mahishasuramardini live, set a reminder and find Kolkata pandals on the map.',
         }),
       );
+
+      // ── Structured data must parse (Google rejects the whole block otherwise) ──
+      const broken = [];
+      const walk = (dir) => {
+        for (const e of readdirSync(dir, { withFileTypes: true })) {
+          const f = resolve(dir, e.name);
+          if (e.isDirectory()) walk(f);
+          else if (e.name.endsWith('.html'))
+            for (const m of readFileSync(f, 'utf8').matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+              try {
+                JSON.parse(m[1]);
+              } catch (err) {
+                broken.push(`${f.slice(outDir.length)}: ${err.message}`);
+              }
+            }
+        }
+      };
+      walk(outDir);
+      if (broken.length) throw new Error('Invalid JSON-LD:\n' + broken.join('\n'));
 
       // ── Sitemap ─────────────────────────────────────────────────────────
       const urls = [
