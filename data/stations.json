@@ -1,0 +1,285 @@
+{
+ "_readme": "Kolkata Metro and railway stations, each pin looked up on Google Maps (2026-10-10). Used to show the nearest station on each pandal and to start pandal-hopping batches. kind: metro|rail; line (metro only): Blue|Green|Purple|Orange|Yellow.",
+ "stations": [
+  {
+   "id": "m-dakshineswar",
+   "name_en": "Dakshineswar",
+   "name_bn": "দক্ষিণেশ্বর",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.6538276,
+   "lng": 88.3636977,
+   "source": "Google Maps \"Dakshineswar\""
+  },
+  {
+   "id": "m-baranagar",
+   "name_en": "Baranagar",
+   "name_bn": "বরানগর",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.6531628,
+   "lng": 88.3805298,
+   "source": "Google Maps \"Baranagar\""
+  },
+  {
+   "id": "m-noapara",
+   "name_en": "Noapara",
+   "name_bn": "নোয়াপাড়া",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.63985,
+   "lng": 88.394094,
+   "source": "Google Maps \"Noapara\""
+  },
+  {
+   "id": "m-dum-dum",
+   "name_en": "Dum Dum",
+   "name_bn": "দমদম",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.6214614,
+   "lng": 88.3928043,
+   "source": "Google Maps \"Dumdum\""
+  },
+  {
+   "id": "m-belgachia",
+   "name_en": "Belgachia",
+   "name_bn": "বেলগাছিয়া",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.605973,
+   "lng": 88.386353,
+   "source": "Google Maps \"Belgachia\""
+  },
+  {
+   "id": "m-shyambazar",
+   "name_en": "Shyambazar",
+   "name_bn": "শ্যামবাজার",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.6006027,
+   "lng": 88.3702928,
+   "source": "Google Maps \"Shyambazar\""
+  },
+  {
+   "id": "m-shobhabazar-sutanuti",
+   "name_en": "Shobhabazar Sutanuti",
+   "name_bn": "শোভাবাজার সুতানুটি",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5960254,
+   "lng": 88.3652848,
+   "source": "Google Maps \"Shovabazar Sutanuti\""
+  },
+  {
+   "id": "m-girish-park",
+   "name_en": "Girish Park",
+   "name_bn": "গিরিশ পার্ক",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5871415,
+   "lng": 88.3630842,
+   "source": "Google Maps \"Girish Park\""
+  },
+  {
+   "id": "m-mahatma-gandhi-road",
+   "name_en": "Mahatma Gandhi Road",
+   "name_bn": "মহাত্মা গান্ধী রোড",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.580696,
+   "lng": 88.3613813,
+   "source": "Google Maps \"Mahatma Gandhi Road\""
+  },
+  {
+   "id": "m-central",
+   "name_en": "Central",
+   "name_bn": "সেন্ট্রাল",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5725237,
+   "lng": 88.3582423,
+   "source": "Google Maps \"Central\""
+  },
+  {
+   "id": "m-chandni-chowk",
+   "name_en": "Chandni Chowk",
+   "name_bn": "চাঁদনি চক",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.566797,
+   "lng": 88.3538026,
+   "source": "Google Maps \"Chandni Chowk\""
+  },
+  {
+   "id": "m-esplanade",
+   "name_en": "Esplanade",
+   "name_bn": "এসপ্ল্যানেড",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5649419,
+   "lng": 88.3516987,
+   "source": "Google Maps \"Esplanade\""
+  },
+  {
+   "id": "m-park-street",
+   "name_en": "Park Street",
+   "name_bn": "পার্ক স্ট্রিট",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.55445,
+   "lng": 88.34985,
+   "source": "Google Maps \"Park Street\""
+  },
+  {
+   "id": "m-maidan",
+   "name_en": "Maidan",
+   "name_bn": "ময়দান",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5493137,
+   "lng": 88.3485261,
+   "source": "Google Maps \"Maidan\""
+  },
+  {
+   "id": "m-rabindra-sadan",
+   "name_en": "Rabindra Sadan",
+   "name_bn": "রবীন্দ্র সদন",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5412216,
+   "lng": 88.3472726,
+   "source": "Google Maps \"Rabindra Sadan metro station\""
+  },
+  {
+   "id": "m-netaji-bhavan",
+   "name_en": "Netaji Bhavan",
+   "name_bn": "নেতাজি ভবন",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.532977,
+   "lng": 88.3457124,
+   "source": "Google Maps \"Netaji Bhavan\""
+  },
+  {
+   "id": "m-jatin-das-park",
+   "name_en": "Jatin Das Park",
+   "name_bn": "যতীন দাস পার্ক",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.524262,
+   "lng": 88.346489,
+   "source": "Google Maps \"Jatin Das Park\""
+  },
+  {
+   "id": "m-kalighat",
+   "name_en": "Kalighat",
+   "name_bn": "কালীঘাট",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5166527,
+   "lng": 88.3460033,
+   "source": "Google Maps \"Kalighat\""
+  },
+  {
+   "id": "m-rabindra-sarobar",
+   "name_en": "Rabindra Sarobar",
+   "name_bn": "রবীন্দ্র সরোবর",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.5078864,
+   "lng": 88.3455571,
+   "source": "Google Maps \"Rabindra Sarobor\""
+  },
+  {
+   "id": "m-mahanayak-uttam-kumar",
+   "name_en": "Mahanayak Uttam Kumar",
+   "name_bn": "মহানায়ক উত্তমকুমার",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.4944519,
+   "lng": 88.3451538,
+   "source": "Google Maps \"Mahanayak Uttamkumar\""
+  },
+  {
+   "id": "m-netaji",
+   "name_en": "Netaji",
+   "name_bn": "নেতাজি",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.532977,
+   "lng": 88.3457124,
+   "source": "Google Maps \"Netaji Bhavan\""
+  },
+  {
+   "id": "m-masterda-surya-sen",
+   "name_en": "Masterda Surya Sen",
+   "name_bn": "মাস্টারদা সূর্য সেন",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.4734883,
+   "lng": 88.3608039,
+   "source": "Google Maps \"Masterda Surya Sen\""
+  },
+  {
+   "id": "m-gitanjali",
+   "name_en": "Gitanjali",
+   "name_bn": "গীতাঞ্জলি",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.469425,
+   "lng": 88.3699223,
+   "source": "Google Maps \"Gitanjali\""
+  },
+  {
+   "id": "m-kavi-nazrul",
+   "name_en": "Kavi Nazrul",
+   "name_bn": "কবি নজরুল",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.4642442,
+   "lng": 88.3806582,
+   "source": "Google Maps \"Kavi Nazrul\""
+  },
+  {
+   "id": "m-shahid-khudiram",
+   "name_en": "Shahid Khudiram",
+   "name_bn": "শহিদ ক্ষুদিরাম",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.4660094,
+   "lng": 88.3916655,
+   "source": "Google Maps \"Shahid Khudiram\""
+  },
+  {
+   "id": "m-kavi-subhash",
+   "name_en": "Kavi Subhash",
+   "name_bn": "কবি সুভাষ",
+   "kind": "metro",
+   "line": "Blue",
+   "lat": 22.4721747,
+   "lng": 88.3978668,
+   "source": "Google Maps \"Kavi Subhash\""
+  },
+  {
+   "id": "m-howrah-maidan",
+   "name_en": "Howrah Maidan",
+   "name_bn": "হাওড়া ময়দান",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5833782,
+   "lng": 88.3337983,
+   "source": "Google Maps \"Howrah Maidan\""
+  },
+  {
+   "id": "m-howrah",
+   "name_en": "Howrah",
+   "name_bn": "হাওড়া",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5837,
+   "lng": 88.34214,
+   "source": "Google Maps \"Howrah Jn\""
+  }
+ ]
+}

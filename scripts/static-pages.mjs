@@ -9,6 +9,7 @@
  */
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { makeBatches, nearestStation, walkMinutes } from '../shared/hopping.mjs';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const json = (o) => JSON.stringify(o).replace(/</g, '\\u003c');
@@ -112,6 +113,13 @@ export default function staticPages() {
       const days = new Function('return ' + cfg.match(/export const PUJA_DAYS: PujaDay\[\] = (\[[\s\S]*?\n\]);/)[1])();
       const { pandals } = JSON.parse(readFileSync(resolve(root, 'data/pandals.json'), 'utf8'));
       const shell = readFileSync(resolve(outDir, 'policies/index.html'), 'utf8');
+      const { stations } = JSON.parse(readFileSync(resolve(root, 'data/stations.json'), 'utf8'));
+      const batches = makeBatches(pandals, stations);
+      const batchOf = new Map(batches.flatMap((b) => b.stops.map((id) => [id, b])));
+      const byId = new Map(pandals.map((p) => [p.id, p]));
+      const stLabel = (hit) => `${hit.station.name_en} ${hit.station.kind === 'metro' ? 'metro' : 'railway'} station`;
+      const stLabelBn = (hit) => `${hit.station.name_bn} ${hit.station.kind === 'metro' ? 'মেট্রো' : 'রেল'} স্টেশন`;
+      const stDist = (hit) => (hit.km < 1 ? `${Math.round(hit.km * 1000)} m` : `${hit.km.toFixed(1)} km`) + (hit.km <= 2 ? `, about ${walkMinutes(hit.km)} min on foot` : '');
       const today = new Date().toISOString().slice(0, 10);
       const write = (path, html) => {
         const file = resolve(outDir, path.slice(1), 'index.html');
@@ -140,8 +148,17 @@ export default function staticPages() {
           .map((q) => ({ q, d: distanceKm(p, q) }))
           .sort((a, b) => a.d - b.d)
           .slice(0, 5);
-        const metro = p.nearestMetro ? ` The nearest metro station is ${p.nearestMetro}.` : '';
-        const metroBn = p.nearestMetro ? ` কাছের মেট্রো স্টেশন: ${p.nearestMetro}।` : '';
+        const st = nearestStation(p, stations);
+        const metro = st ? ` The nearest station is ${stLabel(st)} (${stDist(st)}).` : '';
+        const metroBn = st ? ` কাছের স্টেশন: ${stLabelBn(st)}।` : '';
+        const metroShort = st ? ` Nearest station: ${stLabel(st)}.` : '';
+        const batch = batchOf.get(p.id);
+        const batchHTML = batch
+          ? `<h3>See it in a batch of ${batch.stops.length} pandals close together <span lang="bn">· কাছাকাছি ${batch.stops.length}টি প্যান্ডেল একসাথে</span></h3>
+        <p>About ${batch.walkKm.toFixed(1)} km on foot, ${Math.round(batch.minutes / 15) / 4} hours with time at each pandal${batch.start ? `, starting from ${esc(stLabel(batch.start))}` : ''}.</p>
+        <ol>${batch.stops.map((id) => byId.get(id)).map((q) => `<li>${q.id === p.id ? `<strong>${esc(q.name_en)}</strong>` : `<a href="/pandals/${esc(q.id)}/">${esc(q.name_en)}</a>`} <span lang="bn">${esc(q.name_bn)}</span></li>`).join('')}</ol>
+        <p><a href="/#b-${esc(batch.id)}">Open this batch on the map with Google Maps routes →</a></p>`
+          : '';
         const approx = p.verified
           ? ''
           : `<p class="muted small">⚠ The map pin for this pandal is approximate; confirm the exact spot locally before you set out. <span lang="bn">(অবস্থান আনুমানিক)</span></p>`;
@@ -158,7 +175,7 @@ export default function staticPages() {
         <ul>
           <li>Area: ${esc(p.area)}</li>
           <li>Zone: ${esc(p.zone)} <span lang="bn">(${esc(zoneBn)})</span></li>
-          ${p.nearestMetro ? `<li>Nearest metro: ${esc(p.nearestMetro)}</li>` : ''}
+          ${st ? `<li>Nearest station: ${esc(stLabel(st))} · ${esc(stDist(st))} <span lang="bn">(${esc(stLabelBn(st))})</span></li>` : ''}
         </ul>
         ${approx}
         <p class="btn-row">
@@ -174,6 +191,7 @@ export default function staticPages() {
         <ul>
           ${near.map(({ q, d }) => `<li><a href="/pandals/${esc(q.id)}/">${esc(q.name_en)}</a> <span lang="bn">${esc(q.name_bn)}</span> · ${d.toFixed(1)} km</li>`).join('\n          ')}
         </ul>
+        ${batchHTML}
         <p><a href="/#pandals">Pandals near you and a walking route →</a></p>
       </section>
 
@@ -199,8 +217,8 @@ export default function staticPages() {
             path,
             title: fitTo(60, [`${p.name_en} Durga Puja 2026 | Ma Aschen`, `${p.name_en} Durga Puja 2026`, p.name_en]),
             description: fitTo(155, [
-              `${p.name_en} (${p.name_bn}) Durga Puja 2026 in ${p.area}, ${p.zone}.${metro} Map location, directions and nearby pandals.`,
-              `${p.name_en} Durga Puja 2026 in ${p.area}, ${p.zone}.${metro} Map location, directions and nearby pandals.`,
+              `${p.name_en} (${p.name_bn}) Durga Puja 2026 in ${p.area}, ${p.zone}.${metroShort} Map location, directions and nearby pandals.`,
+              `${p.name_en} Durga Puja 2026 in ${p.area}, ${p.zone}.${metroShort} Map location, directions and nearby pandals.`,
               `${p.name_en} Durga Puja 2026 in ${p.area}. Map location, directions and nearby pandals.`,
             ]),
             image: '/og-pandals.jpg',

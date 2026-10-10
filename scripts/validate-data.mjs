@@ -59,6 +59,20 @@ if (existsSync(resolve(root, 'data/pandals.json'))) {
   for (const s of sponsors) for (const id of s.pandalIds ?? []) if (!pids.has(id)) err(`sponsors[${s.id}]: unknown pandalId ${id}`);
 }
 
+// Stations (nearest metro / train station on each pandal)
+if (existsSync(resolve(root, 'data/stations.json'))) {
+  const sids = new Set();
+  for (const st of load('stations.json').stations) {
+    const at = `stations[${st.id}]`;
+    if (!st.id || sids.has(st.id)) err(`${at}: missing or duplicate id`);
+    sids.add(st.id);
+    for (const k of ['name_en', 'name_bn']) if (!st[k]) err(`${at}: ${k} required`);
+    if (!['metro', 'rail'].includes(st.kind)) err(`${at}: kind must be metro|rail`);
+    if (st.kind === 'metro' && !['Blue', 'Green', 'Purple', 'Orange', 'Yellow'].includes(st.line)) err(`${at}: metro line must be Blue|Green|Purple|Orange|Yellow`);
+    if (typeof st.lat !== 'number' || typeof st.lng !== 'number' || st.lat < 21.4 || st.lat > 27.3 || st.lng < 85.8 || st.lng > 89.9) err(`${at}: bad coordinates`);
+  }
+}
+
 if (errors.length) {
   console.error('Data validation failed:\n - ' + errors.join('\n - '));
   process.exit(1);

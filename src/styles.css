@@ -2648,3 +2648,119 @@ body.has-next-bar .finder {
 .pm-card.is-seen {
   border-color: rgba(127, 220, 164, 0.35);
 }
+
+/* Nearest station on cards */
+.pm-station {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.line-dot {
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  flex: none;
+  background: #999;
+}
+.line-blue { background: #2f7de1; }
+.line-green { background: #22a65a; }
+.line-purple { background: #8b4fd0; }
+.line-orange { background: #f28c28; }
+.line-yellow { background: #e8c21c; }
+
+/* Batches: pandals close together, one walk */
+.pm-batches {
+  margin: 0.2rem 0 0.5rem;
+}
+.pm-batches-title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  color: var(--accent);
+}
+.pm-batch-row {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  margin: 0 -1rem;
+  padding: 0.1rem 1rem 0.4rem;
+}
+.pm-batch-row::-webkit-scrollbar {
+  display: none;
+}
+.pm-batch {
+  flex: none;
+  display: grid;
+  gap: 0.15rem;
+  width: 15.5rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid rgba(244, 185, 66, 0.4);
+  border-radius: 16px;
+  background: rgba(16, 19, 42, 0.92);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.pm-batch:hover,
+.pm-batch[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.pm-batch strong {
+  font-size: 0.95rem;
+}
+.pm-batch-meta {
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+.pm-batch-st,
+.pm-batch-stops {
+  font-size: 0.78rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.pm-hop {
+  position: relative;
+}
+.pm-batch-close {
+  float: right;
+  margin: -0.2rem -0.3rem 0 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(10, 12, 32, 0.6);
+  color: var(--text);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+.pm-step {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 700;
+  vertical-align: 0.1em;
+}
+.pm-num span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #1a1405;
+  border-radius: 50%;
+  background: #f4b942;
+  color: #1a1405;
+  font: 700 13px/1 var(--font-body);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
