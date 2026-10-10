@@ -38,7 +38,7 @@ for (const list of load('playlists.json').lists) {
 
 // Pandals (Phase 2)
 if (existsSync(resolve(root, 'data/pandals.json'))) {
-  const ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas', 'South 24 Parganas', 'Howrah', 'Hooghly', 'Nadia', 'Bankura', 'Purba Medinipur', 'Siliguri', 'Jalpaiguri', 'Cooch Behar'];
+  const ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas', 'South 24 Parganas', 'Howrah', 'Hooghly', 'Nadia', 'Bankura', 'Purba Medinipur', 'Murshidabad', 'Siliguri', 'Jalpaiguri', 'Cooch Behar'];
   const { pandals, routes = [] } = load('pandals.json');
   const pids = new Set();
   for (const p of pandals) {

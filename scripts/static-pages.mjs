@@ -13,7 +13,7 @@ import { dirname, resolve } from 'node:path';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const json = (o) => JSON.stringify(o).replace(/</g, '\\u003c');
 
-const ZONE_BN = { 'North Kolkata': 'উত্তর কলকাতা', 'South Kolkata': 'দক্ষিণ কলকাতা', Central: 'মধ্য কলকাতা', 'Salt Lake–New Town': 'সল্টলেক–নিউ টাউন', 'North 24 Parganas': 'উত্তর ২৪ পরগনা', 'South 24 Parganas': 'দক্ষিণ ২৪ পরগনা', 'Howrah': 'হাওড়া', 'Hooghly': 'হুগলি', 'Nadia': 'নদিয়া', 'Bankura': 'বাঁকুড়া', 'Purba Medinipur': 'পূর্ব মেদিনীপুর', 'Siliguri': 'শিলিগুড়ি', 'Jalpaiguri': 'জলপাইগুড়ি', 'Cooch Behar': 'কোচবিহার' };
+const ZONE_BN = { 'North Kolkata': 'উত্তর কলকাতা', 'South Kolkata': 'দক্ষিণ কলকাতা', Central: 'মধ্য কলকাতা', 'Salt Lake–New Town': 'সল্টলেক–নিউ টাউন', 'North 24 Parganas': 'উত্তর ২৪ পরগনা', 'South 24 Parganas': 'দক্ষিণ ২৪ পরগনা', 'Howrah': 'হাওড়া', 'Hooghly': 'হুগলি', 'Nadia': 'নদিয়া', 'Bankura': 'বাঁকুড়া', 'Purba Medinipur': 'পূর্ব মেদিনীপুর', 'Murshidabad': 'মুর্শিদাবাদ', 'Siliguri': 'শিলিগুড়ি', 'Jalpaiguri': 'জলপাইগুড়ি', 'Cooch Behar': 'কোচবিহার' };
 const WEEKDAY = new Intl.DateTimeFormat('en-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 const WEEKDAY_BN = new Intl.DateTimeFormat('bn-IN', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
 
