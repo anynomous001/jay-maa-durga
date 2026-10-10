@@ -126,9 +126,18 @@ export const dict: Record<string, Entry> = {
   'pm.hop.none': { bn: '{km} কিমির মধ্যে একাধিক প্যান্ডেল নেই, তাই হাঁটার রুট দেওয়া গেল না। নিচের তালিকা থেকে কাছের প্যান্ডেলের রাস্তা দেখুন।', en: 'There aren’t two or more pandals within {km} km, so there’s no walking route. Use the list below for directions to the nearest ones.' },
   'pm.locating': { bn: 'আপনার অবস্থান খোঁজা হচ্ছে…', en: 'Finding your location…' },
   'pm.denied': {
-    bn: 'অবস্থান পাওয়া গেল না (অনুমতি দেওয়া হয়নি বা বন্ধ আছে)। এলাকা দিয়ে খুঁজে নিন।',
-    en: 'Couldn’t get your location (permission denied or unavailable). Search by area instead.',
+    bn: 'এই সাইটকে লোকেশন দেওয়া বন্ধ আছে। ব্রাউজারের ঠিকানার পাশের 🔒 চিহ্নে চেপে লোকেশন চালু করুন — অথবা ম্যাপে আপনার জায়গায় চাপুন।',
+    en: 'Location is blocked for this site. Allow it from the 🔒 icon next to the address — or tap where you are on the map.',
   },
+  'pm.unavailable': {
+    bn: 'ফোন বা কম্পিউটার লোকেশন দিচ্ছে না। লোকেশন সার্ভিস চালু আছে কিনা দেখুন (ম্যাকে: System Settings › Privacy & Security › Location Services › আপনার ব্রাউজার)। ততক্ষণ ম্যাপে আপনার জায়গায় চাপুন।',
+    en: 'Your device isn’t giving a location. Check that location services are on (on a Mac: System Settings › Privacy & Security › Location Services › your browser). Meanwhile, tap where you are on the map.',
+  },
+  'pm.timeout': {
+    bn: 'লোকেশন পেতে বেশি সময় লাগছে। আবার চেষ্টা করুন, অথবা ম্যাপে আপনার জায়গায় চাপুন।',
+    en: 'Getting your location is taking too long. Try again, or tap where you are on the map.',
+  },
+  'pm.pickHint': { bn: 'ম্যাপে আপনার জায়গায় চাপুন', en: 'Tap where you are on the map' },
   'pm.sortedNear': { bn: 'কাছের প্যান্ডেল আগে দেখানো হচ্ছে', en: 'Showing nearest pandals first' },
   'pm.count': { bn: '{n}টি প্যান্ডেল', en: '{n} pandals' },
   'pm.none': { bn: 'কিছু পাওয়া গেল না।', en: 'No pandals found.' },
