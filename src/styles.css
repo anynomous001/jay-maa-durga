@@ -2933,3 +2933,20 @@ button.pm-eat.cta:hover {
 .hero .hero-poll .poll {
   margin-bottom: 0.75rem;
 }
+
+/* Hero headline: two titles stacked in one cell, crossfading (see initHeroSeason). */
+#hero-title {
+  display: grid;
+}
+#hero-title .ht {
+  grid-area: 1 / 1;
+  transition: opacity 0.9s ease;
+}
+#hero-title .ht:not(.on) {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  #hero-title .ht {
+    transition: none;
+  }
+}
