@@ -211,7 +211,7 @@ export const dict: Record<string, Entry> = {
   },
   'faq.q4': { bn: 'বিদেশ থেকে কখন শুনব?', en: 'What time is it outside India?' },
   'faq.a4': {
-    bn: 'এই পাতার "বিদেশে মহালয়ার সময়" অংশে দেখুন। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।',
+    bn: 'এই পাতার “বিদেশে মহালয়ার সময়” অংশে দেখুন। যেমন লন্ডনে ৯ অক্টোবর রাত ১১:২০, নিউ ইয়র্কে সন্ধ্যা ৬:২০, দুবাইতে রাত ২:২০ (১০ অক্টোবর)।',
     en: 'See “Mahalaya time around the world” on this page. For example: London 11:20 PM on 9 Oct, New York 6:20 PM on 9 Oct, Dubai 2:20 AM on 10 Oct.',
   },
 
