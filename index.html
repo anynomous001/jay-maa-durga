@@ -73,76 +73,42 @@
         ]
       }
     </script>
-    <link rel="preload" as="image" type="image/avif" media="(max-aspect-ratio: 4/5)" imagesrcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" imagesizes="100vw" fetchpriority="high" />
-    <link rel="preload" as="image" type="image/avif" media="(min-aspect-ratio: 4/5)" imagesrcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/avif" media="(max-aspect-ratio: 4/5)" imagesrcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" imagesizes="100vw" />
+    <link rel="preload" as="image" type="image/avif" media="(min-aspect-ratio: 4/5)" imagesrcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" imagesizes="100vw" />
     <script type="module" src="/src/pages/home.ts"></script>
   </head>
   <body class="page-home">
+    <picture class="page-bg" aria-hidden="true">
+      <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" sizes="100vw" />
+      <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="/hero/port-480.webp 480w, /hero/port-720.webp 720w" sizes="100vw" />
+      <source type="image/avif" srcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" sizes="100vw" />
+      <source type="image/webp" srcset="/hero/land-640.webp 640w, /hero/land-960.webp 960w, /hero/land-1280.webp 1280w, /hero/land-1672.webp 1672w" sizes="100vw" />
+      <img src="/hero/land-1280.jpg" srcset="/hero/land-640.jpg 640w, /hero/land-960.jpg 960w, /hero/land-1280.jpg 1280w, /hero/land-1672.jpg 1672w" sizes="100vw" width="1672" height="941" alt="" decoding="async" />
+    </picture>
+    <div class="page-bg-shade" aria-hidden="true"></div>
     <!--@partial header-->
     <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <picture class="hero-media">
-          <source media="(max-aspect-ratio: 4/5)" type="image/avif" srcset="/hero/port-480.avif 480w, /hero/port-720.avif 720w" sizes="100vw" />
-          <source media="(max-aspect-ratio: 4/5)" type="image/webp" srcset="/hero/port-480.webp 480w, /hero/port-720.webp 720w" sizes="100vw" />
-          <source media="(max-aspect-ratio: 4/5)" srcset="/hero/port-480.jpg 480w, /hero/port-720.jpg 720w" sizes="100vw" />
-          <source type="image/avif" srcset="/hero/land-640.avif 640w, /hero/land-960.avif 960w, /hero/land-1280.avif 1280w, /hero/land-1672.avif 1672w" sizes="100vw" />
-          <source type="image/webp" srcset="/hero/land-640.webp 640w, /hero/land-960.webp 960w, /hero/land-1280.webp 1280w, /hero/land-1672.webp 1672w" sizes="100vw" />
-          <img src="/hero/land-1280.jpg" srcset="/hero/land-640.jpg 640w, /hero/land-960.jpg 960w, /hero/land-1280.jpg 1280w, /hero/land-1672.jpg 1672w" sizes="100vw"
-            width="1672" height="941" alt="" fetchpriority="high" decoding="async" />
-        </picture>
-        <div class="hero-shade" aria-hidden="true"></div>
-        <div class="hero-inner">
-          <div class="hero-left">
-            <div class="hero-copy">
-              <p class="kicker" data-i18n="hero.kicker.puja">দুর্গাপুজো ২০২৬ · ১৬–২১ অক্টোবর</p>
-              <h1 id="hero-title"><span class="ht on" data-i18n="hero.title.puja">শুভ শারদীয়া</span> <span class="ht" data-i18n="hero.title.durga" aria-hidden="true">শুভ দুর্গাপুজো</span></h1>
-              <p class="hero-sub" data-i18n="hero.sub.puja">কলকাতা আর বিভিন্ন জেলার ৬০টির বেশি পুজো এক ম্যাপে — কাছের প্যান্ডেল, মেট্রো আর হেঁটে ঘোরার রুট দেখে ঠাকুর দেখতে বেরিয়ে পড়ুন।</p>
-              <p class="visitors" data-visitors-wrap hidden>
-                <span class="vis-online"><span class="vis-dot" aria-hidden="true"></span><span data-visitors="online" data-visitors-text="vis.online"></span></span>
-                <span class="vis-total" data-visitors="total" data-visitors-text="vis.total"></span>
-              </p>
-            </div>
-
-            <div class="hero-ctas">
-              <button type="button" class="btn hero-cta" data-near-me><span aria-hidden="true">📍</span> <span data-i18n="pm.nearMe">আমার কাছের প্যান্ডেল</span></button>
-              <a class="btn btn-ghost hero-cta" href="#pandals" data-i18n="hero.all">সব প্যান্ডেল দেখুন</a>
-            </div>
-
-            <div class="reminders" id="reminders" role="group" data-i18n-attr="aria-label:share.group" aria-label="শেয়ার করুন">
-              <a class="icon-btn icon-wa" id="wa-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.6c.3-.6.7-.6 1-.6l.6.1.9 2.1-.6.9c.5 1 1.3 1.8 2.3 2.3l.9-.6 2.1.9v.6c0 .4-.4 1-.9 1.2-.6.2-1.8.2-3.6-.9a8 8 0 0 1-2.9-3.2c-.6-1.3-.3-2.3.2-2.8Z" fill="currentColor"/></svg><span data-i18n="rem.waShort">হোয়াটসঅ্যাপ</span></a>
-              <button type="button" class="icon-btn" id="native-share" hidden><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="share.native">শেয়ার</span></button>
-              <a class="icon-btn" id="fb-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5V7c0-.8.3-1.2 1.3-1.2H17V3h-2.6C11.8 3 10.5 4.5 10.5 6.8v1.7H8V11.5h2.5V21H14v-9.5h2.6l.4-3z" fill="currentColor"/></svg><span data-i18n="share.fb">ফেসবুক</span></a>
-              <button type="button" class="icon-btn" id="copy-link"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="share.copy">লিংক কপি</span></button>
-            </div>
-            <div class="sponsor-slot spotlight" data-slot="spotlight"></div>
-
-          </div>
-
-          <div class="hero-right">
-            <!-- Poll card. Shown once the API answers /polls. The sponsor slot keeps its id "countdown". -->
-            <section class="polls hero-poll" id="polls" aria-labelledby="polls-title" hidden>
-              <h2 id="polls-title" data-i18n="poll.title">আপনার মত দিন</h2>
-              <div class="poll-list"></div>
-              <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
-            </section>
-          </div>
-
-          <nav class="dock" data-i18n-attr="aria-label:dock.label" aria-label="আরও">
-            <button type="button" class="dock-btn" data-open="sheet-schedule" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.schedule">নির্ঘণ্ট</span></button>
-            <button type="button" class="dock-btn" data-open="sheet-faq" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg><span data-i18n="dock.faq">প্রশ্নোত্তর</span></button>
-            <button type="button" class="dock-btn" data-open="sheet-card" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 15.5l2.6-3 2 2.2 1.4-1.6 2 2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="8.6" r="1.3" fill="currentColor"/></svg><span data-i18n="dock.card">শুভেচ্ছা কার্ড</span></button>
-          </nav>
-
+      <section class="intro" aria-labelledby="hero-title">
+        <div class="intro-copy">
+          <p class="kicker" data-i18n="hero.kicker.puja">দুর্গাপুজো ২০২৬ · ১৬–২১ অক্টোবর</p>
+          <h1 id="hero-title"><span class="ht on" data-i18n="hero.title.puja">শুভ শারদীয়া</span> <span class="ht" data-i18n="hero.title.durga" aria-hidden="true">শুভ দুর্গাপুজো</span></h1>
+          <p class="intro-sub" data-i18n="hero.sub.puja">কলকাতা আর জেলার ৬০টির বেশি পুজো এক ম্যাপে — কাছের প্যান্ডেল, মেট্রো আর হাঁটার রুট।</p>
+          <p class="visitors" data-visitors-wrap hidden>
+            <span class="vis-online"><span class="vis-dot" aria-hidden="true"></span><span data-visitors="online" data-visitors-text="vis.online"></span></span>
+            <span class="vis-total" data-visitors="total" data-visitors-text="vis.total"></span>
+          </p>
         </div>
+        <nav class="tools" data-i18n-attr="aria-label:dock.label" aria-label="আরও">
+          <button type="button" class="tool-btn" data-open="sheet-schedule" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="dock.schedule">নির্ঘণ্ট</span></button>
+          <button type="button" class="tool-btn" data-open="sheet-faq" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.5v.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="17" r="1.1" fill="currentColor"/></svg><span data-i18n="dock.faq">প্রশ্নোত্তর</span></button>
+          <button type="button" class="tool-btn" data-open="sheet-card" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3.5" width="16" height="17" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 15.5l2.6-3 2 2.2 1.4-1.6 2 2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="8.6" r="1.3" fill="currentColor"/></svg><span data-i18n="dock.card">শুভেচ্ছা কার্ড</span></button>
+          <button type="button" class="tool-btn" data-open="sheet-share" aria-haspopup="dialog"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="share.native">শেয়ার</span></button>
+        </nav>
       </section>
 
       <!-- Pandal finder (features/finder.ts). /pandals/ redirects here. -->
       <section class="finder" id="pandals" aria-labelledby="pm-title">
-        <div class="finder-head">
-          <h2 id="pm-title" data-i18n="pm.title">প্যান্ডেল ম্যাপ ২০২৬</h2>
-          <p class="lead" data-i18n="pm.intro">কলকাতা, দুই ২৪ পরগনা আর অন্যান্য জেলার পরিচিত পুজো — ম্যাপে দেখুন, খুঁজুন, আর এক চাপে গুগল ম্যাপসে রাস্তা পান।</p>
-          <div class="sponsor-slot" data-slot="map-partner" data-by="pm.partner"></div>
-        </div>
+        <h2 class="sr-only" id="pm-title" data-i18n="pm.title">প্যান্ডেল ম্যাপ ২০২৬</h2>
 
         <div class="pm-controls" role="search">
           <button type="button" class="btn pm-near" id="pm-near" data-near-me aria-pressed="false"><span aria-hidden="true">📍</span> <span data-i18n="pm.nearMe">আমার কাছের প্যান্ডেল</span></button>
@@ -156,6 +122,16 @@
         <div class="pm-layout">
           <div class="pm-map-wrap" id="pm-map-wrap">
             <div id="pm-map" class="pm-map" aria-label="Pandal map"><p class="pm-map-loading" data-i18n="pm.loadingMap">ম্যাপ লোড হচ্ছে…</p></div>
+            <div class="sponsor-slot map-partner" data-slot="map-partner" data-by="pm.partner"></div>
+          </div>
+          <div class="pm-side">
+            <!-- Poll strip: one question at a time. Shown once the API answers /polls. The sponsor slot keeps its id "countdown". -->
+            <section class="polls poll-strip" id="polls" aria-labelledby="polls-title" hidden>
+              <h3 class="sr-only" id="polls-title" data-i18n="poll.title">আপনার মত দিন</h3>
+              <div class="poll-list"></div>
+              <div class="sponsor-slot" data-slot="countdown" data-by="cd.by"></div>
+            </section>
+            <div class="sponsor-slot spotlight" data-slot="spotlight"></div>
           </div>
           <div class="pm-list-wrap">
             <h3 class="sr-only" data-i18n="pm.listTitle">প্যান্ডেলের তালিকা</h3>
@@ -192,6 +168,18 @@
         <details><summary data-i18n="faq.q2">প্যান্ডেল ম্যাপ কীভাবে ব্যবহার করব?</summary><p data-i18n="faq.a2">“আমার কাছের প্যান্ডেল” চাপুন — কাছের পুজো আগে দেখাবে, দূরত্বসহ। প্রতিটি প্যান্ডেলের সঙ্গে কাছের মেট্রো আর এক চাপে গুগল ম্যাপস ডিরেকশন আছে।</p></details>
         <details><summary data-i18n="faq.q3">প্যান্ডেল হপিংয়ের রুট পাব?</summary><p data-i18n="faq.a3">হ্যাঁ। “আমার কাছের প্যান্ডেল” চাপলে আপনার জায়গা থেকে ৫ কিমির মধ্যের প্যান্ডেলগুলো হাঁটার সুবিধামতো পরপর সাজিয়ে গুগল ম্যাপসে রুট খোলে।</p></details>
         <details><summary data-i18n="faq.q4">কলকাতার বাইরের পুজোও আছে?</summary><p data-i18n="faq.a4">হ্যাঁ — উত্তর ও দক্ষিণ ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজোও ম্যাপে আছে।</p></details>
+        </div>
+      </dialog>
+      <dialog class="sheet" id="sheet-share" aria-labelledby="sheet-share-title">
+        <div class="sheet-head">
+          <h2 id="sheet-share-title" data-i18n="share.group">শেয়ার করুন</h2>
+          <button type="button" class="sheet-close" data-close data-i18n-attr="aria-label:ui.close" aria-label="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sheet-body share-grid">
+          <a class="icon-btn icon-wa" id="wa-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.3-1.1A8.5 8.5 0 1 0 12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8.6c.3-.6.7-.6 1-.6l.6.1.9 2.1-.6.9c.5 1 1.3 1.8 2.3 2.3l.9-.6 2.1.9v.6c0 .4-.4 1-.9 1.2-.6.2-1.8.2-3.6-.9a8 8 0 0 1-2.9-3.2c-.6-1.3-.3-2.3.2-2.8Z" fill="currentColor"/></svg><span data-i18n="rem.waShort">হোয়াটসঅ্যাপ</span></a>
+          <a class="icon-btn" id="fb-share" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8.5V7c0-.8.3-1.2 1.3-1.2H17V3h-2.6C11.8 3 10.5 4.5 10.5 6.8v1.7H8V11.5h2.5V21H14v-9.5h2.6l.4-3z" fill="currentColor"/></svg><span data-i18n="share.fb">ফেসবুক</span></a>
+          <button type="button" class="icon-btn" id="native-share" hidden><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 13v6h14v-6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="share.native">শেয়ার</span></button>
+          <button type="button" class="icon-btn" id="copy-link"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span data-i18n="share.copy">লিংক কপি</span></button>
         </div>
       </dialog>
       <dialog class="sheet" id="sheet-card" aria-labelledby="sheet-card-title">

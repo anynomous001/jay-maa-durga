@@ -55,7 +55,7 @@ export function initHeroSeason(): void {
     last = phase;
     const season = phase === 'over' ? '.bijoya' : '.puja';
     for (const part of ['kicker', 'sub']) {
-      const el = document.querySelector<HTMLElement>(`.hero [data-i18n^="hero.${part}"]`);
+      const el = document.querySelector<HTMLElement>(`.intro [data-i18n^="hero.${part}"]`);
       if (!el) continue;
       el.dataset.i18n = `hero.${part}${season}`;
       el.textContent = t(el.dataset.i18n);
