@@ -1595,7 +1595,7 @@ html.sheet-open {
 /* Dock: app-style tab bar (sticky on phones) */
 .dock {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 0.25rem;
   padding: 0.35rem;
   background: rgba(10, 12, 32, 0.78);
