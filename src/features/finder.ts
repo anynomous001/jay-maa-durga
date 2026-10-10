@@ -11,6 +11,8 @@ import { getLang, num, onLangChange, t } from '../lib/i18n';
 import { type LatLng, directionsUrl, distanceKm, routeLegs, routeUrl } from '../lib/maps';
 import { scrollToEl } from '../lib/smooth-scroll';
 import { sponsorFor, sponsorHref } from '../lib/sponsors';
+import stationData from '../../data/stations.json';
+import { type Batch, type Station, type StationHit, makeBatches, nearestStation, walkMinutes } from '../../shared/hopping.mjs';
 
 interface Pandal extends LatLng {
   id: string;
@@ -18,12 +20,21 @@ interface Pandal extends LatLng {
   name_en: string;
   area: string;
   zone: string;
-  nearestMetro?: string;
   verified: boolean;
 }
 
 const pandals = data.pandals as Pandal[];
 const byId = new Map(pandals.map((p) => [p.id, p]));
+const stations = stationData.stations as Station[];
+/** Nearest metro (or, failing that, train) station for each pandal. */
+const stationOf = new Map(pandals.map((p) => [p.id, nearestStation(p, stations)]));
+/** Batches: 4–7 pandals close enough to walk between, computed from the data (see shared/hopping.mjs). */
+const batches = makeBatches(pandals, stations);
+const batchById = new Map(batches.map((b) => [b.id, b]));
+const batchOf = new Map(batches.flatMap((b) => b.stops.map((id) => [id, b] as const)));
+/** "North Kolkata 2": numbered within each zone. */
+const batchNo = new Map<string, number>();
+for (const b of batches) batchNo.set(b.id, batches.filter((x) => x.zone === b.zone).indexOf(b) + 1);
 /** Kolkata and the 24 Parganas get a filter button each; every other district shares one "Other districts" button. */
 const NEAR_ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake–New Town', 'North 24 Parganas', 'South 24 Parganas'];
 const OTHER = 'other';
@@ -42,7 +53,7 @@ const KOLKATA_ZONES = ['North Kolkata', 'South Kolkata', 'Central', 'Salt Lake�
 const HOP_RADIUS_KM = 5;
 const HOP_MAX = 12;
 
-const state = { zone: 'all', query: '', me: null as LatLng | null };
+const state = { zone: 'all', query: '', me: null as LatLng | null, batch: null as string | null };
 // ── Visited pandals: after Google Maps, the site offers the next nearest one you haven't seen ──
 const VISITED_KEY = 'visited';
 const LAST_KEY = 'lastGo';
@@ -98,6 +109,26 @@ const bn = () => getLang() === 'bn';
 const name = (p: Pandal) => (bn() ? p.name_bn : p.name_en);
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 const zoneName = (z: string) => t('pm.zone.' + z);
+const fmtDist = (km: number) => (km < 1 ? `${num(Math.round(km * 1000))} ${t('pm.m')}` : `${num(km.toFixed(1))} ${t('pm.km')}`);
+const fmtTime = (min: number) => {
+  const q = Math.round(min / 15) * 15;
+  const h = Math.floor(q / 60);
+  const m = q % 60;
+  return [h ? t('pm.t.h', { n: num(h) }) : '', m ? t('pm.t.m', { n: num(m) }) : ''].filter(Boolean).join(' ');
+};
+const stationName = (s: Station) => t(s.kind === 'metro' ? 'pm.st.metro' : 'pm.st.rail', { name: bn() ? s.name_bn : s.name_en });
+/** "🚇 Shyambazar metro · 650 m · 9 min walk" */
+function stationText(hit: StationHit | null | undefined): string {
+  if (!hit) return '';
+  const far = hit.km <= 2 ? t('pm.st.walk', { d: fmtDist(hit.km), m: num(walkMinutes(hit.km)) }) : fmtDist(hit.km);
+  return `${hit.station.kind === 'metro' ? '🚇' : '🚆'} ${stationName(hit.station)} · ${far}`;
+}
+function stationHTML(hit: StationHit | null | undefined): string {
+  if (!hit) return '';
+  const line = hit.station.line ? `<i class="line-dot line-${hit.station.line.toLowerCase()}" title="${esc(hit.station.line)}"></i>` : '';
+  return `<span class="pm-station">${line}${esc(stationText(hit))}</span>`;
+}
+const batchName = (b: Batch) => t('pm.batch.name', { zone: zoneName(b.zone), n: num(batchNo.get(b.id) ?? 1) });
 const inZone = (zone: string) =>
   state.zone === 'all' || zone === state.zone || (state.zone === OTHER && !NEAR_ZONES.includes(zone));
 
@@ -107,17 +138,21 @@ function framed(visible: Pandal[]): Pandal[] {
     const me = state.me;
     return [...visible].sort((a, b) => distanceKm(me, a) - distanceKm(me, b)).slice(0, 6);
   }
-  if (state.zone !== 'all' || state.query.trim()) return visible;
+  if (state.batch || state.zone !== 'all' || state.query.trim()) return visible;
   const city = visible.filter((p) => KOLKATA_ZONES.includes(p.zone));
   return city.length ? city : visible;
 }
 
 function filtered(): Pandal[] {
+  if (state.batch) return batchById.get(state.batch)!.stops.map((id) => byId.get(id)!);
   const q = state.query.trim().toLowerCase();
   let out = pandals.filter(
     (p) =>
       inZone(p.zone) &&
-      (!q || [p.name_bn, p.name_en, p.area, p.zone, p.nearestMetro ?? ''].some((s) => s.toLowerCase().includes(q))),
+      (!q ||
+        [p.name_bn, p.name_en, p.area, p.zone, stationOf.get(p.id)?.station.name_en ?? '', stationOf.get(p.id)?.station.name_bn ?? ''].some((s) =>
+          s.toLowerCase().includes(q),
+        )),
   );
   if (state.me) {
     const me = state.me;
@@ -131,6 +166,7 @@ let L: typeof Leaflet | null = null;
 let map: Leaflet.Map | null = null;
 const markers = new Map<string, Leaflet.CircleMarker>();
 let meMarker: Leaflet.CircleMarker | null = null;
+let batchLayer: Leaflet.LayerGroup | null = null;
 let mapSetup: Promise<void> | null = null;
 
 /** Builds the map once, however many callers ask while Leaflet is still loading. */
@@ -166,7 +202,8 @@ async function setupMap(): Promise<void> {
 }
 
 function popupHTML(p: Pandal): string {
-  return `<strong>${esc(name(p))}</strong><br>${esc(p.area)}${p.verified ? '' : `<br><em>${esc(t('pm.approx'))}</em>`}<br><a href="${directionsUrl(p)}" target="_blank" rel="noopener" data-go="${p.id}">${esc(t('pm.directions'))} →</a> · <a href="#p-${p.id}">${esc(t('pm.inList'))}</a>`;
+  const st = stationText(stationOf.get(p.id));
+  return `<strong>${esc(name(p))}</strong><br>${esc(p.area)}${st ? `<br>${esc(st)}` : ''}${p.verified ? '' : `<br><em>${esc(t('pm.approx'))}</em>`}<br><a href="${directionsUrl(p)}" target="_blank" rel="noopener" data-go="${p.id}">${esc(t('pm.directions'))} →</a> · <a href="#p-${p.id}">${esc(t('pm.inList'))}</a>`;
 }
 
 function syncMarkers() {
@@ -177,6 +214,24 @@ function syncMarkers() {
     if (ids.has(id)) m.addTo(map);
     else m.remove();
     m.setTooltipContent(name(byId.get(id)!));
+  }
+  batchLayer?.remove();
+  batchLayer = null;
+  if (state.batch) {
+    const stops = filtered();
+    const Lf = L;
+    batchLayer = Lf.layerGroup([
+      Lf.polyline(
+        stops.map((p) => [p.lat, p.lng] as [number, number]),
+        { color: '#f4b942', weight: 3, opacity: 0.85, dashArray: '6 6' },
+      ),
+      ...stops.map((p, i) =>
+        Lf.marker([p.lat, p.lng], {
+          icon: Lf.divIcon({ className: 'pm-num', html: `<span>${num(i + 1)}</span>`, iconSize: [26, 26] }),
+          title: name(p),
+        }).on('click', () => markers.get(p.id)?.openPopup()),
+      ),
+    ]).addTo(map);
   }
   meMarker?.remove();
   meMarker = state.me
@@ -212,10 +267,10 @@ function eatNearbyHTML(p: Pandal): string {
     : `<div class="pm-eat">${label}${addr}</div>`;
 }
 
-function cardHTML(p: Pandal, showZone: boolean): string {
+function cardHTML(p: Pandal, showZone: boolean, step = 0): string {
   const alt = bn() ? p.name_en : p.name_bn;
   const dist = state.me ? `<span class="pm-dist">${esc(t('pm.away', { d: num(distanceKm(state.me, p).toFixed(1)) }))}</span>` : '';
-  const metro = p.nearestMetro ? `<span>🚇 ${esc(p.nearestMetro)}</span>` : '';
+  const metro = stationHTML(stationOf.get(p.id));
   const zone = showZone ? `<span>${esc(zoneName(p.zone))}</span>` : '';
   const approx = p.verified ? '' : `<p class="pm-approx" title="${esc(t('pm.approxHelp'))}">⚠ ${esc(t('pm.approx'))} — ${esc(t('pm.approxHelp'))}</p>`;
   const seen = visitedNow[p.id] ? ` <span class="pm-seen">✓ ${esc(t('pm.visited'))}</span>` : '';
@@ -224,7 +279,7 @@ function cardHTML(p: Pandal, showZone: boolean): string {
     ? `<a class="btn btn-ghost btn-sm" href="${routeUrl([p, ...next], 'walking')}" target="_blank" rel="noopener" data-go="${[p, ...next].map((q) => q.id).join(',')}" title="${esc(next.map(name).join(' → '))}">${esc(t('pm.nextHere', { n: num(next.length) }))}</a>`
     : '';
   return `<article class="pm-card${visitedNow[p.id] ? ' is-seen' : ''}" id="p-${p.id}">
-    <h4><a class="pm-link" href="/pandals/${p.id}/"><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></a>${seen}</h4>
+    <h4>${step ? `<span class="pm-step">${num(step)}</span>` : ''}<a class="pm-link" href="/pandals/${p.id}/"><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></a>${seen}</h4>
     <p class="pm-meta">${dist}<span>${esc(p.area)}</span>${zone}${metro}</p>
     ${approx}
     <div class="pm-actions"><a class="btn btn-sm" href="${directionsUrl(p)}" target="_blank" rel="noopener" data-go="${p.id}" aria-label="${esc(`${t('pm.directions')}: ${name(p)}`)}">🧭 ${esc(t('pm.directions'))}</a>${nextBtn}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button></div>
@@ -241,6 +296,9 @@ function renderList() {
   const list = $('pm-list');
   if (!items.length) {
     list.innerHTML = `<p class="muted">${esc(t('pm.none'))}</p>`;
+  } else if (state.batch) {
+    // A batch: its pandals in walking order, numbered like the map.
+    list.innerHTML = `<ol class="pm-cards">${items.map((p, i) => `<li>${cardHTML(p, true, i + 1)}</li>`).join('')}</ol>`;
   } else if (state.me) {
     // Near me: one list, closest first.
     list.innerHTML = `<ol class="pm-cards">${items.map((p) => `<li>${cardHTML(p, true)}</li>`).join('')}</ol>`;
@@ -256,8 +314,9 @@ function renderList() {
       .join('');
   }
   const msg = [t('pm.count', { n: num(items.length) })];
-  if (state.me) msg.push(t('pm.sortedNear'));
+  if (state.me && !state.batch) msg.push(t('pm.sortedNear'));
   $('pm-status').textContent = msg.join(' · ');
+  renderBatches();
   renderHop();
   renderNextBar();
   syncMarkers();
@@ -274,7 +333,11 @@ function renderNextBar() {
     return;
   }
   bar.hidden = false;
-  const next = nextFrom(from, NEXT_STOPS);
+  // In a batch, the next stop of that batch comes first.
+  const b = batchOf.get(from.id);
+  const seen = visited();
+  const inBatch = b ? b.stops.slice(b.stops.indexOf(from.id) + 1).filter((id) => !seen[id]).map((id) => byId.get(id)!) : [];
+  const next = inBatch.length ? inBatch.slice(0, NEXT_STOPS) : nextFrom(from, NEXT_STOPS);
   const head = `<p class="pm-next-at">📍 ${esc(t('pm.bar.at', { name: name(from) }))}</p>`;
   const close = `<button type="button" class="pm-next-close" data-next-close aria-label="${esc(t('ui.close'))}">✕</button>`;
   if (!next.length) {
@@ -285,7 +348,7 @@ function renderNextBar() {
   const d = num(distanceKm(from, n) < 1 ? `${Math.round(distanceKm(from, n) * 1000)}` : distanceKm(from, n).toFixed(1));
   const unit = distanceKm(from, n) < 1 ? t('pm.m') : t('pm.km');
   bar.innerHTML = `${head}
-    <p class="pm-next-name">${esc(t('pm.bar.next'))}: <a href="#p-${n.id}">${esc(name(n))}</a> <span class="pm-dist">${esc(d)} ${esc(unit)}</span></p>
+    <p class="pm-next-name">${esc(t(inBatch.length ? 'pm.bar.batchNext' : 'pm.bar.next'))}: <a href="#p-${n.id}">${esc(name(n))}</a> <span class="pm-dist">${esc(d)} ${esc(unit)}</span></p>
     <div class="pm-next-actions">
       <a class="btn btn-sm" href="${directionsUrl(n, 'walking')}" target="_blank" rel="noopener" data-go="${n.id}">🧭 ${esc(t('pm.directions'))}</a>
       ${next.length > 1 ? `<a class="btn btn-ghost btn-sm" href="${routeUrl([from, ...next], 'walking')}" target="_blank" rel="noopener" data-go="${next.map((q) => q.id).join(',')}">${esc(t('pm.bar.route', { n: num(next.length) }))}</a>` : ''}
@@ -306,6 +369,7 @@ function renderZones() {
     b.setAttribute('aria-pressed', String(state.zone === z));
     b.addEventListener('click', () => {
       state.zone = z;
+      state.batch = null;
       renderZones();
       renderList();
     });
@@ -332,8 +396,63 @@ function hopOrder(me: LatLng): Pandal[] {
   return order;
 }
 
+// ── Batches: pandals close together, seen in one walk ──
+function batchCardHTML(b: Batch): string {
+  const first = b.stops.slice(0, 3).map((id) => name(byId.get(id)!));
+  return `<button type="button" class="pm-batch" data-batch="${b.id}" aria-pressed="${state.batch === b.id}">
+    <strong>${esc(batchName(b))}</strong>
+    <span class="pm-batch-meta">${esc(t('pm.batch.meta', { n: num(b.stops.length), km: num(b.walkKm.toFixed(1)), time: fmtTime(b.minutes) }))}</span>
+    ${b.start ? `<span class="pm-batch-st">${esc(t('pm.batch.from', { st: stationText(b.start) }))}</span>` : ''}
+    <span class="pm-batch-stops">${esc(first.join(' → '))}${b.stops.length > 3 ? ' …' : ''}</span>
+  </button>`;
+}
+
+function renderBatches() {
+  const wrap = $('pm-batches');
+  const list = batches.filter((b) => (state.batch ? true : inZone(b.zone)));
+  wrap.hidden = !list.length;
+  $('pm-batch-row').innerHTML = list.map(batchCardHTML).join('');
+}
+
+function renderBatchBox(box: HTMLElement, b: Batch) {
+  const stops = b.stops.map((id) => byId.get(id)!);
+  // Start from the station when it's a short walk away; otherwise Google Maps starts at the first pandal.
+  const origin = b.start && b.start.km <= 2 ? [b.start.station] : [];
+  const legs = routeLegs<LatLng & { id?: string }>([...origin, ...stops]);
+  const links = legs
+    .map((leg, i) => {
+      // Later parts begin where the previous one ended; name only the new stops.
+      const ps = leg.filter((x): x is Pandal => 'zone' in x).slice(i ? 1 : 0);
+      const label = i === 0 ? t('pm.hop.start', { n: num(ps.length) }) : t('pm.hop.next', { n: num(i + 1) });
+      return `<a class="btn btn-sm${i ? ' btn-ghost' : ''}" href="${routeUrl(leg, 'walking')}" target="_blank" rel="noopener" data-go="${ps.map((q) => q.id).join(',')}">${esc(label)}<span class="pm-hop-span">${esc(name(ps[0]))} → ${esc(name(ps[ps.length - 1]))}</span></a>`;
+    })
+    .join('');
+  const ends = [
+    b.start ? t('pm.batch.from', { st: stationText(b.start) }) : '',
+    b.end ? t('pm.batch.end', { st: stationText(b.end) }) : '',
+  ].filter(Boolean);
+  box.hidden = false;
+  box.innerHTML = `<button type="button" class="pm-batch-close" data-batch-close>${esc(t('pm.batch.all'))}</button>
+    <h3>${esc(batchName(b))}</h3>
+    <p class="pm-batch-meta">${esc(t('pm.batch.meta', { n: num(stops.length), km: num(b.walkKm.toFixed(1)), time: fmtTime(b.minutes) }))}</p>
+    ${ends.map((e) => `<p class="small">${esc(e)}</p>`).join('')}
+    <p class="muted small">${esc(t('pm.batch.lead'))}</p>
+    <ol class="pm-hop-stops">${stops.map((p) => `<li><a href="#p-${p.id}">${esc(name(p))}</a></li>`).join('')}</ol>
+    <div class="pm-hop-legs">${links}</div>`;
+}
+
+function openBatch(id: string | null) {
+  state.batch = id && batchById.has(id) ? id : null;
+  renderList();
+  if (state.batch) {
+    history.replaceState(null, '', `#b-${state.batch}`);
+    scrollToEl($('pm-hop'));
+  } else if (location.hash.startsWith('#b-')) history.replaceState(null, '', location.pathname + location.search);
+}
+
 function renderHop() {
   const box = $('pm-hop');
+  if (state.batch) return renderBatchBox(box, batchById.get(state.batch)!);
   if (!state.me) {
     box.hidden = true;
     return;
@@ -363,6 +482,7 @@ function renderHop() {
 /** Sets "you are here" from GPS or a tap on the map, then lists the nearest pandals and the walking route. */
 function setMe(me: LatLng) {
   state.me = me;
+  state.batch = null;
   picking = false;
   $('pm-map').classList.remove('pm-picking');
   $('pm-near').setAttribute('aria-pressed', 'true');
@@ -405,6 +525,10 @@ function nearMe() {
 // ── Deep links: /#p-<id> scrolls to that pandal and shows it on the map ──
 function openHash() {
   const id = decodeURIComponent(location.hash.slice(1));
+  if (id.startsWith('b-')) {
+    if (state.batch !== id.slice(2)) openBatch(id.slice(2));
+    return;
+  }
   if (!id.startsWith('p-')) return;
   const p = byId.get(id.slice(2));
   if (!p) return;
@@ -412,6 +536,7 @@ function openHash() {
     // Filtered out: clear the filters so the card exists.
     state.zone = 'all';
     state.query = '';
+    state.batch = null;
     ($('pm-search') as HTMLInputElement).value = '';
     renderZones();
     renderList();
@@ -466,6 +591,7 @@ export function initFinder() {
     clearTimeout(searchTimer);
     searchTimer = window.setTimeout(() => {
       state.query = (e.target as HTMLInputElement).value;
+      state.batch = null;
       renderList();
     }, 120);
   });
@@ -486,7 +612,15 @@ export function initFinder() {
     true,
   );
   addEventListener('hashchange', openHash);
-  if (location.hash.startsWith('#p-')) requestAnimationFrame(openHash);
+  if (/^#[pb]-/.test(location.hash)) requestAnimationFrame(openHash);
+
+  $('pm-batch-row').addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-batch]');
+    if (b) openBatch(state.batch === b.dataset.batch ? null : b.dataset.batch!);
+  });
+  $('pm-hop').addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('[data-batch-close]')) openBatch(null);
+  });
 
   // Going to Google Maps: remember it, so coming back shows the next pandal.
   document.addEventListener('click', (e) => {
