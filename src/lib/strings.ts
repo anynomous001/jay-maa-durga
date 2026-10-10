@@ -113,15 +113,6 @@ export const dict: Record<string, Entry> = {
   'faq.q4': { bn: 'কলকাতার বাইরের পুজোও আছে?', en: 'Does it cover pujas outside Kolkata?' },
   'faq.a4': { bn: 'হ্যাঁ — উত্তর ও দক্ষিণ ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজোও ম্যাপে আছে।', en: 'Yes — well-known pujas in North and South 24 Parganas, Howrah, Hooghly, Nadia, Bankura, Siliguri, Jalpaiguri and Cooch Behar are on the map too.' },
 
-  // ── Visible SEO facts (home page) ──
-  'seo.title': { bn: 'দুর্গাপুজো ২০২৬: প্যান্ডেল হপিং গাইড', en: 'Durga Puja 2026: pandal-hopping guide' },
-  'seo.when.h': { bn: 'দুর্গাপুজো ২০২৬ কবে?', en: 'When is Durga Puja 2026?' },
-  'seo.when.p': { bn: 'ষষ্ঠী ১৬ অক্টোবর, সপ্তমী ১৭–১৮, অষ্টমী ১৯, নবমী ২০ আর বিজয়া দশমী ২১ অক্টোবর (বিশুদ্ধ সিদ্ধান্ত পঞ্জিকা)।', en: 'Shashthi 16 October, Saptami 17–18, Ashtami 19, Nabami 20 and Bijoya Dashami 21 October (Bisuddha Siddhanta panjika).' },
-  'seo.how.h': { bn: 'ম্যাপে কাছের প্যান্ডেল খুঁজুন', en: 'Find the pandals near you' },
-  'seo.how.p': { bn: 'প্যান্ডেল ম্যাপে “আমার কাছে” চাপলে কাছের পুজো আগে দেখায়। প্রতিটি পুজোর সঙ্গে কাছের মেট্রো, আর হাঁটা, গাড়ি বা বাস/মেট্রোতে গুগল ম্যাপস ডিরেকশন — কোনো অ্যাপ লাগে না।', en: 'Tap “Near me” on the pandal map to see the closest pujas first. Each one comes with the nearest metro and Google Maps directions for walking, driving or public transport, with no app to install.' },
-  'seo.more.h': { bn: 'কলকাতার বাইরেও', en: 'Beyond Kolkata' },
-  'seo.more.p': { bn: 'দুই ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজো — বিষ্ণুপুরের মৃন্ময়ী থেকে কোচবিহারের বড়দেবী।', en: 'Well-known pujas in the 24 Parganas, Howrah, Hooghly, Nadia, Bankura, Siliguri, Jalpaiguri and Cooch Behar — from Bishnupur’s Mrinmoyee to Cooch Behar’s Boro Debi.' },
-  'seo.more.link': { bn: 'প্যান্ডেল ম্যাপ দেখুন →', en: 'Open the pandal map →' },
 
   // ── Mahalaya card ──
   'card.open': { bn: 'শুভেচ্ছা কার্ড বানান', en: 'Make a greeting card' },
@@ -153,9 +144,6 @@ export const dict: Record<string, Entry> = {
   'hop.title': { bn: 'প্যান্ডেল হপিং রুট', en: 'Pandal-hopping routes' },
   'hop.lead': { bn: 'কাছাকাছি প্যান্ডেল নিয়ে সাজানো রুট — এক বিকেলেই ঘুরে নিন।', en: 'Nearby pandals grouped into routes you can do in an evening.' },
   'hop.all': { bn: 'সব রুট আর ম্যাপ দেখুন →', en: 'See every route on the map →' },
-  'seo.routes.h': { bn: 'তৈরি হপিং রুট', en: 'Ready-made hopping routes' },
-  'seo.routes.p': { bn: 'আহিরীটোলা থেকে বাগবাজারের পুরোনো পুজো, হাতিবাগান, লেক টাউন, বালিগঞ্জ-গড়িয়াহাট, কালীঘাট — কাছাকাছি প্যান্ডেল নিয়ে ৭টি রুট, এক চাপে গুগল ম্যাপসে।', en: 'Ahiritola to Bagbazar’s old pujas, Hatibagan, Lake Town, Ballygunge–Gariahat, Kalighat: 7 routes that group nearby pandals, one tap to Google Maps.' },
-  'seo.dates.link': { bn: 'পুজোর পুরো নির্ঘণ্ট →', en: 'Full Puja calendar →' },
   // ── Pandal map ──
   'pm.title': { bn: 'প্যান্ডেল ম্যাপ ২০২৬', en: 'Pandal map 2026' },
   'pm.intro': {
