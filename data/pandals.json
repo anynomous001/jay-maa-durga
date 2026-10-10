@@ -1,5 +1,5 @@
 {
- "_readme": "Coordinates were looked up one by one on Google Maps (see docs/pandal-lookup-log.tsv). verified=false means the pin may not be the exact pandal spot. zone: North Kolkata | South Kolkata (Central | Salt Lake–New Town | North 24 Parganas | South 24 Parganas, and other districts: Howrah | Hooghly | Nadia | Bankura | Siliguri | Jalpaiguri | Cooch Behar). theme2026: leave empty unless confirmed. Routes: ordered stop ids; travelmode walking|driving|transit.",
+ "_readme": "Coordinates were looked up one by one on Google Maps (see docs/pandal-lookup-log.tsv). verified=false means the pin may not be the exact pandal spot. zone: North Kolkata | South Kolkata (Central | Salt Lake–New Town | North 24 Parganas | South 24 Parganas, and other districts: Howrah | Hooghly | Nadia | Bankura | Purba Medinipur | Siliguri | Jalpaiguri | Cooch Behar). theme2026: leave empty unless confirmed. Routes: ordered stop ids; travelmode walking|driving|transit.",
  "pandals": [
   {
    "id": "bagbazar",
@@ -848,6 +848,20 @@
    "theme2026": "",
    "verified": true,
    "source": "Google Maps place \"Maa Mrinmoyee Temple\" (Hindu temple, Rajdarbar, Bishnupur), looked up 2026-10-09. Called the oldest continuous Durga Puja in West Bengal (traditionally 997 CE): https://en.wikipedia.org/wiki/Mrinmoyee_Temple , https://30stades.com/society/bishnupur-bengals-oldest-durga-puja-continues-with-cannons-offbeat-customs-maa-mrinmoyee-1564184",
+   "notes": "named place"
+  },
+  {
+   "id": "tamluk-youth-sporting-club",
+   "name_bn": "তমলুক ইয়ুথ স্পোর্টিং ক্লাব",
+   "name_en": "Tamluk Youth Sporting Club",
+   "area": "Padumbasan, Tamluk",
+   "zone": "Purba Medinipur",
+   "lat": 22.2896977,
+   "lng": 87.9171363,
+   "nearestMetro": "",
+   "theme2026": "",
+   "verified": true,
+   "source": "Suggested by a visitor on 2026-10-10 with a Google Maps link. Google Maps place \"Tamluk Youth Sporting Club\" (sports club, Ward no 11, Padumbasan, Tamluk 721636), looked up 2026-10-10.",
    "notes": "named place"
   },
   {
