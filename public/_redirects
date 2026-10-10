@@ -1,3 +1,5 @@
 # Cloudflare Pages redirects
 /advertise/*  /  301
 /advertise    /  301
+/pandals/     /#pandals  301
+/pandals      /#pandals  301

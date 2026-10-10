@@ -9,9 +9,9 @@ export interface LatLng {
 
 const ll = (p: LatLng) => `${p.lat},${p.lng}`;
 
-/** Opens Google Maps navigation from the user's current location. */
-export function directionsUrl(dest: LatLng, mode: TravelMode): string {
-  return `https://www.google.com/maps/dir/?api=1&destination=${ll(dest)}&travelmode=${mode}`;
+/** Opens Google Maps navigation from the user's current location (Google picks the mode when none is given). */
+export function directionsUrl(dest: LatLng, mode?: TravelMode): string {
+  return `https://www.google.com/maps/dir/?api=1&destination=${ll(dest)}${mode ? `&travelmode=${mode}` : ''}`;
 }
 
 /** Google Maps allows only 3 waypoints on mobile, so a leg holds at most 5 stops. */
