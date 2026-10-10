@@ -13,6 +13,7 @@ export const dict: Record<string, Entry> = {
   // ── Hero / countdown ──
   'hero.kicker': { bn: 'শনিবার, ১০ অক্টোবর ২০২৬ · ভোর', en: 'Saturday, 10 October 2026 · before dawn' },
   'hero.title': { bn: 'শুভ মহালয়া', en: 'Shubho Mahalaya' },
+  'hero.title.durga': { bn: 'শুভ দুর্গাপুজো', en: 'Happy Durga Puja' },
   'hero.sub': {
     bn: 'ভোরের আঁধারে মহিষাসুরমর্দিনী — আকাশবাণীর সরকারি লাইভ স্ট্রিমে, এই পাতা থেকেই।',
     en: 'Mahishasuramardini in the pre-dawn dark — on Akashvani’s official live stream, right from this page.',
