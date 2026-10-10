@@ -14,8 +14,7 @@ export const dict: Record<string, Entry> = {
   'hero.title.durga': { bn: 'শুভ দুর্গাপুজো', en: 'Happy Durga Puja' },
   'hero.kicker.puja': { bn: 'দুর্গাপুজো ২০২৬ · ১৬–২১ অক্টোবর', en: 'Durga Puja 2026 · 16–21 October' },
   'hero.title.puja': { bn: 'শুভ শারদীয়া', en: 'Shubho Sharodiya' },
-  'hero.sub.puja': { bn: 'কলকাতা আর বিভিন্ন জেলার ৬০টির বেশি পুজো এক ম্যাপে — কাছের প্যান্ডেল, মেট্রো আর হেঁটে ঘোরার রুট দেখে ঠাকুর দেখতে বেরিয়ে পড়ুন।', en: '60+ pujas in Kolkata and beyond on one map — find the pandals near you, the metro and a walking route, and head out pandal-hopping.' },
-  'hero.all': { bn: 'সব প্যান্ডেল দেখুন', en: 'All pandals' },
+  'hero.sub.puja': { bn: 'কলকাতা আর জেলার ৬০টির বেশি পুজো এক ম্যাপে — কাছের প্যান্ডেল, মেট্রো আর হাঁটার রুট।', en: '60+ pujas in Kolkata and beyond on one map — pandals near you, the metro and a walking route.' },
   'hero.kicker.bijoya': { bn: 'বিজয়া দশমী ২০২৬', en: 'Bijoya Dashami 2026' },
   'hero.title.bijoya': { bn: 'শুভ বিজয়া', en: 'Shubho Bijoya' },
   'hero.sub.bijoya': { bn: 'আসছে বছর আবার হবে। মহালয়ার রেকর্ডিং আর পুজোর গান নিচে রইল।', en: 'Until next year. Mahalaya recordings and Puja songs are below.' },
@@ -89,8 +88,9 @@ export const dict: Record<string, Entry> = {
   'poll.more-pandals.q': { bn: 'ম্যাপে আরও প্যান্ডেল যোগ করব?', en: 'Should we add more pandals to the map?' },
   'poll.more-pandals.yes': { bn: 'হ্যাঁ, আরও চাই', en: 'Yes, add more' },
   'poll.more-pandals.no': { bn: 'না, এতেই হবে', en: 'No, this is enough' },
-  'poll.tap': { bn: 'একটি উত্তরে চাপুন। ফলাফল ভোটের পরে দেখা যাবে।', en: 'Tap an answer. Results show after you vote.' },
-  'poll.votes': { bn: 'মোট {n}টি ভোট · মত বদলাতে অন্য উত্তরে চাপুন', en: 'Total votes: {n} · tap another answer to change yours' },
+  'poll.tap': { bn: 'উত্তরে চাপুন, ফলাফল পরে দেখাবে', en: 'Tap an answer to see results' },
+  'poll.next': { bn: 'পরের প্রশ্ন ({i}/{n}) →', en: 'Next question ({i}/{n}) →' },
+  'poll.votes': { bn: 'মোট {n}টি ভোট', en: '{n} votes' },
 
   // ── Pandal map ──
   'pm.title': { bn: 'প্যান্ডেল ম্যাপ ২০২৬', en: 'Pandal map 2026' },

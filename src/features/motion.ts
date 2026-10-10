@@ -99,7 +99,7 @@ function magnetic(el: HTMLElement) {
 export function initMotion(): void {
   const mm = gsap.matchMedia();
   mm.add('(prefers-reduced-motion: no-preference)', () => {
-    const title = document.querySelector<HTMLElement>('.hero h1, .page-head h1');
+    const title = document.querySelector<HTMLElement>('.intro h1, .page-head h1');
     // Split after the web fonts land (capped), so the split measures final glyphs
     // and nothing reflows mid-animation.
     if (title) {

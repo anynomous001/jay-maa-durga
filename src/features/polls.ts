@@ -24,47 +24,70 @@ export function initPolls(): void {
   let results: Results | null = null;
   let busy = false;
 
+  /** One question at a time keeps the strip small; starts on the first one this visitor hasn't answered. */
+  let cur = 0;
+  const pickFirst = () => {
+    const i = POLLS.findIndex((p) => !results?.mine[p.id]);
+    cur = i < 0 ? 0 : i;
+  };
+
   const render = () => {
     if (!results) return;
     const list = box.querySelector<HTMLElement>('.poll-list')!;
     list.innerHTML = '';
-    for (const poll of POLLS) {
-      const counts = results.counts[poll.id] ?? {};
-      const total = poll.choices.reduce((n, c) => n + (counts[c] ?? 0), 0);
-      const mine = results.mine[poll.id];
-      const fieldset = document.createElement('fieldset');
-      fieldset.className = 'poll';
-      const legend = document.createElement('legend');
-      legend.textContent = t(`poll.${poll.id}.q`);
-      fieldset.append(legend);
-      for (const choice of poll.choices) {
-        const share = total ? Math.round(((counts[choice] ?? 0) * 100) / total) : 0;
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'poll-choice';
-        b.setAttribute('aria-pressed', String(mine === choice));
-        b.disabled = busy;
-        const label = document.createElement('span');
-        label.className = 'poll-label';
-        label.textContent = t(`poll.${poll.id}.${choice}`);
-        b.append(label);
-        if (mine) {
-          // Results only after voting, so the first answer isn't nudged by the crowd.
-          b.style.setProperty('--share', `${share}%`);
-          const pct = document.createElement('span');
-          pct.className = 'poll-pct';
-          pct.textContent = `${num(share)}%`;
-          b.append(pct);
-        }
-        b.addEventListener('click', () => void vote(poll.id, choice));
-        fieldset.append(b);
+    const poll = POLLS[cur];
+    const counts = results.counts[poll.id] ?? {};
+    const total = poll.choices.reduce((n, c) => n + (counts[c] ?? 0), 0);
+    const mine = results.mine[poll.id];
+    const fieldset = document.createElement('fieldset');
+    fieldset.className = 'poll';
+    const legend = document.createElement('legend');
+    legend.textContent = t(`poll.${poll.id}.q`);
+    fieldset.append(legend);
+    const row = document.createElement('div');
+    row.className = 'poll-choices';
+    for (const choice of poll.choices) {
+      const share = total ? Math.round(((counts[choice] ?? 0) * 100) / total) : 0;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'poll-choice';
+      b.setAttribute('aria-pressed', String(mine === choice));
+      b.disabled = busy;
+      const label = document.createElement('span');
+      label.className = 'poll-label';
+      label.textContent = t(`poll.${poll.id}.${choice}`);
+      b.append(label);
+      if (mine) {
+        // Results only after voting, so the first answer isn't nudged by the crowd.
+        b.style.setProperty('--share', `${share}%`);
+        const pct = document.createElement('span');
+        pct.className = 'poll-pct';
+        pct.textContent = `${num(share)}%`;
+        b.append(pct);
       }
-      const note = document.createElement('p');
-      note.className = 'muted small poll-note';
-      note.textContent = mine ? t('poll.votes', { n: num(total) }) : t('poll.tap');
-      fieldset.append(note);
-      list.append(fieldset);
+      b.addEventListener('click', () => void vote(poll.id, choice));
+      row.append(b);
     }
+    fieldset.append(row);
+    const foot = document.createElement('div');
+    foot.className = 'poll-foot';
+    const note = document.createElement('span');
+    note.className = 'muted small poll-note';
+    note.textContent = mine ? t('poll.votes', { n: num(total) }) : t('poll.tap');
+    foot.append(note);
+    if (POLLS.length > 1) {
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'poll-next';
+      next.textContent = t('poll.next', { i: num(cur + 1), n: num(POLLS.length) });
+      next.addEventListener('click', () => {
+        cur = (cur + 1) % POLLS.length;
+        render();
+      });
+      foot.append(next);
+    }
+    fieldset.append(foot);
+    list.append(fieldset);
   };
 
   const vote = async (poll: string, choice: string, retry = true): Promise<void> => {
@@ -96,6 +119,7 @@ export function initPolls(): void {
     .then((r) => {
       if (!r || typeof r.counts !== 'object') return;
       results = r;
+      pickFirst();
       box.hidden = false;
       render();
     })
