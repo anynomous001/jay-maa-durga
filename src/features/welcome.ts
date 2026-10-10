@@ -11,7 +11,7 @@ const OFF_KEY = 'welcome-dhak';
 const SEEN_KEY = 'welcome-dhak-played';
 const SECONDS = 7;
 /** Taps here start other audio (or open it), so the welcome stays quiet. */
-const AUDIO_CONTROLS = '#radio, #mini-player, dialog, [data-open="sheet-songs"], [data-open="sheet-dhak"]';
+const AUDIO_CONTROLS = '#mini-player, dialog, [data-open="sheet-songs"], [data-open="sheet-dhak"]';
 
 const store = (s: Storage, k: string, v?: string) => {
   try {

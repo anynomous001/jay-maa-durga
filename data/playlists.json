@@ -2,15 +2,6 @@
   "_readme": "Only official embeds. platform: youtube | spotify. url: the normal watch/open URL. Each YouTube item was checked via YouTube oEmbed (owner + embedding allowed) on 2026-10-04. 'source' records who uploaded it.",
   "lists": [
     {
-      "id": "mahalaya-recordings",
-      "items": [
-        { "title": "Mahalaya (Mahishasura Mardini) — Full Album", "artist": "Birendra Krishna Bhadra, Pankaj Kumar Mullick & others", "platform": "youtube", "url": "https://www.youtube.com/watch?v=YQyo8QeoYhc", "source": "Saregama Bengali (verified channel)" },
-        { "title": "1966 — Mahishasur Mardini", "artist": "Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=ZtMbKIfzioM", "source": "Akashvani AIR (official channel)" },
-        { "title": "Mahishasura Mardini (Bangla)", "artist": "Akashvani", "platform": "youtube", "url": "https://www.youtube.com/watch?v=4J_U8MwsL9c", "source": "Akashvani AIR (official channel)" },
-        { "title": "Chandipath — Mahisasurmardini", "artist": "Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=AnrGifI3WHk", "source": "Saregama Bengali (verified channel)" }
-      ]
-    },
-    {
       "id": "mahalaya-songs",
       "items": [
         { "title": "Bajlo Tomar Aalor Benu (with narration)", "artist": "Supriti Ghosh, Birendra Krishna Bhadra", "platform": "youtube", "url": "https://www.youtube.com/watch?v=2Zqlb00ttCU", "source": "Saregama Bengali (verified channel)" },
