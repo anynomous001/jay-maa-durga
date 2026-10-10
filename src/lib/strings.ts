@@ -64,7 +64,7 @@ export const dict: Record<string, Entry> = {
   'faq.q3': { bn: 'প্যান্ডেল হপিংয়ের রুট পাব?', en: 'Can I get a pandal-hopping route?' },
   'faq.a3': { bn: 'হ্যাঁ। “আমার কাছের প্যান্ডেল” চাপলে আপনার জায়গা থেকে ৫ কিমির মধ্যের প্যান্ডেলগুলো হাঁটার সুবিধামতো পরপর সাজিয়ে গুগল ম্যাপসে রুট খোলে।', en: 'Yes. Tap “Pandals near me” and the pandals within 5 km of you are put in an easy walking order, ready to open as a Google Maps route.' },
   'faq.q4': { bn: 'কলকাতার বাইরের পুজোও আছে?', en: 'Does it cover pujas outside Kolkata?' },
-  'faq.a4': { bn: 'হ্যাঁ — উত্তর ও দক্ষিণ ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, পূর্ব মেদিনীপুর (তমলুক), শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজোও ম্যাপে আছে।', en: 'Yes — well-known pujas in North and South 24 Parganas, Howrah, Hooghly, Nadia, Bankura, Purba Medinipur (Tamluk), Siliguri, Jalpaiguri and Cooch Behar are on the map too.' },
+  'faq.a4': { bn: 'হ্যাঁ — উত্তর ও দক্ষিণ ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, পূর্ব মেদিনীপুর (তমলুক), মুর্শিদাবাদ (কাশিমবাজার), শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজোও ম্যাপে আছে।', en: 'Yes — well-known pujas in North and South 24 Parganas, Howrah, Hooghly, Nadia, Bankura, Purba Medinipur (Tamluk), Murshidabad (Cossimbazar), Siliguri, Jalpaiguri and Cooch Behar are on the map too.' },
 
   // ── Greeting card ──
   'card.open': { bn: 'শুভেচ্ছা কার্ড বানান', en: 'Make a greeting card' },
@@ -111,6 +111,7 @@ export const dict: Record<string, Entry> = {
   'pm.zone.Nadia': { bn: 'নদিয়া', en: 'Nadia' },
   'pm.zone.Bankura': { bn: 'বাঁকুড়া', en: 'Bankura' },
   'pm.zone.Purba Medinipur': { bn: 'পূর্ব মেদিনীপুর', en: 'Purba Medinipur' },
+  'pm.zone.Murshidabad': { bn: 'মুর্শিদাবাদ', en: 'Murshidabad' },
   'pm.zone.Siliguri': { bn: 'শিলিগুড়ি', en: 'Siliguri' },
   'pm.zone.Jalpaiguri': { bn: 'জলপাইগুড়ি', en: 'Jalpaiguri' },
   'pm.zone.Cooch Behar': { bn: 'কোচবিহার', en: 'Cooch Behar' },
