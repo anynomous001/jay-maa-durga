@@ -29,9 +29,9 @@ export interface Batch {
 
 export const METRO_WALK_KM: number;
 export const STATION_MAX_KM: number;
-export const BATCH_RADIUS_KM: number;
 export const BATCH_MAX_HOP_KM: number;
 export const BATCH_MIN: number;
+export const BATCH_SPLIT_KM: number;
 export const BATCH_MAX: number;
 export const STREET_FACTOR: number;
 export const WALK_KMH: number;

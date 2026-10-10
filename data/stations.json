@@ -207,9 +207,9 @@
    "name_bn": "নেতাজি",
    "kind": "metro",
    "line": "Blue",
-   "lat": 22.532977,
-   "lng": 88.3457124,
-   "source": "Google Maps \"Netaji Bhavan\""
+   "lat": 22.4809362,
+   "lng": 88.3459611,
+   "source": "Google Maps \"Netaji\""
   },
   {
    "id": "m-masterda-surya-sen",
@@ -280,6 +280,642 @@
    "lat": 22.5837,
    "lng": 88.34214,
    "source": "Google Maps \"Howrah Jn\""
+  },
+  {
+   "id": "m-mahakaran",
+   "name_en": "Mahakaran",
+   "name_bn": "মহাকরণ",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5724588,
+   "lng": 88.3508271,
+   "source": "Google Maps \"Mahakaran metro station\""
+  },
+  {
+   "id": "m-sealdah",
+   "name_en": "Sealdah",
+   "name_bn": "শিয়ালদহ",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.565978,
+   "lng": 88.371959,
+   "source": "Google Maps \"Sealdah metro station\""
+  },
+  {
+   "id": "m-phoolbagan",
+   "name_en": "Phoolbagan",
+   "name_bn": "ফুলবাগান",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.572252,
+   "lng": 88.3894405,
+   "source": "Google Maps \"Phoolbagan metro station\""
+  },
+  {
+   "id": "m-salt-lake-stadium",
+   "name_en": "Salt Lake Stadium",
+   "name_bn": "সল্টলেক স্টেডিয়াম",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.573016,
+   "lng": 88.4030255,
+   "source": "Google Maps \"Salt Lake Stadium\""
+  },
+  {
+   "id": "m-bengal-chemical",
+   "name_en": "Bengal Chemical",
+   "name_bn": "বেঙ্গল কেমিক্যাল",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5800328,
+   "lng": 88.4013242,
+   "source": "Google Maps \"Bengal Chemical metro station\""
+  },
+  {
+   "id": "m-city-centre",
+   "name_en": "City Centre",
+   "name_bn": "সিটি সেন্টার",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5870411,
+   "lng": 88.4078654,
+   "source": "Google Maps \"City Centre\""
+  },
+  {
+   "id": "m-central-park",
+   "name_en": "Central Park",
+   "name_bn": "সেন্ট্রাল পার্ক",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5903952,
+   "lng": 88.4155095,
+   "source": "Google Maps \"Central Park\""
+  },
+  {
+   "id": "m-karunamoyee",
+   "name_en": "Karunamoyee",
+   "name_bn": "করুণাময়ী",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.5862825,
+   "lng": 88.4214022,
+   "source": "Google Maps \"Karunamayee\""
+  },
+  {
+   "id": "m-salt-lake-sector-v",
+   "name_en": "Salt Lake Sector V",
+   "name_bn": "সল্টলেক সেক্টর ফাইভ",
+   "kind": "metro",
+   "line": "Green",
+   "lat": 22.580939,
+   "lng": 88.429052,
+   "source": "Google Maps \"Salt Lake Sector V\""
+  },
+  {
+   "id": "m-joka",
+   "name_en": "Joka",
+   "name_bn": "জোকা",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.4519191,
+   "lng": 88.3015804,
+   "source": "Google Maps \"Joka\""
+  },
+  {
+   "id": "m-thakurpukur",
+   "name_en": "Thakurpukur",
+   "name_bn": "ঠাকুরপুকুর",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.4642826,
+   "lng": 88.3074849,
+   "source": "Google Maps \"Thakurpukur\""
+  },
+  {
+   "id": "m-sakher-bazar",
+   "name_en": "Sakher Bazar",
+   "name_bn": "সখেরবাজার",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.4747597,
+   "lng": 88.3099273,
+   "source": "Google Maps \"Sakher Bazar\""
+  },
+  {
+   "id": "m-behala-chowrasta",
+   "name_en": "Behala Chowrasta",
+   "name_bn": "বেহালা চৌরাস্তা",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.4870602,
+   "lng": 88.3131928,
+   "source": "Google Maps \"Behala Chowrasta\""
+  },
+  {
+   "id": "m-behala-bazar",
+   "name_en": "Behala Bazar",
+   "name_bn": "বেহালা বাজার",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.500378,
+   "lng": 88.3172706,
+   "source": "Google Maps \"বেহালা বাজার\""
+  },
+  {
+   "id": "m-taratala",
+   "name_en": "Taratala",
+   "name_bn": "তারাতলা",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.507687,
+   "lng": 88.320279,
+   "source": "Google Maps \"Taratala\""
+  },
+  {
+   "id": "m-majerhat",
+   "name_en": "Majerhat",
+   "name_bn": "মাঝেরহাট",
+   "kind": "metro",
+   "line": "Purple",
+   "lat": 22.519219,
+   "lng": 88.323742,
+   "source": "Google Maps \"Majerhat\""
+  },
+  {
+   "id": "m-satyajit-ray",
+   "name_en": "Satyajit Ray",
+   "name_bn": "সত্যজিৎ রায়",
+   "kind": "metro",
+   "line": "Orange",
+   "lat": 22.4839198,
+   "lng": 88.3922501,
+   "source": "Google Maps \"Satyajit Ray Metro Station\""
+  },
+  {
+   "id": "m-jyotirindra-nandi",
+   "name_en": "Jyotirindra Nandi",
+   "name_bn": "জ্যোতিরিন্দ্র নন্দী",
+   "kind": "metro",
+   "line": "Orange",
+   "lat": 22.49595,
+   "lng": 88.398611,
+   "source": "Google Maps \"Jyotirindra Nandi\""
+  },
+  {
+   "id": "m-kavi-sukanta",
+   "name_en": "Kavi Sukanta",
+   "name_bn": "কবি সুকান্ত",
+   "kind": "metro",
+   "line": "Orange",
+   "lat": 22.505602,
+   "lng": 88.401066,
+   "source": "Google Maps \"Kavi Sukanta\""
+  },
+  {
+   "id": "m-hemanta-mukhopadhyay",
+   "name_en": "Hemanta Mukhopadhyay",
+   "name_bn": "হেমন্ত মুখোপাধ্যায়",
+   "kind": "metro",
+   "line": "Orange",
+   "lat": 22.514684,
+   "lng": 88.401604,
+   "source": "Google Maps \"Hemanta Mukhopadhyay\""
+  },
+  {
+   "id": "m-beleghata",
+   "name_en": "Beleghata",
+   "name_bn": "বেলেঘাটা",
+   "kind": "metro",
+   "line": "Orange",
+   "lat": 22.5506998,
+   "lng": 88.4040364,
+   "source": "Google Maps \"Beleghata Metro Station\""
+  },
+  {
+   "id": "m-dum-dum-cantonment",
+   "name_en": "Dum Dum Cantonment",
+   "name_bn": "দমদম ক্যান্টনমেন্ট",
+   "kind": "metro",
+   "line": "Yellow",
+   "lat": 22.6369865,
+   "lng": 88.4125389,
+   "source": "Google Maps \"Dum Dum Cantonment metro station\""
+  },
+  {
+   "id": "m-jessore-road",
+   "name_en": "Jessore Road",
+   "name_bn": "যশোর রোড",
+   "kind": "metro",
+   "line": "Yellow",
+   "lat": 22.6391925,
+   "lng": 88.4297986,
+   "source": "Google Maps \"Jessore Road\""
+  },
+  {
+   "id": "m-jai-hind-bimanbandar",
+   "name_en": "Jai Hind Bimanbandar",
+   "name_bn": "জয় হিন্দ বিমানবন্দর",
+   "kind": "metro",
+   "line": "Yellow",
+   "lat": 22.647315,
+   "lng": 88.437376,
+   "source": "Google Maps \"Jai Hind - Bimanbandar\""
+  },
+  {
+   "id": "r-sealdah",
+   "name_en": "Sealdah",
+   "name_bn": "শিয়ালদহ",
+   "kind": "rail",
+   "lat": 22.567792,
+   "lng": 88.3710203,
+   "source": "Google Maps \"Sealdah\""
+  },
+  {
+   "id": "r-howrah",
+   "name_en": "Howrah",
+   "name_bn": "হাওড়া",
+   "kind": "rail",
+   "lat": 22.5830002,
+   "lng": 88.3372909,
+   "source": "Google Maps \"Howrah Railway Station\""
+  },
+  {
+   "id": "r-dum-dum-junction",
+   "name_en": "Dum Dum Junction",
+   "name_bn": "দমদম জংশন",
+   "kind": "rail",
+   "lat": 22.6211825,
+   "lng": 88.3931409,
+   "source": "Google Maps \"Dum Dum Junction\""
+  },
+  {
+   "id": "r-bidhannagar-road",
+   "name_en": "Bidhannagar Road",
+   "name_bn": "বিধাননগর রোড",
+   "kind": "rail",
+   "lat": 22.5914513,
+   "lng": 88.3908142,
+   "source": "Google Maps \"Bidhan Nagar Road\""
+  },
+  {
+   "id": "r-ultadanga",
+   "name_en": "Ultadanga",
+   "name_bn": "উল্টোডাঙা",
+   "kind": "rail",
+   "lat": 22.5969057,
+   "lng": 88.3914471,
+   "source": "Google Maps \"ultadanga rd\""
+  },
+  {
+   "id": "r-patipukur",
+   "name_en": "Patipukur",
+   "name_bn": "পাতিপুকুর",
+   "kind": "rail",
+   "lat": 22.6073398,
+   "lng": 88.3938755,
+   "source": "Google Maps \"Patipukur\""
+  },
+  {
+   "id": "r-baranagar-road",
+   "name_en": "Baranagar Road",
+   "name_bn": "বরানগর রোড",
+   "kind": "rail",
+   "lat": 22.6535565,
+   "lng": 88.3787695,
+   "source": "Google Maps \"Baranagar Road\""
+  },
+  {
+   "id": "r-dakshineswar",
+   "name_en": "Dakshineswar",
+   "name_bn": "দক্ষিণেশ্বর",
+   "kind": "rail",
+   "lat": 22.6538404,
+   "lng": 88.3633586,
+   "source": "Google Maps \"Dakshineswar\""
+  },
+  {
+   "id": "r-belur",
+   "name_en": "Belur",
+   "name_bn": "বেলুড়",
+   "kind": "rail",
+   "lat": 22.6362538,
+   "lng": 88.3397724,
+   "source": "Google Maps \"Belur\""
+  },
+  {
+   "id": "r-liluah",
+   "name_en": "Liluah",
+   "name_bn": "লিলুয়া",
+   "kind": "rail",
+   "lat": 22.6207816,
+   "lng": 88.3391975,
+   "source": "Google Maps \"Liluah\""
+  },
+  {
+   "id": "r-bally",
+   "name_en": "Bally",
+   "name_bn": "বালি",
+   "kind": "rail",
+   "lat": 22.6559311,
+   "lng": 88.3405404,
+   "source": "Google Maps \"Bally\""
+  },
+  {
+   "id": "r-ballygunge-junction",
+   "name_en": "Ballygunge Junction",
+   "name_bn": "বালিগঞ্জ জংশন",
+   "kind": "rail",
+   "lat": 22.5193772,
+   "lng": 88.3721353,
+   "source": "Google Maps \"Ballygunge Jn\""
+  },
+  {
+   "id": "r-dhakuria",
+   "name_en": "Dhakuria",
+   "name_bn": "ঢাকুরিয়া",
+   "kind": "rail",
+   "lat": 22.5091478,
+   "lng": 88.3711877,
+   "source": "Google Maps \"Dhakuria\""
+  },
+  {
+   "id": "r-jadavpur",
+   "name_en": "Jadavpur",
+   "name_bn": "যাদবপুর",
+   "kind": "rail",
+   "lat": 22.495416,
+   "lng": 88.3747469,
+   "source": "Google Maps \"Jadabpur\""
+  },
+  {
+   "id": "r-baghajatin",
+   "name_en": "Baghajatin",
+   "name_bn": "বাঘাযতীন",
+   "kind": "rail",
+   "lat": 22.4827398,
+   "lng": 88.3866517,
+   "source": "Google Maps \"Baghajatin\""
+  },
+  {
+   "id": "r-garia",
+   "name_en": "Garia",
+   "name_bn": "গড়িয়া",
+   "kind": "rail",
+   "lat": 22.4662373,
+   "lng": 88.4050103,
+   "source": "Google Maps \"Garia\""
+  },
+  {
+   "id": "r-lake-gardens",
+   "name_en": "Lake Gardens",
+   "name_bn": "লেক গার্ডেনস",
+   "kind": "rail",
+   "lat": 22.5080712,
+   "lng": 88.3532837,
+   "source": "Google Maps \"Lake Gardens\""
+  },
+  {
+   "id": "r-park-circus",
+   "name_en": "Park Circus",
+   "name_bn": "পার্ক সার্কাস",
+   "kind": "rail",
+   "lat": 22.5409469,
+   "lng": 88.3739013,
+   "source": "Google Maps \"Park Circus\""
+  },
+  {
+   "id": "r-sonarpur-junction",
+   "name_en": "Sonarpur Junction",
+   "name_bn": "সোনারপুর জংশন",
+   "kind": "rail",
+   "lat": 22.4429798,
+   "lng": 88.4305441,
+   "source": "Google Maps \"Sonarpur Junction\""
+  },
+  {
+   "id": "r-baruipur-junction",
+   "name_en": "Baruipur Junction",
+   "name_bn": "বারুইপুর জংশন",
+   "kind": "rail",
+   "lat": 22.3661219,
+   "lng": 88.431372,
+   "source": "Google Maps \"Baruipur Jn.\""
+  },
+  {
+   "id": "r-barrackpore",
+   "name_en": "Barrackpore",
+   "name_bn": "ব্যারাকপুর",
+   "kind": "rail",
+   "lat": 22.760219,
+   "lng": 88.3709178,
+   "source": "Google Maps \"Barrackpore\""
+  },
+  {
+   "id": "r-serampore",
+   "name_en": "Serampore",
+   "name_bn": "শ্রীরামপুর",
+   "kind": "rail",
+   "lat": 22.7540965,
+   "lng": 88.3389217,
+   "source": "Google Maps \"Shrirampur\""
+  },
+  {
+   "id": "r-sheoraphuli",
+   "name_en": "Sheoraphuli",
+   "name_bn": "শেওড়াফুলি",
+   "kind": "rail",
+   "lat": 22.7742078,
+   "lng": 88.3286373,
+   "source": "Google Maps \"Seoraphuli Jn.\""
+  },
+  {
+   "id": "r-chandannagar",
+   "name_en": "Chandannagar",
+   "name_bn": "চন্দননগর",
+   "kind": "rail",
+   "lat": 22.8669135,
+   "lng": 88.3542159,
+   "source": "Google Maps \"Chandan Nagar\""
+  },
+  {
+   "id": "r-krishnanagar-city-junction",
+   "name_en": "Krishnanagar City Junction",
+   "name_bn": "কৃষ্ণনগর সিটি জংশন",
+   "kind": "rail",
+   "lat": 23.3884013,
+   "lng": 88.4937073,
+   "source": "Google Maps \"Krishnanagar City Junction\""
+  },
+  {
+   "id": "r-bishnupur",
+   "name_en": "Bishnupur",
+   "name_bn": "বিষ্ণুপুর",
+   "kind": "rail",
+   "lat": 23.0659471,
+   "lng": 87.3010339,
+   "source": "Google Maps \"Bishnupur Railway Station\""
+  },
+  {
+   "id": "r-tamluk",
+   "name_en": "Tamluk",
+   "name_bn": "তমলুক",
+   "kind": "rail",
+   "lat": 22.2746645,
+   "lng": 87.9199969,
+   "source": "Google Maps \"Tamluk\""
+  },
+  {
+   "id": "r-mecheda",
+   "name_en": "Mecheda",
+   "name_bn": "মেচেদা",
+   "kind": "rail",
+   "lat": 22.414928,
+   "lng": 87.8585339,
+   "source": "Google Maps \"Mecheda\""
+  },
+  {
+   "id": "r-siliguri-junction",
+   "name_en": "Siliguri Junction",
+   "name_bn": "শিলিগুড়ি জংশন",
+   "kind": "rail",
+   "lat": 26.7241694,
+   "lng": 88.4149633,
+   "source": "Google Maps \"Siliguri Junction Station\""
+  },
+  {
+   "id": "r-new-jalpaiguri",
+   "name_en": "New Jalpaiguri",
+   "name_bn": "নিউ জলপাইগুড়ি",
+   "kind": "rail",
+   "lat": 26.6842105,
+   "lng": 88.4428603,
+   "source": "Google Maps \"New Jalpaiguri Station\""
+  },
+  {
+   "id": "r-jalpaiguri",
+   "name_en": "Jalpaiguri",
+   "name_bn": "জলপাইগুড়ি",
+   "kind": "rail",
+   "lat": 26.519227,
+   "lng": 88.7251945,
+   "source": "Google Maps \"Jalpaiguri Station\""
+  },
+  {
+   "id": "r-new-cooch-behar",
+   "name_en": "New Cooch Behar",
+   "name_bn": "নিউ কোচবিহার",
+   "kind": "rail",
+   "lat": 26.3532228,
+   "lng": 89.4689765,
+   "source": "Google Maps \"New Cooch Behar Junction\""
+  },
+  {
+   "id": "r-cooch-behar",
+   "name_en": "Cooch Behar",
+   "name_bn": "কোচবিহার",
+   "kind": "rail",
+   "lat": 26.3186608,
+   "lng": 89.4560574,
+   "source": "Google Maps \"Cooch Behar\""
+  },
+  {
+   "id": "r-cossimbazar",
+   "name_en": "Cossimbazar",
+   "name_bn": "কাশিমবাজার",
+   "kind": "rail",
+   "lat": 24.1221803,
+   "lng": 88.2669745,
+   "source": "Google Maps \"Cossimbazar Railway Station\""
+  },
+  {
+   "id": "r-berhampore-court",
+   "name_en": "Berhampore Court",
+   "name_bn": "বহরমপুর কোর্ট",
+   "kind": "rail",
+   "lat": 24.088932,
+   "lng": 88.2638801,
+   "source": "Google Maps \"Berhampore Court\""
+  },
+  {
+   "id": "r-andul",
+   "name_en": "Andul",
+   "name_bn": "আন্দুল",
+   "kind": "rail",
+   "lat": 22.5755609,
+   "lng": 88.2401462,
+   "source": "Google Maps \"Andul\""
+  },
+  {
+   "id": "r-basirhat",
+   "name_en": "Basirhat",
+   "name_bn": "বসিরহাট",
+   "kind": "rail",
+   "lat": 22.6504025,
+   "lng": 88.8691342,
+   "source": "Google Maps \"Basirhat\""
+  },
+  {
+   "id": "r-barasat-junction",
+   "name_en": "Barasat Junction",
+   "name_bn": "বারাসত জংশন",
+   "kind": "rail",
+   "lat": 22.7236773,
+   "lng": 88.4837833,
+   "source": "Google Maps \"Barasat\""
+  },
+  {
+   "id": "r-birati",
+   "name_en": "Birati",
+   "name_bn": "বিরাটি",
+   "kind": "rail",
+   "lat": 22.6641856,
+   "lng": 88.4274493,
+   "source": "Google Maps \"Birati\""
+  },
+  {
+   "id": "r-tala",
+   "name_en": "Tala",
+   "name_bn": "টালা",
+   "kind": "rail",
+   "lat": 22.6063823,
+   "lng": 88.378872,
+   "source": "Google Maps \"Tala\""
+  },
+  {
+   "id": "r-kolkata-chitpur",
+   "name_en": "Kolkata Chitpur",
+   "name_bn": "কলকাতা (চিৎপুর)",
+   "kind": "rail",
+   "lat": 22.6018382,
+   "lng": 88.3830655,
+   "source": "Google Maps \"Kolkata\""
+  },
+  {
+   "id": "r-majerhat",
+   "name_en": "Majerhat",
+   "name_bn": "মাঝেরহাট",
+   "kind": "rail",
+   "lat": 22.5186648,
+   "lng": 88.3223151,
+   "source": "Google Maps \"Majerhat\""
+  },
+  {
+   "id": "r-brace-bridge",
+   "name_en": "Brace Bridge",
+   "name_bn": "ব্রেস ব্রিজ",
+   "kind": "rail",
+   "lat": 22.517956,
+   "lng": 88.301345,
+   "source": "Google Maps \"Brace Bridge\""
+  },
+  {
+   "id": "r-new-alipore",
+   "name_en": "New Alipore",
+   "name_bn": "নিউ আলিপুর",
+   "kind": "rail",
+   "lat": 22.5099291,
+   "lng": 88.3360076,
+   "source": "Google Maps \"New Alipur\""
   }
  ]
 }

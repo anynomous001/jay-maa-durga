@@ -421,7 +421,8 @@ function renderBatchBox(box: HTMLElement, b: Batch) {
   const legs = routeLegs<LatLng & { id?: string }>([...origin, ...stops]);
   const links = legs
     .map((leg, i) => {
-      const ps = leg.filter((x): x is Pandal => 'zone' in x);
+      // Later parts begin where the previous one ended; name only the new stops.
+      const ps = leg.filter((x): x is Pandal => 'zone' in x).slice(i ? 1 : 0);
       const label = i === 0 ? t('pm.hop.start', { n: num(ps.length) }) : t('pm.hop.next', { n: num(i + 1) });
       return `<a class="btn btn-sm${i ? ' btn-ghost' : ''}" href="${routeUrl(leg, 'walking')}" target="_blank" rel="noopener" data-go="${ps.map((q) => q.id).join(',')}">${esc(label)}<span class="pm-hop-span">${esc(name(ps[0]))} → ${esc(name(ps[ps.length - 1]))}</span></a>`;
     })

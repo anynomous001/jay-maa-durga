@@ -8,11 +8,11 @@
 export const METRO_WALK_KM = 1.5;
 /** Beyond this no station is shown (a far station would mislead more than help). */
 export const STATION_MAX_KM = 12;
-/** Batch members lie within this distance of the batch's centre pandal… */
-export const BATCH_RADIUS_KM = 1.2;
-/** …and no single walk between two stops is longer than this. */
+/** Pandals within this walk of each other can share a batch. */
 export const BATCH_MAX_HOP_KM = 1.1;
 export const BATCH_MIN = 4;
+/** Cost of starting another batch, in km of walking: favours fewer, fuller batches. */
+export const BATCH_SPLIT_KM = 2;
 export const BATCH_MAX = 7;
 /** Streets wind: walking distance ≈ straight line × this. */
 export const STREET_FACTOR = 1.3;
@@ -54,56 +54,72 @@ function walkOrder(first, rest) {
   return order;
 }
 
+const pathKm = (stops) => stops.reduce((km, p, i) => (i ? km + distanceKm(stops[i - 1], p) : 0), 0);
+
+/** Groups of pandals linked by short walks (each within BATCH_MAX_HOP_KM of another in the group). */
+function clusters(pandals) {
+  const seen = new Set();
+  const out = [];
+  for (const p of pandals) {
+    if (seen.has(p.id)) continue;
+    const group = [p];
+    seen.add(p.id);
+    for (let i = 0; i < group.length; i++)
+      for (const q of pandals)
+        if (!seen.has(q.id) && distanceKm(group[i], q) <= BATCH_MAX_HOP_KM) {
+          seen.add(q.id);
+          group.push(q);
+        }
+    out.push(group);
+  }
+  return out;
+}
+
 /**
- * Groups of 4–7 pandals close to one another, each in walking order from the stop nearest a station.
- * Each pandal is in at most one batch; pandals with too few close neighbours get none.
+ * Batches of 4–7 pandals close to one another, each in walking order. Pandals are first grouped into clusters
+ * linked by short walks; one walking path is laid through each cluster and cut into consecutive batches, so a big
+ * cluster (North Kolkata) becomes several batches and every pandal in it gets one. Isolated pandals get none.
  * Deterministic for the same data, so batch ids stay stable between builds.
  */
 export function makeBatches(pandals, stations) {
-  const free = new Set(pandals.map((p) => p.id));
-  const tried = new Set();
-  const around = (p) =>
-    pandals
-      .filter((q) => q.id !== p.id && free.has(q.id) && distanceKm(p, q) <= BATCH_RADIUS_KM)
-      .sort((a, b) => distanceKm(p, a) - distanceKm(p, b));
   const batches = [];
-  for (;;) {
-    // The densest free spot seeds the next batch.
-    let seed = null;
-    let seedNear = [];
-    for (const p of pandals) {
-      if (!free.has(p.id) || tried.has(p.id)) continue;
-      const near = around(p);
-      if (near.length > seedNear.length) {
-        seed = p;
-        seedNear = near;
-      }
+  for (const group of clusters(pandals)) {
+    if (group.length < BATCH_MIN) continue;
+    // The shortest of the nearest-next paths, trying every pandal as the start.
+    let path = null;
+    for (const start of group) {
+      const order = walkOrder(start, group.filter((p) => p !== start));
+      if (!path || pathKm(order) < pathKm(path)) path = order;
     }
-    if (!seed || seedNear.length + 1 < BATCH_MIN) break;
-    tried.add(seed.id);
-    const group = [seed, ...seedNear.slice(0, BATCH_MAX - 1)];
-    // Start where a station is closest, so the walk begins at the metro or train.
-    const startAt = (p) => nearestStation(p, stations)?.km ?? Infinity;
-    const first = group.reduce((a, b) => (startAt(b) < startAt(a) ? b : a));
-    let stops = walkOrder(first, group.filter((p) => p !== first));
-    // A long gap means two clusters: keep the bigger side.
-    const cut = stops.findIndex((p, i) => i > 0 && distanceKm(stops[i - 1], p) > BATCH_MAX_HOP_KM);
-    if (cut > 0) stops = cut >= stops.length - cut ? stops.slice(0, cut) : stops.slice(cut);
-    if (stops.length < BATCH_MIN) continue;
-    for (const p of stops) free.delete(p.id);
-    let km = 0;
-    for (let i = 1; i < stops.length; i++) km += distanceKm(stops[i - 1], stops[i]);
-    const start = nearestStation(stops[0], stations);
-    const end = nearestStation(stops[stops.length - 1], stations);
-    batches.push({
-      id: `${seed.id}`,
-      zone: seed.zone,
-      stops: stops.map((p) => p.id),
-      walkKm: km * STREET_FACTOR,
-      minutes: walkMinutes(km) + stops.length * MINUTES_PER_PANDAL,
-      start,
-      end,
-    });
+    // Cut the path into runs of 4–7 where the walk between runs is longest. Each extra batch costs
+    // BATCH_SPLIT_KM, so a run is split only where the gap is long; otherwise batches stay near 7.
+    const n = path.length;
+    const best = Array(n + 1).fill(Infinity);
+    const from = Array(n + 1).fill(-1);
+    best[0] = 0;
+    for (let i = BATCH_MIN; i <= n; i++)
+      for (let j = Math.max(0, i - BATCH_MAX); j <= i - BATCH_MIN; j++)
+        if (best[j] + pathKm(path.slice(j, i)) + BATCH_SPLIT_KM < best[i]) {
+          best[i] = best[j] + pathKm(path.slice(j, i)) + BATCH_SPLIT_KM;
+          from[i] = j;
+        }
+    const runs = [];
+    for (let i = n; i > 0; i = from[i]) runs.unshift(path.slice(from[i], i));
+    for (let stops of runs) {
+      // Walk it from whichever end is nearer a station.
+      const startKm = (p) => nearestStation(p, stations)?.km ?? Infinity;
+      if (startKm(stops[stops.length - 1]) < startKm(stops[0])) stops = [...stops].reverse();
+      const km = pathKm(stops);
+      batches.push({
+        id: stops[0].id,
+        zone: stops[0].zone,
+        stops: stops.map((p) => p.id),
+        walkKm: km * STREET_FACTOR,
+        minutes: walkMinutes(km) + stops.length * MINUTES_PER_PANDAL,
+        start: nearestStation(stops[0], stations),
+        end: nearestStation(stops[stops.length - 1], stations),
+      });
+    }
   }
   return batches;
 }
