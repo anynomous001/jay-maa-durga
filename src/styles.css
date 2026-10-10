@@ -2568,3 +2568,83 @@ button.pm-eat.cta:hover {
   padding: 0.55rem 0.9rem;
   border-radius: 16px;
 }
+
+/* "Next pandal" bar: shown when someone comes back from Google Maps */
+.pm-next {
+  position: fixed;
+  left: 50%;
+  bottom: calc(0.6rem + env(safe-area-inset-bottom));
+  z-index: 40;
+  width: min(40rem, calc(100% - 1.2rem));
+  transform: translateX(-50%);
+  padding: 0.65rem 2.4rem 0.7rem 0.9rem;
+  border: 1px solid rgba(244, 185, 66, 0.6);
+  border-radius: 18px;
+  background: rgba(14, 16, 38, 0.97);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.55);
+}
+.pm-next[hidden] {
+  display: none;
+}
+.pm-next p {
+  margin: 0;
+}
+.pm-next-at {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.pm-next-name {
+  margin: 0.1rem 0 0.45rem !important;
+  font-size: 0.98rem;
+}
+.pm-next-name a {
+  color: var(--text);
+  font-weight: 700;
+}
+.pm-next-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.pm-next-close {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.pm-next-reset {
+  margin-left: auto;
+  padding: 0.2rem 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.pm-next-none {
+  font-size: 0.9rem;
+}
+body.has-next-bar .finder {
+  padding-bottom: 11rem;
+}
+.pm-seen {
+  margin-left: 0.3rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #7fdca4;
+  white-space: nowrap;
+}
+.pm-card.is-seen {
+  border-color: rgba(127, 220, 164, 0.35);
+}

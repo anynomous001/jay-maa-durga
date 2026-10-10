@@ -43,6 +43,54 @@ const HOP_RADIUS_KM = 5;
 const HOP_MAX = 12;
 
 const state = { zone: 'all', query: '', me: null as LatLng | null };
+// ── Visited pandals: after Google Maps, the site offers the next nearest one you haven't seen ──
+const VISITED_KEY = 'visited';
+const LAST_KEY = 'lastGo';
+/** Forget a hopping session after this long. */
+const SESSION_MS = 12 * 60 * 60 * 1000;
+const NEXT_STOPS = 4;
+function readStore<T>(key: string, fallback: T): T {
+  try {
+    return (JSON.parse(localStorage.getItem(key) ?? 'null') as T) ?? fallback;
+  } catch {
+    return fallback;
+  }
+}
+function writeStore(key: string, value: unknown) {
+  try {
+    if (value == null) localStorage.removeItem(key);
+    else localStorage.setItem(key, JSON.stringify(value));
+  } catch {
+    /* private mode: the bar just won't remember */
+  }
+}
+function visited(): Record<string, number> {
+  const all = readStore<Record<string, number>>(VISITED_KEY, {});
+  const now = Date.now();
+  return Object.fromEntries(Object.entries(all).filter(([, at]) => now - at < SESSION_MS));
+}
+/** Records that someone set off for these pandals (the last one is where they're headed). */
+function markGo(ids: string[]) {
+  const v = visited();
+  for (const id of ids) v[id] = Date.now();
+  writeStore(VISITED_KEY, v);
+  writeStore(LAST_KEY, { id: ids[ids.length - 1], at: Date.now() });
+}
+/** Greedy walk from a pandal through the nearest ones not yet visited, within HOP_RADIUS_KM. */
+function nextFrom(from: Pandal, n: number): Pandal[] {
+  const seen = visited();
+  const left = pandals.filter((p) => p.id !== from.id && !seen[p.id] && distanceKm(from, p) <= HOP_RADIUS_KM);
+  const order: Pandal[] = [];
+  let at: LatLng = from;
+  while (left.length && order.length < n) {
+    let best = 0;
+    for (let i = 1; i < left.length; i++) if (distanceKm(at, left[i]) < distanceKm(at, left[best])) best = i;
+    at = left.splice(best, 1)[0];
+    order.push(at as Pandal);
+  }
+  return order;
+}
+
 /** When the device gives no location, a tap on the map stands in for it. */
 let picking = false;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -118,7 +166,7 @@ async function setupMap(): Promise<void> {
 }
 
 function popupHTML(p: Pandal): string {
-  return `<strong>${esc(name(p))}</strong><br>${esc(p.area)}${p.verified ? '' : `<br><em>${esc(t('pm.approx'))}</em>`}<br><a href="${directionsUrl(p)}" target="_blank" rel="noopener">${esc(t('pm.directions'))} →</a> · <a href="#p-${p.id}">${esc(t('pm.inList'))}</a>`;
+  return `<strong>${esc(name(p))}</strong><br>${esc(p.area)}${p.verified ? '' : `<br><em>${esc(t('pm.approx'))}</em>`}<br><a href="${directionsUrl(p)}" target="_blank" rel="noopener" data-go="${p.id}">${esc(t('pm.directions'))} →</a> · <a href="#p-${p.id}">${esc(t('pm.inList'))}</a>`;
 }
 
 function syncMarkers() {
@@ -170,16 +218,25 @@ function cardHTML(p: Pandal, showZone: boolean): string {
   const metro = p.nearestMetro ? `<span>🚇 ${esc(p.nearestMetro)}</span>` : '';
   const zone = showZone ? `<span>${esc(zoneName(p.zone))}</span>` : '';
   const approx = p.verified ? '' : `<p class="pm-approx" title="${esc(t('pm.approxHelp'))}">⚠ ${esc(t('pm.approx'))} — ${esc(t('pm.approxHelp'))}</p>`;
-  return `<article class="pm-card" id="p-${p.id}">
-    <h4><a class="pm-link" href="/pandals/${p.id}/"><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></a></h4>
+  const seen = visitedNow[p.id] ? ` <span class="pm-seen">✓ ${esc(t('pm.visited'))}</span>` : '';
+  const next = nextFrom(p, NEXT_STOPS);
+  const nextBtn = next.length
+    ? `<a class="btn btn-ghost btn-sm" href="${routeUrl([p, ...next], 'walking')}" target="_blank" rel="noopener" data-go="${[p, ...next].map((q) => q.id).join(',')}" title="${esc(next.map(name).join(' → '))}">${esc(t('pm.nextHere', { n: num(next.length) }))}</a>`
+    : '';
+  return `<article class="pm-card${visitedNow[p.id] ? ' is-seen' : ''}" id="p-${p.id}">
+    <h4><a class="pm-link" href="/pandals/${p.id}/"><span lang="${bn() ? 'bn' : 'en'}">${esc(name(p))}</span> <span class="pm-alt" lang="${bn() ? 'en' : 'bn'}">${esc(alt)}</span></a>${seen}</h4>
     <p class="pm-meta">${dist}<span>${esc(p.area)}</span>${zone}${metro}</p>
     ${approx}
-    <div class="pm-actions"><a class="btn btn-sm" href="${directionsUrl(p)}" target="_blank" rel="noopener" aria-label="${esc(`${t('pm.directions')}: ${name(p)}`)}">🧭 ${esc(t('pm.directions'))}</a><button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button></div>
+    <div class="pm-actions"><a class="btn btn-sm" href="${directionsUrl(p)}" target="_blank" rel="noopener" data-go="${p.id}" aria-label="${esc(`${t('pm.directions')}: ${name(p)}`)}">🧭 ${esc(t('pm.directions'))}</a>${nextBtn}<button type="button" class="btn btn-ghost btn-sm pm-show" data-id="${p.id}">${esc(t('pm.onMap'))}</button></div>
     ${eatNearbyHTML(p)}
   </article>`;
 }
 
+/** Visited set for the render in progress (read once, not per card). */
+let visitedNow: Record<string, number> = {};
+
 function renderList() {
+  visitedNow = visited();
   const items = filtered();
   const list = $('pm-list');
   if (!items.length) {
@@ -202,7 +259,39 @@ function renderList() {
   if (state.me) msg.push(t('pm.sortedNear'));
   $('pm-status').textContent = msg.join(' · ');
   renderHop();
+  renderNextBar();
   syncMarkers();
+}
+
+/** Bottom bar after a trip to Google Maps: the next nearest pandal you haven't seen, one tap away. */
+function renderNextBar() {
+  const bar = $('pm-next');
+  const last = readStore<{ id: string; at: number } | null>(LAST_KEY, null);
+  const from = last && Date.now() - last.at < SESSION_MS ? byId.get(last.id) : undefined;
+  document.body.classList.toggle('has-next-bar', !!from);
+  if (!from) {
+    bar.hidden = true;
+    return;
+  }
+  bar.hidden = false;
+  const next = nextFrom(from, NEXT_STOPS);
+  const head = `<p class="pm-next-at">📍 ${esc(t('pm.bar.at', { name: name(from) }))}</p>`;
+  const close = `<button type="button" class="pm-next-close" data-next-close aria-label="${esc(t('ui.close'))}">✕</button>`;
+  if (!next.length) {
+    bar.innerHTML = `${head}<p class="pm-next-none">${esc(t('pm.bar.none', { km: num(HOP_RADIUS_KM) }))} <button type="button" class="pm-next-reset" data-next-reset>${esc(t('pm.bar.reset'))}</button></p>${close}`;
+    return;
+  }
+  const n = next[0];
+  const d = num(distanceKm(from, n) < 1 ? `${Math.round(distanceKm(from, n) * 1000)}` : distanceKm(from, n).toFixed(1));
+  const unit = distanceKm(from, n) < 1 ? t('pm.m') : t('pm.km');
+  bar.innerHTML = `${head}
+    <p class="pm-next-name">${esc(t('pm.bar.next'))}: <a href="#p-${n.id}">${esc(name(n))}</a> <span class="pm-dist">${esc(d)} ${esc(unit)}</span></p>
+    <div class="pm-next-actions">
+      <a class="btn btn-sm" href="${directionsUrl(n, 'walking')}" target="_blank" rel="noopener" data-go="${n.id}">🧭 ${esc(t('pm.directions'))}</a>
+      ${next.length > 1 ? `<a class="btn btn-ghost btn-sm" href="${routeUrl([from, ...next], 'walking')}" target="_blank" rel="noopener" data-go="${next.map((q) => q.id).join(',')}">${esc(t('pm.bar.route', { n: num(next.length) }))}</a>` : ''}
+      <button type="button" class="pm-next-reset" data-next-reset>${esc(t('pm.bar.reset'))}</button>
+    </div>
+    ${close}`;
 }
 
 function renderZones() {
@@ -262,7 +351,7 @@ function renderHop() {
       const first = leg[1] as Pandal;
       const last = leg[leg.length - 1] as Pandal;
       const label = i === 0 ? t('pm.hop.start', { n: num(leg.length - 1) }) : t('pm.hop.next', { n: num(i + 1) });
-      return `<a class="btn btn-sm${i ? ' btn-ghost' : ''}" href="${routeUrl(leg, 'walking')}" target="_blank" rel="noopener">${esc(label)}<span class="pm-hop-span">${esc(name(first))} → ${esc(name(last))}</span></a>`;
+      return `<a class="btn btn-sm${i ? ' btn-ghost' : ''}" href="${routeUrl(leg, 'walking')}" target="_blank" rel="noopener" data-go="${(leg.slice(1) as Pandal[]).map((q) => q.id).join(',')}">${esc(label)}<span class="pm-hop-span">${esc(name(first))} → ${esc(name(last))}</span></a>`;
     })
     .join('');
   box.innerHTML = `<h3>${esc(t('pm.hop.title'))}</h3>
@@ -398,4 +487,30 @@ export function initFinder() {
   );
   addEventListener('hashchange', openHash);
   if (location.hash.startsWith('#p-')) requestAnimationFrame(openHash);
+
+  // Going to Google Maps: remember it, so coming back shows the next pandal.
+  document.addEventListener('click', (e) => {
+    const el = e.target as HTMLElement;
+    const go = el.closest<HTMLElement>('[data-go]');
+    if (go) {
+      markGo(go.dataset.go!.split(','));
+      // Most phones switch to the Maps app; the page refreshes when it is shown again.
+      setTimeout(renderList, 400);
+      return;
+    }
+    if (el.closest('[data-next-close]')) {
+      writeStore(LAST_KEY, null);
+      renderNextBar();
+    } else if (el.closest('[data-next-reset]')) {
+      writeStore(LAST_KEY, null);
+      writeStore(VISITED_KEY, null);
+      renderList();
+    }
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') renderList();
+  });
+  addEventListener('pageshow', (e) => {
+    if (e.persisted) renderList();
+  });
 }
