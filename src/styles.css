@@ -2857,3 +2857,28 @@ button.pm-eat.cta:hover {
     justify-content: flex-start;
   }
 }
+
+/* No device location: tap the map to set where you are. */
+.pm-map {
+  position: relative;
+}
+.pm-map.pm-picking {
+  cursor: crosshair;
+  box-shadow: 0 0 0 3px var(--accent);
+}
+.pm-map.pm-picking::after {
+  content: attr(data-hint);
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  z-index: 1000;
+  transform: translateX(-50%);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  pointer-events: none;
+}

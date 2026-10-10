@@ -43,6 +43,8 @@ const HOP_RADIUS_KM = 5;
 const HOP_MAX = 12;
 
 const state = { zone: 'all', query: '', me: null as LatLng | null };
+/** When the device gives no location, a tap on the map stands in for it. */
+let picking = false;
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 const bn = () => getLang() === 'bn';
 const name = (p: Pandal) => (bn() ? p.name_bn : p.name_en);
@@ -105,8 +107,13 @@ async function setupMap(): Promise<void> {
     }).addTo(map);
     m.bindPopup(() => popupHTML(p));
     m.bindTooltip(name(p));
+    // Choosing your spot: tapping a pin counts as "I'm here" too.
+    m.on('click', () => picking && setMe({ lat: p.lat, lng: p.lng }));
     markers.set(p.id, m);
   }
+  map.on('click', (e: Leaflet.LeafletMouseEvent) => {
+    if (picking) setMe({ lat: e.latlng.lat, lng: e.latlng.lng });
+  });
   syncMarkers();
 }
 
@@ -264,25 +271,45 @@ function renderHop() {
     <div class="pm-hop-legs">${links}</div>`;
 }
 
+/** Sets "you are here" from GPS or a tap on the map, then lists the nearest pandals and the walking route. */
+function setMe(me: LatLng) {
+  state.me = me;
+  picking = false;
+  $('pm-map').classList.remove('pm-picking');
+  $('pm-near').setAttribute('aria-pressed', 'true');
+  renderList();
+}
+
+function startPicking(msgKey: string) {
+  $('pm-status').textContent = t(msgKey);
+  picking = true;
+  void ensureMap().then(() => {
+    const el = $('pm-map');
+    el.dataset.hint = t('pm.pickHint');
+    el.classList.add('pm-picking');
+  });
+}
+
 function nearMe() {
   const status = $('pm-status');
+  scrollToEl($('pm-near'));
+  void ensureMap();
   if (!('geolocation' in navigator)) {
-    status.textContent = t('pm.denied');
+    startPicking('pm.unavailable');
     return;
   }
   status.textContent = t('pm.locating');
-  scrollToEl($('pm-near'));
-  void ensureMap();
+  const ok = (pos: GeolocationPosition) => setMe({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+  const fail = (err: GeolocationPositionError) =>
+    startPicking(err.code === err.PERMISSION_DENIED ? 'pm.denied' : err.code === err.TIMEOUT ? 'pm.timeout' : 'pm.unavailable');
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      state.me = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-      $('pm-near').setAttribute('aria-pressed', 'true');
-      renderList();
+    ok,
+    (err) => {
+      if (err.code === err.PERMISSION_DENIED) return fail(err);
+      // Laptops often fail the quick network fix; try once more and let the device use whatever it has.
+      navigator.geolocation.getCurrentPosition(ok, fail, { enableHighAccuracy: true, timeout: 20000, maximumAge: 600000 });
     },
-    () => {
-      status.textContent = t('pm.denied');
-    },
-    { enableHighAccuracy: false, timeout: 15000, maximumAge: 300000 },
+    { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 },
   );
 }
 
