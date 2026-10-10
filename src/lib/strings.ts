@@ -33,10 +33,10 @@ export const dict: Record<string, Entry> = {
   'mc.f2': { bn: '🚇 কাছের মেট্রো', en: '🚇 Nearest metro' },
   'mc.f3': { bn: '🧭 গুগল ম্যাপস ডিরেকশন', en: '🧭 Google Maps directions' },
   'mc.cta': { bn: 'ম্যাপ খুলুন', en: 'Open the map' },
-  'welcome.mute': { bn: 'ঢাক বন্ধ করুন', en: 'Turn off dhak' },
   'dock.map': { bn: 'প্যান্ডেল ম্যাপ', en: 'Pandal map' },
   'rem.waShort': { bn: 'হোয়াটসঅ্যাপ', en: 'WhatsApp' },
   'share.native': { bn: 'শেয়ার', en: 'Share' },
+  'share.group': { bn: 'শেয়ার করুন', en: 'Share' },
   'share.title': { bn: 'দুর্গাপুজো ২০২৬ প্যান্ডেল ম্যাপ — মা আসছেন', en: 'Durga Puja 2026 pandal map — Ma Aschen' },
   'share.text': { bn: 'শুভ দুর্গাপুজো 🙏 কাছের প্যান্ডেল, মেট্রো আর হপিং রুট এক ম্যাপে।', en: 'Happy Durga Puja 🙏 Nearby pandals, metro and hopping routes on one map.' },
   'share.fb': { bn: 'ফেসবুক', en: 'Facebook' },
@@ -44,25 +44,14 @@ export const dict: Record<string, Entry> = {
   'share.copied': { bn: 'কপি হয়েছে ✓', en: 'Copied ✓' },
   'slot.spotlight': { bn: 'স্পটলাইট কার্ড', en: 'Spotlight card' },
   'slot.spotlight.where': { bn: 'হোম পেজের ছবির উপর, ডান দিকে (রেডিও প্লেয়ার থেকে দূরে)', en: 'On the home hero image, right side (away from the radio player)' },
-  // ── Radio ──
+  // ── Visitors ──
   'radio.listeners': { bn: '{n} জন এখন শুনছেন', en: '{n} listening now' },
   'vis.online': { bn: '{n} জন এখন অনলাইন', en: '{n} online now' },
   'vis.total': { bn: 'মোট {n} জন দেখেছেন', en: '{n} visitors so far' },
   'vis.label': { bn: 'ভিজিটর', en: 'Visitors' },
 
-  // ── Wake ──
-
-  // ── Reminders ──
-  'rem.title': { bn: 'রিমাইন্ডার রাখুন', en: 'Set a reminder' },
-  'rem.gcal': { bn: 'গুগল ক্যালেন্ডারে যোগ করুন', en: 'Add to Google Calendar' },
-  'rem.ics': { bn: '.ics ফাইল (iPhone/Outlook)', en: '.ics file (iPhone/Outlook)' },
-  'rem.shashthi': { bn: 'মহাষষ্ঠীর রিমাইন্ডারও', en: 'Also remind me for Shashthi' },
-  'rem.wa': { bn: 'হোয়াটসঅ্যাপে শেয়ার করুন', en: 'Share on WhatsApp' },
+  // ── Share ──
   'rem.waText': { bn: 'শুভ দুর্গাপুজো 🙏 কলকাতা আর জেলার ৬০টির বেশি পুজো এক ম্যাপে — কাছের প্যান্ডেল, মেট্রো আর হপিং রুট: {url}', en: 'Happy Durga Puja 🙏 60+ pujas in Kolkata and beyond on one map — nearest pandals, metro and hopping routes: {url}' },
-  'rem.copy': { bn: 'লিংক কপি', en: 'Copy link' },
-  'rem.copied': { bn: 'কপি হয়েছে', en: 'Copied' },
-  'ev.shashthi.title': { bn: 'মহাষষ্ঠী — দুর্গাপুজো শুরু', en: 'Maha Shashthi — Durga Puja begins' },
-  'ev.shashthi.desc': { bn: 'প্যান্ডেল ম্যাপ ও পুজোর গান: {url}', en: 'Pandal map & Puja songs: {url}' },
 
   // ── Schedule ──
   'sch.title': { bn: 'পুজোর নির্ঘণ্ট ২০২৬', en: 'Puja calendar 2026' },
@@ -75,33 +64,6 @@ export const dict: Record<string, Entry> = {
     en: 'Dates follow the Bisuddha Siddhanta panjika (Saptami spans two days this year). Gupta Press panjika runs one day earlier from Ashtami.',
   },
 
-  // ── Dhak ──
-  'dhak.title': { bn: 'ঢাক বাজান', en: 'Play the dhak' },
-  'dhak.hint': { bn: 'ঢাকে টোকা দিন (বা স্পেস/এন্টার চাপুন)', en: 'Tap the drum (or press Space/Enter)' },
-  'dhak.label': { bn: 'ঢাক — বাজাতে চাপুন', en: 'Dhak — press to play' },
-  'dhak.rhythm': { bn: 'পুরো বোল বাজাও', en: 'Play a full rhythm' },
-  'dhak.stop': { bn: 'থামাও', en: 'Stop' },
-  'dhak.credit': {
-    bn: 'ঢাকের রেকর্ডিং: <a href="https://commons.wikimedia.org/wiki/File:Durga_Puja_Dhak_Dhol.ogg" target="_blank" rel="noopener">Mamta Jagdish Dhody</a>, উইকিমিডিয়া কমন্স, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> (ছোট অংশে কাটা)।',
-    en: 'Dhak recording: <a href="https://commons.wikimedia.org/wiki/File:Durga_Puja_Dhak_Dhol.ogg" target="_blank" rel="noopener">Mamta Jagdish Dhody</a>, Wikimedia Commons, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> (cut into short clips).',
-  },
-  'dhak.by': { bn: 'ঢাক সৌজন্যে', en: 'Dhak presented by' },
-
-  // ── Playlists ──
-  'pl.title': { bn: 'গান ও রেকর্ডিং', en: 'Songs & recordings' },
-  'pl.mahalaya-songs': { bn: 'আগমনী গান', en: 'Agomoni songs' },
-  'pl.puja-songs': { bn: 'পুজোর গান', en: 'Durga Puja songs' },
-  'pl.load': { bn: 'চালান', en: 'Load player' },
-  'pl.audio': { bn: 'অডিও', en: 'Audio' },
-  'pl.video': { bn: 'ভিডিও', en: 'Video' },
-  'pl.nowPlaying': { bn: 'এখন বাজছে', en: 'Now playing' },
-  'pl.open': { bn: 'অ্যাপে খুলুন', en: 'Open in app' },
-  'pl.spotifyNote': {
-    bn: '"অডিও" চাপলে ছোট প্লেয়ারে গান চলতে থাকবে, আপনি সাইটে ঘুরে বেড়াতে পারবেন (ইউটিউবের নিয়মে ছোট ভিডিও-জানলাটা দেখা যাবে)। স্পটিফাইতে লগ-ইন না থাকলে শুধু ৩০ সেকেন্ডের প্রিভিউ। সব প্লেয়ার সরকারি চ্যানেলের।',
-    en: '“Audio” keeps the song playing in a small player while you browse (YouTube requires its small video window to stay visible). Spotify plays 30-second previews unless you’re logged in. All players are official channel embeds.',
-  },
-  'pl.empty': { bn: 'তালিকা তৈরি হচ্ছে…', en: 'List coming soon…' },
-
   // ── FAQ ──
   'faq.title': { bn: 'প্রশ্নোত্তর', en: 'FAQ' },
   'faq.q1': { bn: 'দুর্গাপুজো ২০২৬-এর তারিখ কী?', en: 'What are the Durga Puja 2026 dates?' },
@@ -113,8 +75,7 @@ export const dict: Record<string, Entry> = {
   'faq.q4': { bn: 'কলকাতার বাইরের পুজোও আছে?', en: 'Does it cover pujas outside Kolkata?' },
   'faq.a4': { bn: 'হ্যাঁ — উত্তর ও দক্ষিণ ২৪ পরগনা, হাওড়া, হুগলি, নদিয়া, বাঁকুড়া, শিলিগুড়ি, জলপাইগুড়ি আর কোচবিহারের পরিচিত পুজোও ম্যাপে আছে।', en: 'Yes — well-known pujas in North and South 24 Parganas, Howrah, Hooghly, Nadia, Bankura, Siliguri, Jalpaiguri and Cooch Behar are on the map too.' },
 
-
-  // ── Mahalaya card ──
+  // ── Greeting card ──
   'card.open': { bn: 'শুভেচ্ছা কার্ড বানান', en: 'Make a greeting card' },
   'card.title': { bn: 'পুজোর শুভেচ্ছা কার্ড', en: 'Durga Puja greeting card' },
   'card.name': { bn: 'আপনার নাম (ইচ্ছে হলে)', en: 'Your name (optional)' },
@@ -139,8 +100,6 @@ export const dict: Record<string, Entry> = {
   'poll.tap': { bn: 'একটি উত্তরে চাপুন। ফলাফল ভোটের পরে দেখা যাবে।', en: 'Tap an answer. Results show after you vote.' },
   'poll.votes': { bn: 'মোট {n}টি ভোট · মত বদলাতে অন্য উত্তরে চাপুন', en: 'Total votes: {n} · tap another answer to change yours' },
 
-  'rem.pujaGcal': { bn: 'ষষ্ঠীর রিমাইন্ডার', en: 'Shashthi reminder' },
-  'rem.pujaIcs': { bn: '.ics রিমাইন্ডার', en: '.ics reminder' },
   'hop.title': { bn: 'প্যান্ডেল হপিং রুট', en: 'Pandal-hopping routes' },
   'hop.lead': { bn: 'কাছাকাছি প্যান্ডেল নিয়ে সাজানো রুট — এক বিকেলেই ঘুরে নিন।', en: 'Nearby pandals grouped into routes you can do in an evening.' },
   'hop.all': { bn: 'সব রুট আর ম্যাপ দেখুন →', en: 'See every route on the map →' },
